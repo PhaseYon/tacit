@@ -28,6 +28,9 @@ htmlcov/
 dist/
 build/
 
+# Celery beat state
+celerybeat-schedule*
+
 # Editors / OS
 .vscode/
 .idea/

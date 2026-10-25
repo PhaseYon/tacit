@@ -1,0 +1,33 @@
+{
+  "name": "Tacit (dev)",
+  "url": "https://github.com/PhaseYon/tacit",
+  "description": "Syncs PRs, issues, reviews and docs into Tacit, respecting repo permissions.",
+  "hook_attributes": { "url": "WEBHOOK_URL", "active": true },
+  "redirect_url": "MANIFEST_REDIRECT_URL",
+  "callback_urls": ["http://localhost:3000/api/auth/callback/github"],
+  "setup_url": "http://localhost:8000/github/setup",
+  "setup_on_update": true,
+  "request_oauth_on_install": false,
+  "public": false,
+  "default_permissions": {
+    "metadata": "read",
+    "issues": "read",
+    "pull_requests": "read",
+    "contents": "read",
+    "members": "read",
+    "email_addresses": "read"
+  },
+  "default_events": [
+    "issues",
+    "issue_comment",
+    "pull_request",
+    "pull_request_review",
+    "pull_request_review_comment",
+    "push",
+    "repository",
+    "member",
+    "membership",
+    "team",
+    "organization"
+  ]
+}
