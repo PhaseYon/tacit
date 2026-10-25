@@ -1,14 +1,21 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 import { buttonVariants } from "@/components/ui/button";
 import { getSession } from "@/lib/session";
 
-export default async function Home() {
+async function RedirectIfSignedIn() {
   if (await getSession()) redirect("/dashboard");
+  return null;
+}
 
+export default function Home() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center gap-6 px-4 text-center">
+      <Suspense>
+        <RedirectIfSignedIn />
+      </Suspense>
       <h1 className="text-4xl font-semibold tracking-tight">Tacit</h1>
       <p className="max-w-md text-muted-foreground">
         Your team&apos;s memory, wired into every AI tool. Ask why something was done, who

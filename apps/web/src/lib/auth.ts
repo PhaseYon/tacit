@@ -7,14 +7,13 @@ import { sendMail } from "./mailer";
 
 const baseURL = process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
 
+// GitHub sign-in/linking uses the Tacit GitHub App's OAuth credentials, so a linked
+// account is an OAuth-verified GitHub identity (used for repo permission sync).
+const githubClientId = process.env.GITHUB_APP_CLIENT_ID;
+const githubClientSecret = process.env.GITHUB_APP_CLIENT_SECRET;
 const github =
-  process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET
-    ? {
-        github: {
-          clientId: process.env.GITHUB_CLIENT_ID,
-          clientSecret: process.env.GITHUB_CLIENT_SECRET,
-        },
-      }
+  githubClientId && githubClientSecret
+    ? { github: { clientId: githubClientId, clientSecret: githubClientSecret } }
     : undefined;
 
 export const auth = betterAuth({
@@ -33,6 +32,13 @@ export const auth = betterAuth({
     },
   },
   socialProviders: github,
+  account: {
+    accountLinking: {
+      // People's GitHub email often differs from their work email. Linking happens
+      // from a signed-in session via OAuth, so the user proves control of both.
+      allowDifferentEmails: true,
+    },
+  },
   plugins: [
     // Workspaces are Better Auth organizations.
     organization({

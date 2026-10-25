@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { AppHeader } from "@/components/app-header";
+import { GitHubSection } from "@/components/github-section";
 import { InviteForm } from "@/components/invite-form";
 import { PageSkeleton } from "@/components/page-skeleton";
 import { Badge } from "@/components/ui/badge";
@@ -19,8 +20,15 @@ import { type ApiMember, apiFetch } from "@/lib/api";
 import { auth } from "@/lib/auth";
 import { requireSession } from "@/lib/session";
 
-async function WorkspacePageContent({ params }: { params: PageProps<"/w/[slug]">["params"] }) {
+async function WorkspacePageContent({
+  params,
+  searchParams,
+}: {
+  params: PageProps<"/w/[slug]">["params"];
+  searchParams: PageProps<"/w/[slug]">["searchParams"];
+}) {
   const { slug } = await params;
+  const query = await searchParams;
   const session = await requireSession();
 
   const workspace = await auth.api
@@ -70,6 +78,17 @@ async function WorkspacePageContent({ params }: { params: PageProps<"/w/[slug]">
           </CardContent>
         </Card>
 
+        <GitHubSection
+          workspaceId={workspace.id}
+          slug={slug}
+          canManage={canInvite}
+          flash={{
+            connected: query.github === "connected",
+            requested: query.github === "requested",
+            error: typeof query.github_error === "string" ? query.github_error : undefined,
+          }}
+        />
+
         {canInvite && (
           <Card>
             <CardHeader>
@@ -96,10 +115,10 @@ async function WorkspacePageContent({ params }: { params: PageProps<"/w/[slug]">
 }
 
 // Session and data are per-request, so they stream in behind Suspense.
-export default function WorkspacePage({ params }: PageProps<"/w/[slug]">) {
+export default function WorkspacePage({ params, searchParams }: PageProps<"/w/[slug]">) {
   return (
     <Suspense fallback={<PageSkeleton />}>
-      <WorkspacePageContent params={params} />
+      <WorkspacePageContent params={params} searchParams={searchParams} />
     </Suspense>
   );
 }
