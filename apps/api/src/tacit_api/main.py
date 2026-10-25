@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from sqlalchemy import select
 
 from .config import get_settings
+from .connectors.github.routes import router as github_router
 from .db import dispose_engine
 from .deps import CurrentPrincipal, CurrentWorkspace, UserDB
 from .models import Member, User, Workspace
@@ -19,6 +20,7 @@ async def lifespan(_: FastAPI):
 
 
 app = FastAPI(title="Tacit API", version="0.1.0", lifespan=lifespan)
+app.include_router(github_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[get_settings().web_origin],
