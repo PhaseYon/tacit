@@ -349,7 +349,7 @@ later as a login-time cross-check.
 
 **Never-leak failure modes (fail closed):**
 - No linked GitHub account → no private content. The UI says "Link GitHub to see N private repos".
-- ACL older than 24 h (worker down, App suspended, API errors) → `can_read_container`
+- ACL older than 6 h (worker down, App suspended, API errors) → `can_read_container`
   returns false for private repos. The UI shows an "access check stale" banner. We
   accept losing availability rather than risk a leak.
 - Removing access always happens before anything else (§5). A failed ACL sync never
@@ -406,17 +406,19 @@ Each step is one PR-sized commit with tests.
     SQL view (docs, tokens and estimated extraction cost per repo), with numbers
     recorded for the step 4 go/no-go decision.
 
-## Open questions
+## Decisions on open questions (2026-10-24)
 
-1. **Better Auth GitHub provider** (apps/web, step 1 owner): OK to add GitHub social
-   linking with the App's credentials, plus the column-level grant on `account`?
-2. **`tacit_worker` role:** needs adding to `infra/postgres/init/01-roles.sh` (step 1 territory).
-3. **Public repos** visible to all workspace members: acceptable, or should users still
-   need a linked account?
-4. **Uninstall retention:** purge immediately or keep 30 days (soft-deleted) to allow reinstalling?
-5. **Multiple installations per workspace** (e.g. personal account plus org): the
-   schema allows it. Is the UI needed in v1?
-6. **24-hour ACL staleness cutoff:** is this the right balance between availability and safety?
-7. Confirm with a real installation token that `collaborators?affiliation=all` lists
-   members who get access through secret teams and enterprise roles. If it doesn't, add
-   team listing (`GET /repos/{o}/{r}/teams` + team members).
+1. **Better Auth GitHub provider:** yes. Use the GitHub App's client ID and secret for
+   GitHub sign-in and linking (no separate OAuth App). Grant `tacit_worker` SELECT on
+   `account ("userId", "providerId", "accountId")` only.
+2. **`tacit_worker` role:** yes. Add it to `infra/postgres/init/01-roles.sh`, the CI role
+   step and the test fixtures in the same commit as migration 0002.
+3. **Public repos:** readable by every workspace member, with no linked account needed.
+4. **Uninstall:** hide immediately (drop `container_access` rows and tombstone the
+   documents in the same transaction as the webhook), then hard-delete after 30 days.
+   Reinstalling within 30 days restores rows when the ACL is resynced.
+5. **Multiple installations per workspace:** the schema allows it; no UI in v1.
+6. **ACL staleness cutoff: 6 h** rather than 24 h. The refresh is hourly, so 6 h means
+   several missed runs, and it keeps the window where a removed collaborator can still read small.
+7. Still open: check `affiliation=all` against secret teams and enterprise roles with
+   a real token during plan step 9. Add team listing if it's missing.
