@@ -19,7 +19,7 @@ class Settings(BaseSettings):
     auth_jwt_issuer: str = "http://localhost:3000"
     auth_jwt_audience: str = "tacit-api"
     # Signs short-lived state tokens (e.g. the GitHub install flow).
-    better_auth_secret: SecretStr = SecretStr("dev-only-secret-change-me")
+    better_auth_secret: SecretStr = SecretStr("dev-only-secret-change-me-in-dotenv-please")
 
     web_origin: str = "http://localhost:3000"
     api_public_url: str = "http://localhost:8000"
