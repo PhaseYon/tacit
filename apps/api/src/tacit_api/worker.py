@@ -27,6 +27,7 @@ celery_app.conf.update(
     broker_connection_retry_on_startup=True,
     include=[
         "tacit_api.connectors.github.tasks",
+        "tacit_api.connectors.slack.tasks",
         "tacit_api.search.tasks",
         "tacit_api.graph.tasks",
     ],

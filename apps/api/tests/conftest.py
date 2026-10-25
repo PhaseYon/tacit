@@ -17,12 +17,15 @@ from alembic.config import Config
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from httpx import ASGITransport, AsyncClient
 
+from .slack_mock import slack_api  # noqa: F401  (fixture: fake Slack Web API)
+
 SUPERUSER_URL = os.environ.get(
     "TEST_SUPERUSER_URL", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
 TEST_DB = os.environ.get(
     "TEST_DB_NAME",
-    "tacit_test_" + __import__("hashlib").sha1(str(Path(__file__).resolve()).encode()).hexdigest()[:8],
+    "tacit_test_"
+    + __import__("hashlib").sha1(str(Path(__file__).resolve()).encode()).hexdigest()[:8],
 )
 API_DIR = Path(__file__).resolve().parents[1]
 

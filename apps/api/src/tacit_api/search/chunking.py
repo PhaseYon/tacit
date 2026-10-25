@@ -56,11 +56,15 @@ def context_header(kind: str, title: str | None, metadata: dict) -> str:
         "pr_review": "PR review",
         "pr_review_comment": "Code review comment",
         "markdown_file": "Doc",
+        "slack_message": "Slack message",
+        "slack_reply": "Slack thread reply",
     }
     parts = [labels.get(kind, kind)]
     number = metadata.get("number") or metadata.get("parent_number")
     if number:
         parts.append(f"#{number}")
+    if metadata.get("channel"):
+        parts.append(f"in {metadata['channel']}")
     if metadata.get("path"):
         parts.append(str(metadata["path"]))
     head = " ".join(parts)

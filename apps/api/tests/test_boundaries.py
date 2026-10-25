@@ -15,3 +15,13 @@ def test_graphiti_only_imported_in_graph_package():
         and re.search(r"^\s*(from|import)\s+graphiti_core", p.read_text(), re.M)
     ]
     assert offenders == []
+
+
+def test_slack_sdk_only_imported_in_slack_client():
+    offenders = [
+        str(p.relative_to(SRC))
+        for p in SRC.rglob("*.py")
+        if p.relative_to(SRC) != Path("connectors/slack/client.py")
+        and re.search(r"^\s*(from|import)\s+slack_sdk", p.read_text(), re.M)
+    ]
+    assert offenders == []

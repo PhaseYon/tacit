@@ -59,7 +59,8 @@ async def test_api_reads_installation_metadata_in_own_workspace_only(slack_rows)
     async with rls_session(s.alice, s.acme) as sess:
         teams = set((await sess.execute(text("SELECT team_id FROM slack_installation"))).scalars())
         chans = set((await sess.execute(text("SELECT name FROM slack_channel"))).scalars())
-    assert teams == {"TRLS1", "TREVOKED"} and chans == {"#general"}
+    # Other modules add Acme teams too; what matters is that Globex's never shows.
+    assert {"TRLS1", "TREVOKED"} <= teams and "TRLS2" not in teams and "#general" in chans
     async with rls_session(s.carol, s.acme) as sess:  # forged workspace
         assert (await sess.execute(text("SELECT 1 FROM slack_installation"))).all() == []
         assert (await sess.execute(text("SELECT 1 FROM slack_channel"))).all() == []
@@ -86,12 +87,14 @@ async def test_worker_scoped_to_selected_workspace(slack_rows):
     s = slack_rows
     async with worker_session(s.acme) as sess:
         teams = set((await sess.execute(text("SELECT team_id FROM slack_installation"))).scalars())
-        cursors = (await sess.execute(text("SELECT container_id::text FROM slack_sync_cursor"))).all()
+        cursors = (
+            await sess.execute(text("SELECT container_id::text FROM slack_sync_cursor"))
+        ).all()
         blob = await sess.scalar(
             text("SELECT bot_token_encrypted FROM slack_installation WHERE team_id = 'TRLS1'")
         )
-    assert teams == {"TRLS1", "TREVOKED"}
-    assert [c[0] for c in cursors] == [CH_ACME]
+    assert {"TRLS1", "TREVOKED"} <= teams and "TRLS2" not in teams
+    assert CH_ACME in {c[0] for c in cursors} and CH_GLOBEX not in {c[0] for c in cursors}
     assert decrypt_token(blob, "TRLS1") == TOKEN
     async with worker_session() as sess:
         assert (await sess.execute(text("SELECT 1 FROM slack_installation"))).all() == []
@@ -114,7 +117,9 @@ async def test_team_lookup_skips_revoked(slack_rows):
     async with worker_session() as sess:
         got = await sess.scalar(text("SELECT app.workspace_for_slack_team('TRLS1')"))
         revoked = await sess.scalar(text("SELECT app.workspace_for_slack_team('TREVOKED')"))
-        listed = set((await sess.execute(text("SELECT * FROM app.list_slack_installations()"))).all())
+        listed = set(
+            (await sess.execute(text("SELECT * FROM app.list_slack_installations()"))).all()
+        )
     assert got == slack_rows.acme and revoked is None
     assert {("org_acme", "TRLS1"), ("org_globex", "TRLS2")} <= {tuple(r) for r in listed}
     assert not any(r[1] == "TREVOKED" for r in listed)
