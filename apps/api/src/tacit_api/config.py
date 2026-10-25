@@ -40,6 +40,14 @@ class Settings(BaseSettings):
     # "redis" shares installation tokens + ETag cache across workers; "memory" for tests.
     github_cache: str = "redis"
 
+    # Slack app (see docs/design/slack-connector.md). Empty means the connector is disabled.
+    slack_client_id: str = ""
+    slack_client_secret: SecretStr = SecretStr("")
+    slack_signing_secret: SecretStr = SecretStr("")
+    slack_api_url: str = "https://slack.com/api/"
+    # Backfill horizon: older history is skipped to bound API time on large teams.
+    slack_backfill_days: int = 365
+
     # Embeddings: "fastembed" (local, free, default), "openai", or "fake" (tests).
     embedding_provider: str = "fastembed"
     embedding_model: str = "BAAI/bge-small-en-v1.5"
@@ -61,6 +69,10 @@ class Settings(BaseSettings):
     @property
     def github_enabled(self) -> bool:
         return bool(self.github_app_id and self.github_app_private_key_path)
+
+    @property
+    def slack_enabled(self) -> bool:
+        return bool(self.slack_client_id and self.slack_client_secret.get_secret_value())
 
 
 @lru_cache
