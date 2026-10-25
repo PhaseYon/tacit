@@ -112,3 +112,76 @@ async def hybrid_search(session: AsyncSession, query: str, limit: int = 10) -> l
         )
         for r in rows
     ]
+
+
+# --- Single-signal baselines (for the benchmark) --------------------------------------
+
+_BASELINE_SQL = """
+    WITH q AS (SELECT CAST(:emb AS vector) AS e, {tsq} AS tq),
+    ranked AS (
+      SELECT c.document_id, c.id AS chunk_id, c.content, {score} AS score
+      FROM document_chunk c, q {where}
+      ORDER BY {order} LIMIT :cand
+    ),
+    best AS (
+      SELECT DISTINCT ON (document_id) * FROM ranked ORDER BY document_id, score DESC
+    )
+    SELECT b.document_id::text, b.chunk_id::text, b.score, d.kind,
+           COALESCE(d.title, p.title) AS title, d.url, d.author_login, d.source_created_at,
+           d.metadata->>'state' AS state, sc.name AS container, left(b.content, 300) AS snippet
+    FROM best b
+    JOIN source_document d ON d.id = b.document_id
+    LEFT JOIN source_document p ON p.id = d.parent_id
+    JOIN source_container sc ON sc.id = d.container_id
+    WHERE d.deleted_at IS NULL
+    ORDER BY b.score DESC LIMIT :limit
+"""
+_TSQ = "to_tsquery('english', replace(plainto_tsquery('english', :q)::text, ' & ', ' | '))"
+VECTOR_SQL = text(
+    _BASELINE_SQL.format(
+        tsq="NULL::tsquery",
+        score="1 - (c.embedding <=> q.e)",
+        where="",
+        order="c.embedding <=> q.e",
+    )
+)
+KEYWORD_SQL = text(
+    _BASELINE_SQL.format(
+        tsq=_TSQ,
+        score="ts_rank_cd(c.tsv, q.tq)",
+        where="WHERE c.tsv @@ q.tq",
+        order="ts_rank_cd(c.tsv, q.tq) DESC",
+    )
+)
+
+
+async def baseline_search(
+    session: AsyncSession, query: str, mode: str, limit: int = 10
+) -> list[SearchHit]:
+    """mode: "vector" (pgvector cosine only) or "keyword" (Postgres full-text only)."""
+    query = query.strip()
+    if not query:
+        return []
+    emb = await run_in_threadpool(get_embedder().embed_query, query)
+    await session.execute(text("SET LOCAL hnsw.iterative_scan = relaxed_order"))
+    sql = VECTOR_SQL if mode == "vector" else KEYWORD_SQL
+    rows = await session.execute(
+        sql, {"emb": vector_literal(emb), "q": query, "cand": CANDIDATES, "limit": limit}
+    )
+    return [
+        SearchHit(
+            document_id=r.document_id,
+            chunk_id=r.chunk_id,
+            score=float(r.score),
+            matched_by=["semantic" if mode == "vector" else "keyword"],
+            kind=r.kind,
+            title=r.title,
+            url=r.url,
+            author=r.author_login,
+            created_at=r.source_created_at,
+            state=r.state,
+            container=r.container,
+            snippet=r.snippet,
+        )
+        for r in rows
+    ]

@@ -171,3 +171,15 @@ async def test_search_endpoint(client, make_token, seed, corpus):
     first = r.json()["results"][0]
     assert first["url"].startswith("https://github.com/")
     assert first["kind"] == "markdown_file"
+
+
+async def test_baselines_respect_permissions(seed, corpus):
+    from tacit_api.search.hybrid import baseline_search
+
+    for mode in ("vector", "keyword"):
+        async with rls_session(seed.alice, seed.acme) as s:
+            alice = [h.title for h in await baseline_search(s, "stripe billing fees", mode)]
+        async with rls_session(seed.bob, seed.acme) as s:
+            bob = [h.title for h in await baseline_search(s, "stripe billing fees", mode)]
+        assert "Switch billing to Stripe" in alice, mode
+        assert "Switch billing to Stripe" not in bob, mode
