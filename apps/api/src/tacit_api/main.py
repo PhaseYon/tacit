@@ -6,19 +6,30 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import select
 
+from .agent.routes import router as ask_router
 from .config import get_settings
+from .connectors.github.routes import router as github_router
 from .db import dispose_engine
 from .deps import CurrentPrincipal, CurrentWorkspace, UserDB
+from .graph.routes import router as graph_router
+from .mcp_server import mcp_app
 from .models import Member, User, Workspace
+from .search.routes import router as search_router
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
-    yield
+    # The MCP app has its own lifespan (session manager) that must run too.
+    async with mcp_app.lifespan(mcp_app):
+        yield
     await dispose_engine()
 
 
 app = FastAPI(title="Tacit API", version="0.1.0", lifespan=lifespan)
+app.include_router(github_router)
+app.include_router(search_router)
+app.include_router(graph_router)
+app.include_router(ask_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[get_settings().web_origin],
@@ -83,6 +94,11 @@ async def list_members(ws: CurrentWorkspace) -> list[MemberOut]:
         MemberOut(user_id=u.id, name=u.name, email=u.email, role=m.role, joined_at=m.created_at)
         for m, u in rows
     ]
+
+
+# Last, so the REST routes above take precedence. Serves /mcp and the OAuth
+# protected-resource metadata under /.well-known.
+app.mount("/", mcp_app)
 
 
 def run() -> None:

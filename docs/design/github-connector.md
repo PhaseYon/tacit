@@ -45,8 +45,9 @@ user's email during linking.
 `pull_request_review_comment`, `push`, `member`, `membership`, `team`, `organization`,
 `github_app_authorization` (a user revoked the App, so we drop their link).
 
-App settings: "Request user authorization (OAuth) during installation" **on**, so the
-setup callback includes a `code` we can use to verify the installer. Setup URL is
+App settings: "Request user authorization (OAuth) during installation" **off**. When
+it's on, GitHub sends the installer to the OAuth callback instead of the Setup URL
+(see "Install flow" for how we verify the installer instead). Setup URL is
 `{API}/github/setup`. Webhook URL is `{API}/webhooks/github`. Store the App config as a
 **manifest** (`infra/github/app-manifest.json`) so dev and prod Apps can be recreated
 with the manifest flow instead of clicking through settings.
@@ -222,10 +223,14 @@ Celery beat ──▶ reconcile / ACL refresh / redeliver failed ─────
 1. In a workspace, an admin clicks "Connect GitHub". The API issues a signed `state` (JWT:
    workspace_id, user_id, nonce, 10-minute expiry) and redirects to
    `github.com/apps/<slug>/installations/new?state=…`.
-2. GitHub redirects to `/github/setup?installation_id&setup_action&state&code`. **The
-   `installation_id` in that URL is unauthenticated.** We verify `state`, exchange
-   `code` for a user token, and check that the installation appears in
-   `GET /user/installations`. Then we discard the token.
+2. GitHub redirects to `/github/setup?installation_id&setup_action&state`. **The
+   `installation_id` in that URL is unauthenticated.** We verify `state`, then check
+   the installation against the user's *linked, OAuth-verified* GitHub id (connecting
+   requires linking GitHub first). A personal install's account must be that user; for an
+   org install, `GET /orgs/{org}/memberships/{login}` (installation token) must show an
+   active admin. *(Implementation note, 2026-10-25: this replaces the original
+   code-exchange plan, which doesn't work because GitHub skips the Setup URL when
+   OAuth-on-install is enabled.)*
 3. Upsert `github_installation` (insert fails if the install already belongs to
    another workspace). The `installation.created` webhook may arrive before or after
    this; whichever comes second finds the row and moves on. Both paths enqueue

@@ -1,0 +1,3128 @@
+{
+  "repository": {
+    "id": 710000001,
+    "node_id": "R_kgDOLRK710000001",
+    "name": "handbook",
+    "full_name": "larkspur/handbook",
+    "private": false,
+    "visibility": "public",
+    "owner": {
+      "login": "larkspur",
+      "id": 91000000,
+      "type": "Organization"
+    },
+    "html_url": "https://github.com/larkspur/handbook",
+    "description": "Larkspur engineering handbook and architecture decision records",
+    "url": "https://api.github.com/repos/larkspur/handbook",
+    "created_at": "2025-03-09T18:00:00Z",
+    "default_branch": "main",
+    "archived": false
+  },
+  "issues": [
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/9",
+      "repository_url": "https://api.github.com/repos/larkspur/handbook",
+      "comments_url": "https://api.github.com/repos/larkspur/handbook/issues/9/comments",
+      "html_url": "https://github.com/larkspur/handbook/issues/9",
+      "id": 2100100009,
+      "node_id": "I_kwDOLRK10009",
+      "number": 9,
+      "title": "Broken link in README",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 6364667319,
+          "node_id": "LA_kwDOLRK6364667319",
+          "name": "docs",
+          "color": "e5773e"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 0,
+      "created_at": "2025-06-30T10:00:00Z",
+      "updated_at": "2025-06-30T12:00:00Z",
+      "closed_at": "2025-06-30T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "The link to the code review doc 404s.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/14",
+      "repository_url": "https://api.github.com/repos/larkspur/handbook",
+      "comments_url": "https://api.github.com/repos/larkspur/handbook/issues/14/comments",
+      "html_url": "https://github.com/larkspur/handbook/issues/14",
+      "id": 2100100014,
+      "node_id": "I_kwDOLRK10014",
+      "number": 14,
+      "title": "Who needs to approve an ADR?",
+      "user": {
+        "login": "priya-natarajan",
+        "id": 91000006,
+        "node_id": "U_kgDO91000006",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000006?v=4",
+        "html_url": "https://github.com/priya-natarajan",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 8069659470,
+          "node_id": "LA_kwDOLRK8069659470",
+          "name": "question",
+          "color": "c883d1"
+        },
+        {
+          "id": 7250053782,
+          "node_id": "LA_kwDOLRK7250053782",
+          "name": "process",
+          "color": "9c2c22"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 3,
+      "created_at": "2025-09-24T09:00:00Z",
+      "updated_at": "2025-09-25T12:00:00Z",
+      "closed_at": "2025-09-25T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "I'm about to open my first ADR (UUIDv7 keys). ADR-0001 says \"CTO + an engineer who will\nown the change\". Does that mean two approvals on the PR? And do vendor ADRs need Inês?",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/21",
+      "repository_url": "https://api.github.com/repos/larkspur/handbook",
+      "comments_url": "https://api.github.com/repos/larkspur/handbook/issues/21/comments",
+      "html_url": "https://github.com/larkspur/handbook/issues/21",
+      "id": 2100100021,
+      "node_id": "I_kwDOLRK10021",
+      "number": 21,
+      "title": "Do we need an ADR for feature flags?",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 8069659470,
+          "node_id": "LA_kwDOLRK8069659470",
+          "name": "question",
+          "color": "c883d1"
+        }
+      ],
+      "state": "open",
+      "state_reason": null,
+      "locked": false,
+      "assignees": [],
+      "comments": 2,
+      "created_at": "2026-04-07T10:00:00Z",
+      "updated_at": "2026-04-09T10:00:00Z",
+      "closed_at": null,
+      "author_association": "MEMBER",
+      "body": "We've used a home-grown `feature_flags` table for the search cutover and the WorkOS\nrollout. Should we write an ADR, or look at a vendor (LaunchDarkly, Unleash)?",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/24",
+      "repository_url": "https://api.github.com/repos/larkspur/handbook",
+      "comments_url": "https://api.github.com/repos/larkspur/handbook/issues/24/comments",
+      "html_url": "https://github.com/larkspur/handbook/issues/24",
+      "id": 2100100024,
+      "node_id": "I_kwDOLRK10024",
+      "number": 24,
+      "title": "Tech radar still lists Elasticsearch as Adopt",
+      "user": {
+        "login": "ravi-kapoor",
+        "id": 91000009,
+        "node_id": "U_kgDO91000009",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000009?v=4",
+        "html_url": "https://github.com/ravi-kapoor",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 6364667319,
+          "node_id": "LA_kwDOLRK6364667319",
+          "name": "docs",
+          "color": "e5773e"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 2,
+      "created_at": "2026-05-28T10:00:00Z",
+      "updated_at": "2026-06-02T12:05:00Z",
+      "closed_at": "2026-06-02T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Noticed during onboarding docs review: the radar says Adopt for Elasticsearch, but the cluster was deleted in April. Also Auth0.",
+      "reactions": {
+        "total_count": 0
+      }
+    }
+  ],
+  "pull_requests": [
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/1",
+      "id": 1900100001,
+      "node_id": "PR_kwDOLRK10001",
+      "html_url": "https://github.com/larkspur/handbook/pull/1",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/1",
+      "number": 1,
+      "state": "closed",
+      "locked": false,
+      "title": "Add ADR process (ADR-0001) and template",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Starting the handbook. ADR-0001 says how we record decisions; the template is in\n`docs/adr/template.md`.\n\nRule of thumb: if you'd have to explain it to a new hire in six months, write an ADR.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-03-10T09:12:00Z",
+      "updated_at": "2025-03-10T17:05:00Z",
+      "closed_at": "2025-03-10T17:05:00Z",
+      "merged_at": "2025-03-10T17:05:00Z",
+      "merge_commit_sha": "8b4aa69c8727720a38288bff6f4c4dba4f801aca",
+      "head": {
+        "label": "larkspur:pr-adr-0001",
+        "ref": "pr-adr-0001",
+        "sha": "4197ac321883d3bc12efe550070bb62394b6232e"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "b61531853c9259bce04a2bd0f567c6771b56d464"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 2,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/2",
+      "id": 1900100002,
+      "node_id": "PR_kwDOLRK10002",
+      "html_url": "https://github.com/larkspur/handbook/pull/2",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/2",
+      "number": 2,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0002: Python + FastAPI backend, Postgres as system of record",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Writing down what we already agreed on the kickoff call: Python/FastAPI, Postgres,\nSQLAlchemy + Alembic. Also lists why not Node/NestJS or Go.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-03-12T10:20:00Z",
+      "updated_at": "2025-03-14T16:10:00Z",
+      "closed_at": "2025-03-14T16:10:00Z",
+      "merged_at": "2025-03-14T16:10:00Z",
+      "merge_commit_sha": "4f38670ce77bb2d79303d6efd776b8d46688e33f",
+      "head": {
+        "label": "larkspur:pr-adr-0002",
+        "ref": "pr-adr-0002",
+        "sha": "e210160593771b0326c3b19bd325d88ec8935996"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "da47383c3309cab8a444415e63b10c4cc8d6c2f4"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/3",
+      "id": 1900100003,
+      "node_id": "PR_kwDOLRK10003",
+      "html_url": "https://github.com/larkspur/handbook/pull/3",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/3",
+      "number": 3,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0003: Host on Heroku",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Proposal: Heroku for API, worker and web, plus Heroku Postgres and Redis.\n\nWe don't have anyone to run infrastructure and we need to ship the pilot in April. Heroku\npipelines + review apps get us there. I put the exit criteria in Consequences: bill over\n~$2k/month, or a customer needing private networking.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8793723193,
+          "node_id": "LA_kwDOLRK8793723193",
+          "name": "infra",
+          "color": "0ce9b0"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-03-20T13:00:00Z",
+      "updated_at": "2025-03-24T10:15:00Z",
+      "closed_at": "2025-03-24T10:15:00Z",
+      "merged_at": "2025-03-24T10:15:00Z",
+      "merge_commit_sha": "748bac34bf98e47aa11b45fc49aef462b1a595b5",
+      "head": {
+        "label": "larkspur:pr-adr-0003",
+        "ref": "pr-adr-0003",
+        "sha": "bd6645062145feb13f57300eba4292e8a03f0e66"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "97fb2ba279dbbff9e631bb2a846d02cc4ff428c8"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 1,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/4",
+      "id": 1900100004,
+      "node_id": "PR_kwDOLRK10004",
+      "html_url": "https://github.com/larkspur/handbook/pull/4",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/4",
+      "number": 4,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0004: Auth0 for authentication",
+      "user": {
+        "login": "jonah-blake",
+        "id": 91000004,
+        "node_id": "U_kgDO91000004",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000004?v=4",
+        "html_url": "https://github.com/jonah-blake",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "We shouldn't build password storage, resets and MFA ourselves. Auth0 Essentials covers\nemail/password, Google login and MFA. The API verifies RS256 JWTs against the JWKS.\n\nLooked at Cognito (cheaper, but the hosted UI is rough and customizing it is painful) and\nClerk (nice DX, very React-centric, less mature for our API-first setup).",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8315324353,
+          "node_id": "LA_kwDOLRK8315324353",
+          "name": "security",
+          "color": "05d664"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-04-03T10:30:00Z",
+      "updated_at": "2025-04-08T12:00:00Z",
+      "closed_at": "2025-04-08T12:00:00Z",
+      "merged_at": "2025-04-08T12:00:00Z",
+      "merge_commit_sha": "4f04bad4f36451d9da8907a5016052b19d5302ab",
+      "head": {
+        "label": "larkspur:pr-adr-0004",
+        "ref": "pr-adr-0004",
+        "sha": "92b017de53eb29b624038503f555f019530550a4"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "ed0ec5a79996101964a3418c00333ee653e3d7e2"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "jonah-blake",
+        "id": 91000004,
+        "node_id": "U_kgDO91000004",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000004?v=4",
+        "html_url": "https://github.com/jonah-blake",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 1
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/5",
+      "id": 1900100005,
+      "node_id": "PR_kwDOLRK10005",
+      "html_url": "https://github.com/larkspur/handbook/pull/5",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/5",
+      "number": 5,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0005: Elasticsearch for report search",
+      "user": {
+        "login": "jonah-blake",
+        "id": 91000004,
+        "node_id": "U_kgDO91000004",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000004?v=4",
+        "html_url": "https://github.com/jonah-blake",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Search is the feature inspectors ask about most in pilot interviews: \"find that report on\nMaple Ave from last spring\", \"every report where we flagged polybutylene pipe\".\n\nProposal: index reports into Elasticsearch on Elastic Cloud and serve search from there.\n\nWhy ES and not Postgres FTS:\n- fuzzy address matching (typos, abbreviations) out of the box\n- relevance tuning (boost address and client over notes)\n- we expect 10M+ reports in two years; I don't want search load on the primary\n\nCosts: about $95/month to start, plus an indexing job.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8035683751,
+          "node_id": "LA_kwDOLRK8035683751",
+          "name": "search",
+          "color": "52576d"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-04-15T14:00:00Z",
+      "updated_at": "2025-04-22T11:30:00Z",
+      "closed_at": "2025-04-22T11:30:00Z",
+      "merged_at": "2025-04-22T11:30:00Z",
+      "merge_commit_sha": "fc5b1f781c8059c0b0d69b4e155467378a69a0a6",
+      "head": {
+        "label": "larkspur:pr-adr-0005",
+        "ref": "pr-adr-0005",
+        "sha": "1159419aaf28bd202fe4b232bb1e7c5828a4c8b6"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "77a104a377b28adcb38ad16dff90c1101bb4d72b"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "jonah-blake",
+        "id": 91000004,
+        "node_id": "U_kgDO91000004",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000004?v=4",
+        "html_url": "https://github.com/jonah-blake",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 1,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/6",
+      "id": 1900100006,
+      "node_id": "PR_kwDOLRK10006",
+      "html_url": "https://github.com/larkspur/handbook/pull/6",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/6",
+      "number": 6,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0006: Redux Toolkit for frontend state",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "The report editor has deeply nested state (sections → items → findings → photos) and\nwe need undo and good devtools. Proposal: Redux Toolkit, one slice per domain.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-04-28T09:00:00Z",
+      "updated_at": "2025-04-30T15:20:00Z",
+      "closed_at": "2025-04-30T15:20:00Z",
+      "merged_at": "2025-04-30T15:20:00Z",
+      "merge_commit_sha": "d27aab3f8c2254cf7e66c087751135bda91f3a19",
+      "head": {
+        "label": "larkspur:pr-adr-0006",
+        "ref": "pr-adr-0006",
+        "sha": "09fdc9eabeccbf341100e048836ca05632c28c72"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "eb0f80bcddbca3785717b2fe4bf68bd58e821cb1"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 2,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/7",
+      "id": 1900100007,
+      "node_id": "PR_kwDOLRK10007",
+      "html_url": "https://github.com/larkspur/handbook/pull/7",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/7",
+      "number": 7,
+      "state": "closed",
+      "locked": false,
+      "title": "Add code review guidelines",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "How we review PRs and who approves ADRs. Mostly writing down what we already do.",
+      "labels": [
+        {
+          "id": 6364667319,
+          "node_id": "LA_kwDOLRK6364667319",
+          "name": "docs",
+          "color": "e5773e"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-05-02T10:00:00Z",
+      "updated_at": "2025-05-05T09:30:00Z",
+      "closed_at": "2025-05-05T09:30:00Z",
+      "merged_at": "2025-05-05T09:30:00Z",
+      "merge_commit_sha": "10512069d0eccb16288d147d931fa3c207741a01",
+      "head": {
+        "label": "larkspur:pr-code-review",
+        "ref": "pr-code-review",
+        "sha": "9fe8a8add4e3b845350ad22acc2ee666b5bed665"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "7915c2ad81577a299d6ceb0d0fe9f544a0348d32"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/8",
+      "id": 1900100008,
+      "node_id": "PR_kwDOLRK10008",
+      "html_url": "https://github.com/larkspur/handbook/pull/8",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/8",
+      "number": 8,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0007: URL path API versioning",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "First integration partner wants to pull reports into their CRM, so we need a versioning\npolicy before we publish the API. Proposal: `/v1/...` in the path.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 7902841359,
+          "node_id": "LA_kwDOLRK7902841359",
+          "name": "api",
+          "color": "cd0185"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-06-12T11:00:00Z",
+      "updated_at": "2025-06-17T10:00:00Z",
+      "closed_at": "2025-06-17T10:00:00Z",
+      "merged_at": "2025-06-17T10:00:00Z",
+      "merge_commit_sha": "e1f9e5ef9ce8cc78b5f7b8acfe2a3a84a0d2ec0f",
+      "head": {
+        "label": "larkspur:pr-adr-0007",
+        "ref": "pr-adr-0007",
+        "sha": "6c5c7aa155fa510f35ae08b5829fa9f1dfb5da95"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "fa49a31bba2a53f619663329b1e53c96bfc0fe9f"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/10",
+      "id": 1900100010,
+      "node_id": "PR_kwDOLRK10010",
+      "html_url": "https://github.com/larkspur/handbook/pull/10",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/10",
+      "number": 10,
+      "state": "closed",
+      "locked": false,
+      "title": "Fix typos in ADR-0005",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "teh → the, Elasticsearh → Elasticsearch.",
+      "labels": [
+        {
+          "id": 6364667319,
+          "node_id": "LA_kwDOLRK6364667319",
+          "name": "docs",
+          "color": "e5773e"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-07-01T08:40:00Z",
+      "updated_at": "2025-07-01T09:05:00Z",
+      "closed_at": "2025-07-01T09:05:00Z",
+      "merged_at": "2025-07-01T09:05:00Z",
+      "merge_commit_sha": "c72f3c501940ed570c4905fddc7883cc6be00669",
+      "head": {
+        "label": "larkspur:pr-typo-0005",
+        "ref": "pr-typo-0005",
+        "sha": "821f00ddf783160080cbf98fd652b6dd4327a2e0"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "60785ffe0c28b235770d6f1db6104d9cdec8618e"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/11",
+      "id": 1900100011,
+      "node_id": "PR_kwDOLRK10011",
+      "html_url": "https://github.com/larkspur/handbook/pull/11",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/11",
+      "number": 11,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0008: Offline-first PWA instead of native apps",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "After the field visits last week: inspectors lose signal in basements and crawl spaces\nall the time, and two pilot users lost photos when the browser tab reloaded.\n\nProposal: make the mobile web app an offline-first PWA (service worker, IndexedDB drafts,\ndurable photo outbox) rather than building native apps. Details and the React Native\ncomparison are in the ADR.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        },
+        {
+          "id": 6014178784,
+          "node_id": "LA_kwDOLRK6014178784",
+          "name": "mobile",
+          "color": "22684c"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-07-29T10:00:00Z",
+      "updated_at": "2025-08-05T14:00:00Z",
+      "closed_at": "2025-08-05T14:00:00Z",
+      "merged_at": "2025-08-05T14:00:00Z",
+      "merge_commit_sha": "c0667f8190a18e6a24636b64d5c5f9deb94fa685",
+      "head": {
+        "label": "larkspur:pr-adr-0008",
+        "ref": "pr-adr-0008",
+        "sha": "ed63af1a99ba437b11b4189aa1fdd0fa9b5fdad2"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "98556a211b8b84c6e98cc86e89151d586d441ba8"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 1,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/12",
+      "id": 1900100012,
+      "node_id": "PR_kwDOLRK10012",
+      "html_url": "https://github.com/larkspur/handbook/pull/12",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/12",
+      "number": 12,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR proposal: GraphQL for the public API",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "The report editor fetches a lot of nested data (report → sections → items → findings →\nphotos) and we have N+1 request waterfalls on slow connections. GraphQL would let the\nclient ask for exactly what it needs in one request, and partners could use the same API.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 7902841359,
+          "node_id": "LA_kwDOLRK7902841359",
+          "name": "api",
+          "color": "cd0185"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-09-03T10:00:00Z",
+      "updated_at": "2025-09-12T16:00:00Z",
+      "closed_at": "2025-09-12T16:00:00Z",
+      "merged_at": null,
+      "merge_commit_sha": null,
+      "head": {
+        "label": "larkspur:pr-graphql",
+        "ref": "pr-graphql",
+        "sha": "8d7af52560104a56b7e2f8f0777882ec81223c87"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "6cdce8c801d6edb3bee62f0784a4d0d4afc95dd8"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": false,
+      "merged_by": null,
+      "comments": 1,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/13",
+      "id": 1900100013,
+      "node_id": "PR_kwDOLRK10013",
+      "html_url": "https://github.com/larkspur/handbook/pull/13",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/13",
+      "number": 13,
+      "state": "closed",
+      "locked": false,
+      "title": "Add on-call guide",
+      "user": {
+        "login": "kofi-mensah",
+        "id": 91000008,
+        "node_id": "U_kgDO91000008",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000008?v=4",
+        "html_url": "https://github.com/kofi-mensah",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "First version of the on-call rotation and runbooks.",
+      "labels": [
+        {
+          "id": 6364667319,
+          "node_id": "LA_kwDOLRK6364667319",
+          "name": "docs",
+          "color": "e5773e"
+        },
+        {
+          "id": 8793723193,
+          "node_id": "LA_kwDOLRK8793723193",
+          "name": "infra",
+          "color": "0ce9b0"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-09-15T10:00:00Z",
+      "updated_at": "2025-09-16T11:00:00Z",
+      "closed_at": "2025-09-16T11:00:00Z",
+      "merged_at": "2025-09-16T11:00:00Z",
+      "merge_commit_sha": "2de4e91c5fe7aa6d29a1c0b07098e018166e4287",
+      "head": {
+        "label": "larkspur:pr-oncall",
+        "ref": "pr-oncall",
+        "sha": "11752910b1e902f5b0737ed45de3628e849359a4"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "ad505f9d465b78eec61d59eb712e379913e819d1"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "kofi-mensah",
+        "id": 91000008,
+        "node_id": "U_kgDO91000008",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000008?v=4",
+        "html_url": "https://github.com/kofi-mensah",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/15",
+      "id": 1900100015,
+      "node_id": "PR_kwDOLRK10015",
+      "html_url": "https://github.com/larkspur/handbook/pull/15",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/15",
+      "number": 15,
+      "state": "closed",
+      "locked": false,
+      "title": "Code review: vendor ADRs need CEO sign-off",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "From #14: vendor decisions over $500/month need a 👍 from Inês.",
+      "labels": [
+        {
+          "id": 6364667319,
+          "node_id": "LA_kwDOLRK6364667319",
+          "name": "docs",
+          "color": "e5773e"
+        },
+        {
+          "id": 7250053782,
+          "node_id": "LA_kwDOLRK7250053782",
+          "name": "process",
+          "color": "9c2c22"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-09-25T10:00:00Z",
+      "updated_at": "2025-09-25T11:45:00Z",
+      "closed_at": "2025-09-25T11:45:00Z",
+      "merged_at": "2025-09-25T11:45:00Z",
+      "merge_commit_sha": "542038badbbf40575f49ee96f9d40f639b437c59",
+      "head": {
+        "label": "larkspur:pr-code-review-vendors",
+        "ref": "pr-code-review-vendors",
+        "sha": "39042a0c95df674a1d8c60e41a6997d7da471f75"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "36db91f09e6092aa6cc8bdf3225c61b6be911995"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/16",
+      "id": 1900100016,
+      "node_id": "PR_kwDOLRK10016",
+      "html_url": "https://github.com/larkspur/handbook/pull/16",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/16",
+      "number": 16,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0009: UUIDv7 primary keys for new tables",
+      "user": {
+        "login": "priya-natarajan",
+        "id": 91000006,
+        "node_id": "U_kgDO91000006",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000006?v=4",
+        "html_url": "https://github.com/priya-natarajan",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "The offline outbox creates findings and photos on the device, so they need ids before the\nserver sees them. Proposal: UUIDv7 for new tables. Benchmarks on a copy of `photos` (40M\nrows): UUIDv4 inserts were 2.3x slower than bigint because of index page splits; UUIDv7 was\nwithin 8% of bigint.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8377661486,
+          "node_id": "LA_kwDOLRK8377661486",
+          "name": "database",
+          "color": "a8ec9f"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-09-26T10:00:00Z",
+      "updated_at": "2025-10-02T12:00:00Z",
+      "closed_at": "2025-10-02T12:00:00Z",
+      "merged_at": "2025-10-02T12:00:00Z",
+      "merge_commit_sha": "466703a255e9d3bb4b063b64c8275ff1837aefd0",
+      "head": {
+        "label": "larkspur:pr-adr-0009",
+        "ref": "pr-adr-0009",
+        "sha": "51f0ecba10b6de27d6beff5c38d664a563ea044b"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "82f82bdc43db409ed14f6152b079fe8d9a1547ef"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "priya-natarajan",
+        "id": 91000006,
+        "node_id": "U_kgDO91000006",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000006?v=4",
+        "html_url": "https://github.com/priya-natarajan",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/17",
+      "id": 1900100017,
+      "node_id": "PR_kwDOLRK10017",
+      "html_url": "https://github.com/larkspur/handbook/pull/17",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/17",
+      "number": 17,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0010: Move from Heroku to AWS (ECS Fargate + RDS)",
+      "user": {
+        "login": "kofi-mensah",
+        "id": 91000008,
+        "node_id": "U_kgDO91000008",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000008?v=4",
+        "html_url": "https://github.com/kofi-mensah",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "ADR-0003 said we'd revisit Heroku when the bill passed ~$2k/month or a customer needed\nprivate networking. Both happened:\n\n- October bill: $2,912 (Performance-M dynos for PDF workers after the R14 errors)\n- Brightwell Surveys (enterprise pilot) needs VPC peering → Heroku Private Spaces\n\nEstimate on AWS (Fargate + RDS + ElastiCache + ALB): ~$1,700/month. Migration plan is in\nlarkspur/api#25. This PR adds ADR-0010 and marks ADR-0003 as superseded.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8793723193,
+          "node_id": "LA_kwDOLRK8793723193",
+          "name": "infra",
+          "color": "0ce9b0"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-11-10T10:00:00Z",
+      "updated_at": "2025-11-18T15:00:00Z",
+      "closed_at": "2025-11-18T15:00:00Z",
+      "merged_at": "2025-11-18T15:00:00Z",
+      "merge_commit_sha": "ca3679fae65b07bacd03aa5540639a2b4a64f40d",
+      "head": {
+        "label": "larkspur:pr-adr-0010",
+        "ref": "pr-adr-0010",
+        "sha": "ee334b22e12815dc6b09e405433901ea5499beda"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "619026857813f3690fb441e8585846e46176d603"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "kofi-mensah",
+        "id": 91000008,
+        "node_id": "U_kgDO91000008",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000008?v=4",
+        "html_url": "https://github.com/kofi-mensah",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 1,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/18",
+      "id": 1900100018,
+      "node_id": "PR_kwDOLRK10018",
+      "html_url": "https://github.com/larkspur/handbook/pull/18",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/18",
+      "number": 18,
+      "state": "closed",
+      "locked": false,
+      "title": "Add tech radar",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "A one-page view of what we use, what we're trying and what we've retired.",
+      "labels": [
+        {
+          "id": 6364667319,
+          "node_id": "LA_kwDOLRK6364667319",
+          "name": "docs",
+          "color": "e5773e"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-01-08T10:00:00Z",
+      "updated_at": "2026-01-09T10:00:00Z",
+      "closed_at": "2026-01-09T10:00:00Z",
+      "merged_at": "2026-01-09T10:00:00Z",
+      "merge_commit_sha": "bd8762a4e5bad423b4ec9bcc2fa67b95c5b708f5",
+      "head": {
+        "label": "larkspur:pr-tech-radar",
+        "ref": "pr-tech-radar",
+        "sha": "61176469198b340e0fa4486aef87bb611b75f1a6"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "ff1edb6e8b99ec3243b3abe8f709b84c58ea7054"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/19",
+      "id": 1900100019,
+      "node_id": "PR_kwDOLRK10019",
+      "html_url": "https://github.com/larkspur/handbook/pull/19",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/19",
+      "number": 19,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0011: TanStack Query for server state (supersedes ADR-0006)",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Follow-up to larkspur/web#10. Most of our Redux store is cached server data\nand we hand-roll loading flags, invalidation and optimistic updates in every slice.\n\nProposal: TanStack Query for server state (persisted to IndexedDB for offline), Zustand\nfor the bits of real client state, remove Redux screen by screen. Marks ADR-0006 as\nsuperseded.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-02-03T10:00:00Z",
+      "updated_at": "2026-02-10T11:00:00Z",
+      "closed_at": "2026-02-10T11:00:00Z",
+      "merged_at": "2026-02-10T11:00:00Z",
+      "merge_commit_sha": "12f9a7b724dd28172ff5bfcfb62a855a74c65e4b",
+      "head": {
+        "label": "larkspur:pr-adr-0011",
+        "ref": "pr-adr-0011",
+        "sha": "27935453b9318a6b5bb483c4494809326f3bfe9a"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "c0f44e35ede904d218d01e89eb413673ea57996b"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 1,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/20",
+      "id": 1900100020,
+      "node_id": "PR_kwDOLRK10020",
+      "html_url": "https://github.com/larkspur/handbook/pull/20",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/20",
+      "number": 20,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+      "user": {
+        "login": "priya-natarajan",
+        "id": 91000006,
+        "node_id": "U_kgDO91000006",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000006?v=4",
+        "html_url": "https://github.com/priya-natarajan",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Proposal to supersede ADR-0005.\n\nBackground: the 2025-12-04 reindex incident (postmortem in `larkspur/api`), the\nevaluation in larkspur/api#32 and the benchmark spike in larkspur/api#38.\n\nTL;DR: 2.1M reports (not 10M), p95 38 ms on Postgres FTS vs 22 ms on ES, budget 150 ms.\nES costs $1,380/month and we maintain permission filtering twice. Plan: tsvector + GIN,\nshadow-read for two weeks, cut over behind a flag, delete the cluster.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8035683751,
+          "node_id": "LA_kwDOLRK8035683751",
+          "name": "search",
+          "color": "52576d"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-03-09T10:00:00Z",
+      "updated_at": "2026-03-17T16:00:00Z",
+      "closed_at": "2026-03-17T16:00:00Z",
+      "merged_at": "2026-03-17T16:00:00Z",
+      "merge_commit_sha": "edeff9b65fd8746b574e2e51e042cf27d87c7ce7",
+      "head": {
+        "label": "larkspur:pr-adr-0012",
+        "ref": "pr-adr-0012",
+        "sha": "e51750ca6a2a8d22af54f2c1526da30d943f374c"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "343e1c24d98917e41f483259bf70f39c71375f8f"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "priya-natarajan",
+        "id": 91000006,
+        "node_id": "U_kgDO91000006",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000006?v=4",
+        "html_url": "https://github.com/priya-natarajan",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 1,
+      "review_comments": 1
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/22",
+      "id": 1900100022,
+      "node_id": "PR_kwDOLRK10022",
+      "html_url": "https://github.com/larkspur/handbook/pull/22",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/22",
+      "number": 22,
+      "state": "closed",
+      "locked": false,
+      "title": "On-call: replace Elasticsearch runbook with Postgres FTS",
+      "user": {
+        "login": "kofi-mensah",
+        "id": 91000008,
+        "node_id": "U_kgDO91000008",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000008?v=4",
+        "html_url": "https://github.com/kofi-mensah",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "The ES cluster is gone (larkspur/api#46). New search runbook points at the GIN index.",
+      "labels": [
+        {
+          "id": 6364667319,
+          "node_id": "LA_kwDOLRK6364667319",
+          "name": "docs",
+          "color": "e5773e"
+        },
+        {
+          "id": 8793723193,
+          "node_id": "LA_kwDOLRK8793723193",
+          "name": "infra",
+          "color": "0ce9b0"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-04-15T10:00:00Z",
+      "updated_at": "2026-04-15T15:00:00Z",
+      "closed_at": "2026-04-15T15:00:00Z",
+      "merged_at": "2026-04-15T15:00:00Z",
+      "merge_commit_sha": "55ac08e42df39a438081d840fcc3547bfb90ad07",
+      "head": {
+        "label": "larkspur:pr-oncall-search",
+        "ref": "pr-oncall-search",
+        "sha": "658d05d45606cc4ddf4d0718f36e5ed27d7af87e"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "14dc1e16a8167e851b239d81b8c432834f151367"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "kofi-mensah",
+        "id": 91000008,
+        "node_id": "U_kgDO91000008",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000008?v=4",
+        "html_url": "https://github.com/kofi-mensah",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/23",
+      "id": 1900100023,
+      "node_id": "PR_kwDOLRK10023",
+      "html_url": "https://github.com/larkspur/handbook/pull/23",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/23",
+      "number": 23,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0013: WorkOS for auth, SSO and SCIM (supersedes ADR-0004)",
+      "user": {
+        "login": "ravi-kapoor",
+        "id": 91000009,
+        "node_id": "U_kgDO91000009",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000009?v=4",
+        "html_url": "https://github.com/ravi-kapoor",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Enterprise deals are blocked on SAML SSO and SCIM (larkspur/api#45). Auth0's Enterprise\nquote plus SCIM add-on doesn't fit our pricing; WorkOS charges per SSO connection, which we\ncan pass through in the enterprise plan.\n\nMigration: import Auth0 password hashes into WorkOS, so users keep their passwords. Marks\nADR-0004 as superseded.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8315324353,
+          "node_id": "LA_kwDOLRK8315324353",
+          "name": "security",
+          "color": "05d664"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-05-12T10:00:00Z",
+      "updated_at": "2026-05-20T12:00:00Z",
+      "closed_at": "2026-05-20T12:00:00Z",
+      "merged_at": "2026-05-20T12:00:00Z",
+      "merge_commit_sha": "ad4740cc3ed8a338383425c77a49a2952e24818d",
+      "head": {
+        "label": "larkspur:pr-adr-0013",
+        "ref": "pr-adr-0013",
+        "sha": "76464b97f3d4d911006702a80a90180456925f79"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "316fcdbff5043fc99bc8e56aa90334ed924b54ef"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "ravi-kapoor",
+        "id": 91000009,
+        "node_id": "U_kgDO91000009",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000009?v=4",
+        "html_url": "https://github.com/ravi-kapoor",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 2,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/25",
+      "id": 1900100025,
+      "node_id": "PR_kwDOLRK10025",
+      "html_url": "https://github.com/larkspur/handbook/pull/25",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/25",
+      "number": 25,
+      "state": "closed",
+      "locked": false,
+      "title": "Tech radar: retire Elasticsearch and Auth0",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "ES cluster deleted in April, Auth0 removal in progress. Moved both to Retired.",
+      "labels": [
+        {
+          "id": 6364667319,
+          "node_id": "LA_kwDOLRK6364667319",
+          "name": "docs",
+          "color": "e5773e"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-06-02T10:00:00Z",
+      "updated_at": "2026-06-02T12:00:00Z",
+      "closed_at": "2026-06-02T12:00:00Z",
+      "merged_at": "2026-06-02T12:00:00Z",
+      "merge_commit_sha": "15603853c148fc267787397277ee798de1de5d71",
+      "head": {
+        "label": "larkspur:pr-radar-update",
+        "ref": "pr-radar-update",
+        "sha": "c40b3b361aeadac31bf6f162e7ea8952ac7c4ca1"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "0a0b08fbe754e40b30d7067e2e80645137f763f6"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/26",
+      "id": 1900100026,
+      "node_id": "PR_kwDOLRK10026",
+      "html_url": "https://github.com/larkspur/handbook/pull/26",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/26",
+      "number": 26,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0014: Retention of inspection photos and reports",
+      "user": {
+        "login": "ravi-kapoor",
+        "id": 91000009,
+        "node_id": "U_kgDO91000009",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000009?v=4",
+        "html_url": "https://github.com/ravi-kapoor",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "We have no retention policy, and two enterprise security questionnaires asked for one.\nProposal: keep reports and photos 7 years, move photo originals to Glacier Instant\nRetrieval after 90 days.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8315324353,
+          "node_id": "LA_kwDOLRK8315324353",
+          "name": "security",
+          "color": "05d664"
+        },
+        {
+          "id": 7764701139,
+          "node_id": "LA_kwDOLRK7764701139",
+          "name": "compliance",
+          "color": "dd9440"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-08-04T10:00:00Z",
+      "updated_at": "2026-08-11T10:00:00Z",
+      "closed_at": "2026-08-11T10:00:00Z",
+      "merged_at": "2026-08-11T10:00:00Z",
+      "merge_commit_sha": "6643f70c354121751154bc1b4840044a92fc0b56",
+      "head": {
+        "label": "larkspur:pr-adr-0014",
+        "ref": "pr-adr-0014",
+        "sha": "7aa6ce39dbde67f30b1261e160c6af5712be53cb"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "7bc48120ced169e8f897569b37dd93b4d1104653"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "ravi-kapoor",
+        "id": 91000009,
+        "node_id": "U_kgDO91000009",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000009?v=4",
+        "html_url": "https://github.com/ravi-kapoor",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/27",
+      "id": 1900100027,
+      "node_id": "PR_kwDOLRK10027",
+      "html_url": "https://github.com/larkspur/handbook/pull/27",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/27",
+      "number": 27,
+      "state": "closed",
+      "locked": false,
+      "title": "ADR-0015: Fuzzy address matching with pg_trgm",
+      "user": {
+        "login": "priya-natarajan",
+        "id": 91000006,
+        "node_id": "U_kgDO91000006",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000006?v=4",
+        "html_url": "https://github.com/priya-natarajan",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Since the move to Postgres FTS, support tickets about misspelled addresses not matching\n(larkspur/api#54). Proposal: pg_trgm trigram index on the normalized address,\ncombined with FTS rank. Not bringing ES back.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8035683751,
+          "node_id": "LA_kwDOLRK8035683751",
+          "name": "search",
+          "color": "52576d"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-09-01T10:00:00Z",
+      "updated_at": "2026-09-08T11:00:00Z",
+      "closed_at": "2026-09-08T11:00:00Z",
+      "merged_at": "2026-09-08T11:00:00Z",
+      "merge_commit_sha": "e0dfaefa0476c1b1125c2cdd3f8d880a36af7ce2",
+      "head": {
+        "label": "larkspur:pr-adr-0015",
+        "ref": "pr-adr-0015",
+        "sha": "974ac4b5f78582d182fe7ae7bdbbd45ea2affa81"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "308e792ea1f99e9d14f8603595c081d2f435de28"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "priya-natarajan",
+        "id": 91000006,
+        "node_id": "U_kgDO91000006",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000006?v=4",
+        "html_url": "https://github.com/priya-natarajan",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/28",
+      "id": 1900100028,
+      "node_id": "PR_kwDOLRK10028",
+      "html_url": "https://github.com/larkspur/handbook/pull/28",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/28",
+      "number": 28,
+      "state": "open",
+      "locked": false,
+      "title": "Draft: ADR-0016 Append-only audit log",
+      "user": {
+        "login": "ravi-kapoor",
+        "id": 91000009,
+        "node_id": "U_kgDO91000009",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000009?v=4",
+        "html_url": "https://github.com/ravi-kapoor",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Draft, not ready for review. Enterprise customers want an audit log of who viewed and\nchanged reports. Exploring an append-only table vs. event sourcing.",
+      "labels": [
+        {
+          "id": 5164546230,
+          "node_id": "LA_kwDOLRK5164546230",
+          "name": "adr",
+          "color": "109a41"
+        },
+        {
+          "id": 8315324353,
+          "node_id": "LA_kwDOLRK8315324353",
+          "name": "security",
+          "color": "05d664"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-09-21T10:00:00Z",
+      "updated_at": "2026-09-22T09:00:00Z",
+      "closed_at": null,
+      "merged_at": null,
+      "merge_commit_sha": null,
+      "head": {
+        "label": "larkspur:pr-adr-audit-draft",
+        "ref": "pr-adr-audit-draft",
+        "sha": "2f94628efac59e92e1d30dd41faf7329cc143f7a"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "8fc1a7e4ca33e8620f7f7bc6373460e1b6289a05"
+      },
+      "author_association": "MEMBER",
+      "draft": true,
+      "merged": false,
+      "merged_by": null,
+      "comments": 1,
+      "review_comments": 0
+    }
+  ],
+  "pull_request_reviews": [
+    {
+      "id": 2401000001,
+      "node_id": "PRR_kwDOLRK2401000001",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/1#pullrequestreview-2401000001",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/1",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-03-10T14:30:00Z",
+      "commit_id": "4197ac321883d3bc12efe550070bb62394b6232e"
+    },
+    {
+      "id": 2401000002,
+      "node_id": "PRR_kwDOLRK2401000002",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approving. One note for the record: FastAPI's async story is great for I/O but PDF rendering must never run in a request handler. Worth a line in Consequences.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/2#pullrequestreview-2401000002",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/2",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-03-13T09:45:00Z",
+      "commit_id": "e210160593771b0326c3b19bd325d88ec8935996"
+    },
+    {
+      "id": 2401000003,
+      "node_id": "PRR_kwDOLRK2401000003",
+      "user": {
+        "login": "jonah-blake",
+        "id": 91000004,
+        "node_id": "U_kgDO91000004",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000004?v=4",
+        "html_url": "https://github.com/jonah-blake",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/2#pullrequestreview-2401000003",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/2",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-03-14T15:30:00Z",
+      "commit_id": "e210160593771b0326c3b19bd325d88ec8935996"
+    },
+    {
+      "id": 2401000004,
+      "node_id": "PRR_kwDOLRK2401000004",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Fine for now. I agree with the exit criteria, let's actually check them when we sign the first enterprise customer instead of drifting.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/3#pullrequestreview-2401000004",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/3",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-03-21T18:20:00Z",
+      "commit_id": "bd6645062145feb13f57300eba4292e8a03f0e66"
+    },
+    {
+      "id": 2401000005,
+      "node_id": "PRR_kwDOLRK2401000005",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "COMMENTED",
+      "html_url": "https://github.com/larkspur/handbook/pull/4#pullrequestreview-2401000005",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/4",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-04-04T09:10:00Z",
+      "commit_id": "92b017de53eb29b624038503f555f019530550a4"
+    },
+    {
+      "id": 2401000006,
+      "node_id": "PRR_kwDOLRK2401000006",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/4#pullrequestreview-2401000006",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/4",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-04-07T11:20:00Z",
+      "commit_id": "92b017de53eb29b624038503f555f019530550a4"
+    },
+    {
+      "id": 2401000007,
+      "node_id": "PRR_kwDOLRK2401000007",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approved. Added the SAML caveat.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/4#pullrequestreview-2401000007",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/4",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-04-08T10:05:00Z",
+      "commit_id": "92b017de53eb29b624038503f555f019530550a4"
+    },
+    {
+      "id": 2401000008,
+      "node_id": "PRR_kwDOLRK2401000008",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "I'm not convinced yet. This adds a second datastore we have to keep in sync, a reindex procedure, and a second copy of the permission rules. Postgres FTS with a GIN index handles a few million rows fine. Can we at least list Postgres FTS as an alternative with the reasons we rejected it?",
+      "state": "CHANGES_REQUESTED",
+      "html_url": "https://github.com/larkspur/handbook/pull/5#pullrequestreview-2401000008",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/5",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-04-16T10:20:00Z",
+      "commit_id": "1159419aaf28bd202fe4b232bb1e7c5828a4c8b6"
+    },
+    {
+      "id": 2401000009,
+      "node_id": "PRR_kwDOLRK2401000009",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Alternatives section addresses it. Not my first choice but I won't block.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/5#pullrequestreview-2401000009",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/5",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-04-21T15:00:00Z",
+      "commit_id": "1159419aaf28bd202fe4b232bb1e7c5828a4c8b6"
+    },
+    {
+      "id": 2401000010,
+      "node_id": "PRR_kwDOLRK2401000010",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Going with ES. Search quality is a selling point for the pilot and Jonah has run ES before. Use Elastic Cloud so we don't operate it ourselves. If keeping it in sync turns into real ops work, we revisit.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/5#pullrequestreview-2401000010",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/5",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-04-22T10:45:00Z",
+      "commit_id": "1159419aaf28bd202fe4b232bb1e7c5828a4c8b6"
+    },
+    {
+      "id": 2401000011,
+      "node_id": "PRR_kwDOLRK2401000011",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/6#pullrequestreview-2401000011",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/6",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-04-30T14:00:00Z",
+      "commit_id": "09fdc9eabeccbf341100e048836ca05632c28c72"
+    },
+    {
+      "id": 2401000012,
+      "node_id": "PRR_kwDOLRK2401000012",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/7#pullrequestreview-2401000012",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/7",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-05-02T16:00:00Z",
+      "commit_id": "9fe8a8add4e3b845350ad22acc2ee666b5bed665"
+    },
+    {
+      "id": 2401000013,
+      "node_id": "PRR_kwDOLRK2401000013",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/7#pullrequestreview-2401000013",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/7",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-05-05T09:00:00Z",
+      "commit_id": "9fe8a8add4e3b845350ad22acc2ee666b5bed665"
+    },
+    {
+      "id": 2401000014,
+      "node_id": "PRR_kwDOLRK2401000014",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "+1 to path versioning. Header versioning would be painful for the PWA: the service worker cache keys on the URL, so two API versions would collide in the cache.",
+      "state": "COMMENTED",
+      "html_url": "https://github.com/larkspur/handbook/pull/8#pullrequestreview-2401000014",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/8",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-06-13T10:30:00Z",
+      "commit_id": "6c5c7aa155fa510f35ae08b5829fa9f1dfb5da95"
+    },
+    {
+      "id": 2401000015,
+      "node_id": "PRR_kwDOLRK2401000015",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/8#pullrequestreview-2401000015",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/8",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-06-16T17:00:00Z",
+      "commit_id": "6c5c7aa155fa510f35ae08b5829fa9f1dfb5da95"
+    },
+    {
+      "id": 2401000016,
+      "node_id": "PRR_kwDOLRK2401000016",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/8#pullrequestreview-2401000016",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/8",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-06-17T09:10:00Z",
+      "commit_id": "6c5c7aa155fa510f35ae08b5829fa9f1dfb5da95"
+    },
+    {
+      "id": 2401000017,
+      "node_id": "PRR_kwDOLRK2401000017",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/10#pullrequestreview-2401000017",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/10",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-07-01T09:00:00Z",
+      "commit_id": "821f00ddf783160080cbf98fd652b6dd4327a2e0"
+    },
+    {
+      "id": 2401000018,
+      "node_id": "PRR_kwDOLRK2401000018",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approve. iOS Safari is the risk (no Background Sync, storage eviction). Let's make sure we compress photos client-side before they hit IndexedDB.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/11#pullrequestreview-2401000018",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/11",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-07-30T11:00:00Z",
+      "commit_id": "ed63af1a99ba437b11b4189aa1fdd0fa9b5fdad2"
+    },
+    {
+      "id": 2401000019,
+      "node_id": "PRR_kwDOLRK2401000019",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approved. Two frontend engineers can't maintain a web app plus two native apps. If offline photo loss keeps happening after this ships, we revisit.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/11#pullrequestreview-2401000019",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/11",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-08-05T13:30:00Z",
+      "commit_id": "ed63af1a99ba437b11b4189aa1fdd0fa9b5fdad2"
+    },
+    {
+      "id": 2401000020,
+      "node_id": "PRR_kwDOLRK2401000020",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "I see the waterfall problem, but we can fix that with a `?include=` parameter on `/v1/reports/{id}`. GraphQL makes HTTP caching and the offline cache much harder (everything is a POST to one URL), and we just published ADR-0007.",
+      "state": "COMMENTED",
+      "html_url": "https://github.com/larkspur/handbook/pull/12#pullrequestreview-2401000020",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/12",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-09-04T10:00:00Z",
+      "commit_id": "8d7af52560104a56b7e2f8f0777882ec81223c87"
+    },
+    {
+      "id": 2401000021,
+      "node_id": "PRR_kwDOLRK2401000021",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/13#pullrequestreview-2401000021",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/13",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-09-16T10:30:00Z",
+      "commit_id": "11752910b1e902f5b0737ed45de3628e849359a4"
+    },
+    {
+      "id": 2401000022,
+      "node_id": "PRR_kwDOLRK2401000022",
+      "user": {
+        "login": "ines-duarte",
+        "id": 91000002,
+        "node_id": "U_kgDO91000002",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000002?v=4",
+        "html_url": "https://github.com/ines-duarte",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/15#pullrequestreview-2401000022",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/15",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-09-25T11:30:00Z",
+      "commit_id": "39042a0c95df674a1d8c60e41a6997d7da471f75"
+    },
+    {
+      "id": 2401000023,
+      "node_id": "PRR_kwDOLRK2401000023",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approve. Let's not migrate existing tables, not worth the risk.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/16#pullrequestreview-2401000023",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/16",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-09-29T09:00:00Z",
+      "commit_id": "51f0ecba10b6de27d6beff5c38d664a563ea044b"
+    },
+    {
+      "id": 2401000024,
+      "node_id": "PRR_kwDOLRK2401000024",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/16#pullrequestreview-2401000024",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/16",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-10-02T11:00:00Z",
+      "commit_id": "51f0ecba10b6de27d6beff5c38d664a563ea044b"
+    },
+    {
+      "id": 2401000025,
+      "node_id": "PRR_kwDOLRK2401000025",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approve. I wrote ADR-0003 and its exit criteria are met, so this is the plan working as intended.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/17#pullrequestreview-2401000025",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/17",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-11-12T10:00:00Z",
+      "commit_id": "ee334b22e12815dc6b09e405433901ea5499beda"
+    },
+    {
+      "id": 2401000026,
+      "node_id": "PRR_kwDOLRK2401000026",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approved. Kofi owns the migration; target is Heroku off by early December.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/17#pullrequestreview-2401000026",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/17",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-11-18T14:30:00Z",
+      "commit_id": "ee334b22e12815dc6b09e405433901ea5499beda"
+    },
+    {
+      "id": 2401000027,
+      "node_id": "PRR_kwDOLRK2401000027",
+      "user": {
+        "login": "kofi-mensah",
+        "id": 91000008,
+        "node_id": "U_kgDO91000008",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000008?v=4",
+        "html_url": "https://github.com/kofi-mensah",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/18#pullrequestreview-2401000027",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/18",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-01-09T09:00:00Z",
+      "commit_id": "61176469198b340e0fa4486aef87bb611b75f1a6"
+    },
+    {
+      "id": 2401000028,
+      "node_id": "PRR_kwDOLRK2401000028",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approve. I wrote ADR-0006 and it was the right call for a 2-person team with a complex editor, but the editor state is now a small part of the store. The reports list migration in the spike removed 600 lines.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/19#pullrequestreview-2401000028",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/19",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-02-09T16:00:00Z",
+      "commit_id": "27935453b9318a6b5bb483c4494809326f3bfe9a"
+    },
+    {
+      "id": 2401000029,
+      "node_id": "PRR_kwDOLRK2401000029",
+      "user": {
+        "login": "kofi-mensah",
+        "id": 91000008,
+        "node_id": "U_kgDO91000008",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000008?v=4",
+        "html_url": "https://github.com/kofi-mensah",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "COMMENTED",
+      "html_url": "https://github.com/larkspur/handbook/pull/20#pullrequestreview-2401000029",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/20",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-03-10T09:30:00Z",
+      "commit_id": "e51750ca6a2a8d22af54f2c1526da30d943f374c"
+    },
+    {
+      "id": 2401000030,
+      "node_id": "PRR_kwDOLRK2401000030",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approve. For the record I argued for Postgres FTS in the ADR-0005 review in April 2025 :) The numbers back it up now; at 2.1M reports a second datastore isn't worth it.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/20#pullrequestreview-2401000030",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/20",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-03-11T10:00:00Z",
+      "commit_id": "e51750ca6a2a8d22af54f2c1526da30d943f374c"
+    },
+    {
+      "id": 2401000031,
+      "node_id": "PRR_kwDOLRK2401000031",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approved. I made the ES call in 2025 on a 10M-report projection that didn't happen, and the sync incidents are real ops cost. Postgres FTS it is. Keep the shadow-read period, and add pg_trgm only if inspectors miss fuzzy address matching.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/20#pullrequestreview-2401000031",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/20",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-03-17T15:30:00Z",
+      "commit_id": "e51750ca6a2a8d22af54f2c1526da30d943f374c"
+    },
+    {
+      "id": 2401000032,
+      "node_id": "PRR_kwDOLRK2401000032",
+      "user": {
+        "login": "priya-natarajan",
+        "id": 91000006,
+        "node_id": "U_kgDO91000006",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000006?v=4",
+        "html_url": "https://github.com/priya-natarajan",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/22#pullrequestreview-2401000032",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/22",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-04-15T14:00:00Z",
+      "commit_id": "658d05d45606cc4ddf4d0718f36e5ed27d7af87e"
+    },
+    {
+      "id": 2401000033,
+      "node_id": "PRR_kwDOLRK2401000033",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approved. Jonah's ADR-0004 called out the SAML limitation back in 2025; we've now hit it. WorkOS is the cheaper path to SSO + SCIM.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/23#pullrequestreview-2401000033",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/23",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-05-19T17:00:00Z",
+      "commit_id": "76464b97f3d4d911006702a80a90180456925f79"
+    },
+    {
+      "id": 2401000034,
+      "node_id": "PRR_kwDOLRK2401000034",
+      "user": {
+        "login": "ravi-kapoor",
+        "id": 91000009,
+        "node_id": "U_kgDO91000009",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000009?v=4",
+        "html_url": "https://github.com/ravi-kapoor",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/25#pullrequestreview-2401000034",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/25",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-06-02T11:30:00Z",
+      "commit_id": "c40b3b361aeadac31bf6f162e7ea8952ac7c4ca1"
+    },
+    {
+      "id": 2401000035,
+      "node_id": "PRR_kwDOLRK2401000035",
+      "user": {
+        "login": "ines-duarte",
+        "id": 91000002,
+        "node_id": "U_kgDO91000002",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000002?v=4",
+        "html_url": "https://github.com/ines-duarte",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approve. 7 years matches what our customers' insurers ask for. The 30-day notice before deletion is important.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/26#pullrequestreview-2401000035",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/26",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-08-05T09:00:00Z",
+      "commit_id": "7aa6ce39dbde67f30b1261e160c6af5712be53cb"
+    },
+    {
+      "id": 2401000036,
+      "node_id": "PRR_kwDOLRK2401000036",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/26#pullrequestreview-2401000036",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/26",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-08-10T16:00:00Z",
+      "commit_id": "7aa6ce39dbde67f30b1261e160c6af5712be53cb"
+    },
+    {
+      "id": 2401000037,
+      "node_id": "PRR_kwDOLRK2401000037",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approve. This was the follow-up ADR-0012 anticipated.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/handbook/pull/27#pullrequestreview-2401000037",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/27",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-09-07T10:00:00Z",
+      "commit_id": "974ac4b5f78582d182fe7ae7bdbbd45ea2affa81"
+    }
+  ],
+  "issue_comments": [
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000001",
+      "html_url": "https://github.com/larkspur/handbook/pull/1#issuecomment-3001000001",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/1",
+      "id": 3001000001,
+      "node_id": "IC_kwDOLRK3001000001",
+      "user": {
+        "login": "jonah-blake",
+        "id": 91000004,
+        "node_id": "U_kgDO91000004",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000004?v=4",
+        "html_url": "https://github.com/jonah-blake",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-03-10T11:02:00Z",
+      "updated_at": "2025-03-10T11:02:00Z",
+      "author_association": "MEMBER",
+      "body": "Love this. Can we also say that superseded ADRs stay in the repo? I've seen teams delete old ones and then nobody knows why something was tried before.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000002",
+      "html_url": "https://github.com/larkspur/handbook/pull/1#issuecomment-3001000002",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/1",
+      "id": 3001000002,
+      "node_id": "IC_kwDOLRK3001000002",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-03-10T11:40:00Z",
+      "updated_at": "2025-03-10T11:40:00Z",
+      "author_association": "MEMBER",
+      "body": "Good call, added: ADRs are never deleted, the old one gets `Superseded by ADR-NNNN`.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000003",
+      "html_url": "https://github.com/larkspur/handbook/pull/3#issuecomment-3001000003",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/3",
+      "id": 3001000003,
+      "node_id": "IC_kwDOLRK3001000003",
+      "user": {
+        "login": "jonah-blake",
+        "id": 91000004,
+        "node_id": "U_kgDO91000004",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000004?v=4",
+        "html_url": "https://github.com/jonah-blake",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-03-20T16:45:00Z",
+      "updated_at": "2025-03-20T16:45:00Z",
+      "author_association": "MEMBER",
+      "body": "Fly.io would be cheaper, but I agree Heroku is the boring choice and boring is what we want for the pilot.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000004",
+      "html_url": "https://github.com/larkspur/handbook/pull/5#issuecomment-3001000004",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/5",
+      "id": 3001000004,
+      "node_id": "IC_kwDOLRK3001000004",
+      "user": {
+        "login": "jonah-blake",
+        "id": 91000004,
+        "node_id": "U_kgDO91000004",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000004?v=4",
+        "html_url": "https://github.com/jonah-blake",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-04-17T09:30:00Z",
+      "updated_at": "2025-04-17T09:30:00Z",
+      "author_association": "MEMBER",
+      "body": "Added an Alternatives section. Short version: Postgres FTS has no good fuzzy matching (pg_trgm helps, but tuning it per field is manual), and I'd rather not put 10M+ reports of search load on the primary. Algolia: per-record pricing and sensitive property data.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000005",
+      "html_url": "https://github.com/larkspur/handbook/pull/6#issuecomment-3001000005",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/6",
+      "id": 3001000005,
+      "node_id": "IC_kwDOLRK3001000005",
+      "user": {
+        "login": "jonah-blake",
+        "id": 91000004,
+        "node_id": "U_kgDO91000004",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000004?v=4",
+        "html_url": "https://github.com/jonah-blake",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-04-28T13:15:00Z",
+      "updated_at": "2025-04-28T13:15:00Z",
+      "author_association": "MEMBER",
+      "body": "RTK Query would cut a lot of the thunk boilerplate for server data. Worth a look?",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000006",
+      "html_url": "https://github.com/larkspur/handbook/pull/6#issuecomment-3001000006",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/6",
+      "id": 3001000006,
+      "node_id": "IC_kwDOLRK3001000006",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-04-28T15:40:00Z",
+      "updated_at": "2025-04-28T15:40:00Z",
+      "author_association": "MEMBER",
+      "body": "Looked at it. I'd rather keep one pattern for now (thunks + slices) while the team is small. Can revisit.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000007",
+      "html_url": "https://github.com/larkspur/handbook/pull/11#issuecomment-3001000007",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/11",
+      "id": 3001000007,
+      "node_id": "IC_kwDOLRK3001000007",
+      "user": {
+        "login": "ines-duarte",
+        "id": 91000002,
+        "node_id": "U_kgDO91000002",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000002?v=4",
+        "html_url": "https://github.com/ines-duarte",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-07-31T09:20:00Z",
+      "updated_at": "2025-07-31T09:20:00Z",
+      "author_association": "MEMBER",
+      "body": "From the product side: none of the pilot firms asked for an app store app. They asked for 'works in the basement' and 'doesn't lose my photos'. If the PWA does that, I'm happy. App store presence can wait.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000008",
+      "html_url": "https://github.com/larkspur/handbook/pull/12#issuecomment-3001000008",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/12",
+      "id": 3001000008,
+      "node_id": "IC_kwDOLRK3001000008",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-09-12T15:50:00Z",
+      "updated_at": "2025-09-12T15:50:00Z",
+      "author_association": "MEMBER",
+      "body": "Closing this. Decision: no GraphQL for now. We stay with REST + `/v1` (ADR-0007) and add `include=` for nested resources. Offline caching is the deciding factor; the service worker can't cache POSTs to `/graphql` sensibly. We can reopen if partners ask for it.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000009",
+      "html_url": "https://github.com/larkspur/handbook/issues/14#issuecomment-3001000009",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/14",
+      "id": 3001000009,
+      "node_id": "IC_kwDOLRK3001000009",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-09-24T11:00:00Z",
+      "updated_at": "2025-09-24T11:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Yes: two approvals, mine plus an owner. For vendors over $500/month, Inês should 👍 the PR too. I'll write that into code-review.md.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000010",
+      "html_url": "https://github.com/larkspur/handbook/issues/14#issuecomment-3001000010",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/14",
+      "id": 3001000010,
+      "node_id": "IC_kwDOLRK3001000010",
+      "user": {
+        "login": "ines-duarte",
+        "id": 91000002,
+        "node_id": "U_kgDO91000002",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000002?v=4",
+        "html_url": "https://github.com/ines-duarte",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-09-24T12:30:00Z",
+      "updated_at": "2025-09-24T12:30:00Z",
+      "author_association": "MEMBER",
+      "body": "Works for me. Ping me on anything with a monthly bill.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000011",
+      "html_url": "https://github.com/larkspur/handbook/issues/14#issuecomment-3001000011",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/14",
+      "id": 3001000011,
+      "node_id": "IC_kwDOLRK3001000011",
+      "user": {
+        "login": "priya-natarajan",
+        "id": 91000006,
+        "node_id": "U_kgDO91000006",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000006?v=4",
+        "html_url": "https://github.com/priya-natarajan",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-09-25T11:50:00Z",
+      "updated_at": "2025-09-25T11:50:00Z",
+      "author_association": "MEMBER",
+      "body": "Thanks, clear now.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000012",
+      "html_url": "https://github.com/larkspur/handbook/pull/17#issuecomment-3001000012",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/17",
+      "id": 3001000012,
+      "node_id": "IC_kwDOLRK3001000012",
+      "user": {
+        "login": "ines-duarte",
+        "id": 91000002,
+        "node_id": "U_kgDO91000002",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000002?v=4",
+        "html_url": "https://github.com/ines-duarte",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-11-11T09:00:00Z",
+      "updated_at": "2025-11-11T09:00:00Z",
+      "author_association": "MEMBER",
+      "body": "👍 from me on cost. Saving ~$1.2k/month and unblocking Brightwell is an easy yes.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000013",
+      "html_url": "https://github.com/larkspur/handbook/pull/19#issuecomment-3001000013",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/19",
+      "id": 3001000013,
+      "node_id": "IC_kwDOLRK3001000013",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-02-05T10:00:00Z",
+      "updated_at": "2026-02-05T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "No objection. Sam and Lena own the frontend, so I'll leave the approval to Sam. Please keep the offline outbox out of TanStack's cache, it needs to be durable on its own.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000014",
+      "html_url": "https://github.com/larkspur/handbook/pull/20#issuecomment-3001000014",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/20",
+      "id": 3001000014,
+      "node_id": "IC_kwDOLRK3001000014",
+      "user": {
+        "login": "ines-duarte",
+        "id": 91000002,
+        "node_id": "U_kgDO91000002",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000002?v=4",
+        "html_url": "https://github.com/ines-duarte",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-03-12T09:00:00Z",
+      "updated_at": "2026-03-12T09:00:00Z",
+      "author_association": "MEMBER",
+      "body": "👍 on cost. Please make sure the Brightwell admins hear about any search changes before cutover, search is the feature they use most.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000015",
+      "html_url": "https://github.com/larkspur/handbook/issues/21#issuecomment-3001000015",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/21",
+      "id": 3001000015,
+      "node_id": "IC_kwDOLRK3001000015",
+      "user": {
+        "login": "kofi-mensah",
+        "id": 91000008,
+        "node_id": "U_kgDO91000008",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000008?v=4",
+        "html_url": "https://github.com/kofi-mensah",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-04-07T14:00:00Z",
+      "updated_at": "2026-04-07T14:00:00Z",
+      "author_association": "MEMBER",
+      "body": "LaunchDarkly quoted us ~$700/month at our seat count. The table works fine. I'd write a short ADR saying we keep it until it hurts.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000016",
+      "html_url": "https://github.com/larkspur/handbook/issues/21#issuecomment-3001000016",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/21",
+      "id": 3001000016,
+      "node_id": "IC_kwDOLRK3001000016",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-04-09T10:00:00Z",
+      "updated_at": "2026-04-09T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Agree, but no rush. Leaving open.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000017",
+      "html_url": "https://github.com/larkspur/handbook/pull/23#issuecomment-3001000017",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/23",
+      "id": 3001000017,
+      "node_id": "IC_kwDOLRK3001000017",
+      "user": {
+        "login": "ines-duarte",
+        "id": 91000002,
+        "node_id": "U_kgDO91000002",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000002?v=4",
+        "html_url": "https://github.com/ines-duarte",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-05-13T09:30:00Z",
+      "updated_at": "2026-05-13T09:30:00Z",
+      "author_association": "MEMBER",
+      "body": "👍. Per-connection pricing works: we charge enterprise plans per firm anyway, so each customer's SSO connection is covered by their plan.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000018",
+      "html_url": "https://github.com/larkspur/handbook/pull/23#issuecomment-3001000018",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/23",
+      "id": 3001000018,
+      "node_id": "IC_kwDOLRK3001000018",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-05-14T11:00:00Z",
+      "updated_at": "2026-05-14T11:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Make sure we keep the Auth0 tenant read-only for 30 days after cutover in case we need to roll back.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000019",
+      "html_url": "https://github.com/larkspur/handbook/issues/24#issuecomment-3001000019",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/24",
+      "id": 3001000019,
+      "node_id": "IC_kwDOLRK3001000019",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-05-28T12:00:00Z",
+      "updated_at": "2026-05-28T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Good catch, will update this week.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000020",
+      "html_url": "https://github.com/larkspur/handbook/issues/24#issuecomment-3001000020",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/24",
+      "id": 3001000020,
+      "node_id": "IC_kwDOLRK3001000020",
+      "user": {
+        "login": "ravi-kapoor",
+        "id": 91000009,
+        "node_id": "U_kgDO91000009",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000009?v=4",
+        "html_url": "https://github.com/ravi-kapoor",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-06-02T12:05:00Z",
+      "updated_at": "2026-06-02T12:05:00Z",
+      "author_association": "MEMBER",
+      "body": "Fixed in #25.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/issues/comments/3001000021",
+      "html_url": "https://github.com/larkspur/handbook/pull/28#issuecomment-3001000021",
+      "issue_url": "https://api.github.com/repos/larkspur/handbook/issues/28",
+      "id": 3001000021,
+      "node_id": "IC_kwDOLRK3001000021",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-09-22T09:00:00Z",
+      "updated_at": "2026-09-22T09:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Please not event sourcing for the whole domain :) An append-only `audit_event` table would cover the questionnaire.",
+      "reactions": {
+        "total_count": 0
+      }
+    }
+  ],
+  "review_comments": [
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/comments/1701000001",
+      "pull_request_review_id": 2401000005,
+      "id": 1701000001,
+      "node_id": "PRRC_kwDOLRK1701000001",
+      "diff_hunk": "@@ -21,6 +21,7 @@",
+      "path": "docs/adr/0004-auth0-for-authentication.md",
+      "commit_id": "92b017de53eb29b624038503f555f019530550a4",
+      "original_commit_id": "92b017de53eb29b624038503f555f019530550a4",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Worth noting that SAML connections are only on Professional/Enterprise. If we ever sell to big inspection firms this will bite us.",
+      "created_at": "2025-04-04T09:10:00Z",
+      "updated_at": "2025-04-04T09:10:00Z",
+      "html_url": "https://github.com/larkspur/handbook/pull/4#discussion_r1701000001",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/4",
+      "author_association": "MEMBER",
+      "in_reply_to_id": null,
+      "start_line": null,
+      "original_start_line": null,
+      "line": 24,
+      "original_line": 24,
+      "side": "RIGHT"
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/handbook/pulls/comments/1701000002",
+      "pull_request_review_id": 2401000029,
+      "id": 1701000002,
+      "node_id": "PRRC_kwDOLRK1701000002",
+      "diff_hunk": "@@ -16,6 +16,7 @@",
+      "path": "docs/adr/0012-postgres-full-text-search.md",
+      "commit_id": "e51750ca6a2a8d22af54f2c1526da30d943f374c",
+      "original_commit_id": "e51750ca6a2a8d22af54f2c1526da30d943f374c",
+      "user": {
+        "login": "kofi-mensah",
+        "id": 91000008,
+        "node_id": "U_kgDO91000008",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000008?v=4",
+        "html_url": "https://github.com/kofi-mensah",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Confirmed the Elastic Cloud number: $1,380/month after we scaled to 3 nodes for the reindex in December. Deleting it is the biggest single saving on our infra bill this year.",
+      "created_at": "2026-03-10T09:30:00Z",
+      "updated_at": "2026-03-10T09:30:00Z",
+      "html_url": "https://github.com/larkspur/handbook/pull/20#discussion_r1701000002",
+      "pull_request_url": "https://api.github.com/repos/larkspur/handbook/pulls/20",
+      "author_association": "MEMBER",
+      "in_reply_to_id": null,
+      "start_line": null,
+      "original_start_line": null,
+      "line": 19,
+      "original_line": 19,
+      "side": "RIGHT"
+    }
+  ],
+  "markdown_files": [
+    {
+      "path": "README.md",
+      "sha": "1a258de36e11fe67563bc18d2d63221333e49e59",
+      "content": "# Larkspur engineering handbook\n\nHow we build Larkspur, the inspection reporting app for home and property inspectors.\nThis repo is public on purpose: we think working in the open makes us better.\n\n## Architecture decision records\n\n| ADR | Title | Status |\n|---|---|---|\n| [0001](https://github.com/larkspur/handbook/blob/main/docs/adr/0001-record-architecture-decisions.md) | Record architecture decisions | Accepted |\n| [0002](https://github.com/larkspur/handbook/blob/main/docs/adr/0002-python-fastapi-postgres.md) | Python, FastAPI and Postgres | Accepted |\n| [0003](https://github.com/larkspur/handbook/blob/main/docs/adr/0003-heroku-hosting.md) | Host on Heroku | Superseded by 0010 |\n| [0004](https://github.com/larkspur/handbook/blob/main/docs/adr/0004-auth0-for-authentication.md) | Auth0 for authentication | Superseded by 0013 |\n| [0005](https://github.com/larkspur/handbook/blob/main/docs/adr/0005-elasticsearch-for-report-search.md) | Elasticsearch for report search | Superseded by 0012 |\n| [0006](https://github.com/larkspur/handbook/blob/main/docs/adr/0006-redux-toolkit-frontend-state.md) | Redux Toolkit for frontend state | Superseded by 0011 |\n| [0007](https://github.com/larkspur/handbook/blob/main/docs/adr/0007-url-path-api-versioning.md) | URL path API versioning | Accepted |\n| [0008](https://github.com/larkspur/handbook/blob/main/docs/adr/0008-offline-first-pwa.md) | Offline-first PWA, no native apps | Accepted |\n| [0009](https://github.com/larkspur/handbook/blob/main/docs/adr/0009-uuidv7-primary-keys.md) | UUIDv7 primary keys | Accepted |\n| [0010](https://github.com/larkspur/handbook/blob/main/docs/adr/0010-aws-ecs-fargate-hosting.md) | AWS ECS Fargate + RDS | Accepted |\n| [0011](https://github.com/larkspur/handbook/blob/main/docs/adr/0011-tanstack-query-for-server-state.md) | TanStack Query + Zustand | Accepted |\n| [0012](https://github.com/larkspur/handbook/blob/main/docs/adr/0012-postgres-full-text-search.md) | Postgres full-text search | Accepted |\n| [0013](https://github.com/larkspur/handbook/blob/main/docs/adr/0013-workos-for-sso-and-auth.md) | WorkOS for auth, SSO and SCIM | Accepted |\n| [0014](https://github.com/larkspur/handbook/blob/main/docs/adr/0014-photo-and-report-retention.md) | Photo and report retention | Accepted |\n| [0015](https://github.com/larkspur/handbook/blob/main/docs/adr/0015-pg-trgm-fuzzy-address-search.md) | Fuzzy address matching with pg_trgm | Accepted |\n\n## Other docs\n\n- [Code review](docs/engineering/code-review.md)\n- [On-call](docs/engineering/oncall.md)\n- [Tech radar](docs/engineering/tech-radar.md)\n"
+    },
+    {
+      "path": "docs/adr/0001-record-architecture-decisions.md",
+      "sha": "1bf4ed280d61a0e4979ec13f0f1900ff714cabdb",
+      "content": "# ADR-0001: Record architecture decisions\n\n- Status: Accepted\n- Date: 2025-03-10\n- Deciders: @maya-chen\n\n## Context\n\nWe are three engineers today and will be more. Decisions made in a call or a DM get lost,\nand new people re-litigate them because they can't find the reasoning.\n\n## Decision\n\nWe record every significant architecture decision as an ADR in `docs/adr/`, numbered\nin order, using `docs/adr/template.md`. \"Significant\" means: hard to reverse, affects more\nthan one service, or adds a vendor or datastore.\n\n- An ADR is proposed in a pull request against this repo.\n- It needs approval from the CTO (@maya-chen) and at least one engineer who will own the\n  change. See `docs/engineering/code-review.md`.\n- ADRs are never deleted. When a decision changes we write a new ADR, set the old one's\n  status to `Superseded by ADR-NNNN`, and link both ways.\n\n## Consequences\n\nThe handbook is public, so ADRs must not contain customer names, credentials or\nsecurity details. Those go in the private `larkspur/api` repo.\n"
+    },
+    {
+      "path": "docs/adr/0002-python-fastapi-postgres.md",
+      "sha": "d210d7990c12cfcfbf528607b29cd2ef578ba048",
+      "content": "# ADR-0002: Python and FastAPI for the backend, Postgres as the system of record\n\n- Status: Accepted\n- Date: 2025-03-14\n- Deciders: @maya-chen, @tomas-rivera, @jonah-blake\n\n## Context\n\nLarkspur lets home and property inspectors capture inspections on a phone, generate the\nreport and share it with their clients. We need an HTTP API for the web app and the\noffline PWA, background jobs (PDF rendering, emails) and a relational store.\n\n## Decision\n\n- **Python 3.12 + FastAPI** for the API. Everyone on the team knows Python, FastAPI gives\n  us OpenAPI for free, and async I/O suits a mostly I/O-bound API.\n- **PostgreSQL** is the system of record for all business data.\n- SQLAlchemy 2 + Alembic for data access and migrations.\n\nWe considered Node/NestJS (one language with the frontend) and Go. Hiring and the team's\nexperience decided it.\n\n## Consequences\n\nCPU-heavy work (PDF rendering, image processing) must run in background workers, not in\nrequest handlers.\n"
+    },
+    {
+      "path": "docs/adr/0003-heroku-hosting.md",
+      "sha": "56a2211bccfa639f0f85efec6d4f196516c9eb4d",
+      "content": "# ADR-0003: Host on Heroku\n\n- Status: Superseded by [ADR-0010](https://github.com/larkspur/handbook/blob/main/docs/adr/0010-aws-ecs-fargate-hosting.md) (2025-11-18)\n- Date: 2025-03-24\n- Deciders: @tomas-rivera, @maya-chen\n\n## Context\n\nWe have no platform engineer. We want deploys to be `git push` and we want managed\nPostgres and Redis with backups we don't have to think about.\n\n## Decision\n\nRun the API, the worker and the web app on Heroku (Standard-2X dynos), with Heroku\nPostgres (Standard-0) and Heroku Data for Redis.\n\n## Consequences\n\n- Fast to set up; pipelines and review apps out of the box.\n- Cost grows linearly with dynos. We'll revisit when the bill passes about $2k/month or an\n  enterprise customer needs private networking.\n- No VPC control, limited memory per dyno (1 GB on Standard-2X).\n"
+    },
+    {
+      "path": "docs/adr/0004-auth0-for-authentication.md",
+      "sha": "e7c7b90aa4fcda00c52b5a5d757ee124d8853cfd",
+      "content": "# ADR-0004: Use Auth0 for authentication\n\n- Status: Superseded by [ADR-0013](https://github.com/larkspur/handbook/blob/main/docs/adr/0013-workos-for-sso-and-auth.md) (2026-05-20)\n- Date: 2025-04-08\n- Deciders: @jonah-blake, @maya-chen, @tomas-rivera\n\n## Context\n\nInspectors sign in with email and password, some with Google. We don't want to build\npassword storage, resets, MFA and brute-force protection ourselves.\n\n## Decision\n\nUse Auth0 (Essentials plan) for sign-up, sign-in, password reset and MFA. The API verifies\nAuth0-issued JWTs (RS256) against Auth0's JWKS.\n\n## Consequences\n\n- Pricing is per monthly active user; fine at our size.\n- Enterprise SAML connections are only on the Professional/Enterprise plans. If we sell to\n  larger inspection firms we will need to revisit this.\n"
+    },
+    {
+      "path": "docs/adr/0005-elasticsearch-for-report-search.md",
+      "sha": "43dd539bd965a215401b2b2ab904351509c7b2a5",
+      "content": "# ADR-0005: Elasticsearch for report search\n\n- Status: Superseded by [ADR-0012](https://github.com/larkspur/handbook/blob/main/docs/adr/0012-postgres-full-text-search.md) (2026-03-17)\n- Date: 2025-04-22\n- Deciders: @jonah-blake (proposed), @maya-chen (approved)\n\n## Context\n\nInspectors search their past reports by address, client name and defect text\n(\"galvanized pipe\", \"double tapped breaker\"). We expect address search to need fuzzy\nmatching and relevance tuning, and we projected 10M+ reports within two years.\n\n## Decision\n\nIndex reports into **Elasticsearch** (Elastic Cloud, managed) and serve all report search\nfrom it. Postgres stays the source of truth; a Celery job indexes changes.\n\nAlternatives considered:\n- **Postgres full-text search**: one less datastore, but weaker fuzzy matching and\n  relevance tuning, and we worried about load on the primary at 10M+ reports.\n- **Algolia**: great relevance, but per-record pricing gets expensive at our projected\n  volume, and reports hold sensitive property data.\n\n## Consequences\n\n- A second datastore to keep in sync with Postgres (indexing job, reindex procedure).\n- Permission filtering must be re-implemented in ES queries.\n- Elastic Cloud cost starts at roughly $95/month and grows with data.\n"
+    },
+    {
+      "path": "docs/adr/0006-redux-toolkit-frontend-state.md",
+      "sha": "aeeba5bf59129b40264d977e30069301c3b4ec4e",
+      "content": "# ADR-0006: Redux Toolkit for frontend state\n\n- Status: Superseded by [ADR-0011](https://github.com/larkspur/handbook/blob/main/docs/adr/0011-tanstack-query-for-server-state.md) (2026-02-10)\n- Date: 2025-04-30\n- Deciders: @sam-whitfield, @maya-chen\n\n## Context\n\nThe web app edits large inspection reports with many sections, photos and comments.\nWe need predictable state updates and good devtools.\n\n## Decision\n\nUse Redux Toolkit (RTK) with one slice per domain (reports, clients, templates, session).\nServer data is fetched with thunks and stored in slices.\n\n## Consequences\n\n- Predictable, well-known, great devtools.\n- More boilerplate than lighter options. We accepted it for consistency.\n"
+    },
+    {
+      "path": "docs/adr/0007-url-path-api-versioning.md",
+      "sha": "7fa123be4f65f33084cf72e3b3bf1cabe4c41d6f",
+      "content": "# ADR-0007: Version the public API in the URL path\n\n- Status: Accepted\n- Date: 2025-06-17\n- Deciders: @tomas-rivera, @maya-chen, @sam-whitfield\n\n## Context\n\nInspection firms want to integrate (pull finished reports into their CRMs). The PWA also\ncaches API responses offline, so old clients stay around for weeks.\n\n## Decision\n\nAll routes live under `/v1/...`. Breaking changes get a new prefix (`/v2`). We rejected\nheader-based versioning (`Accept: application/vnd.larkspur.v1+json`) because service\nworker caches key on the URL, and rejected GraphQL for now (see the closed GraphQL proposal\nin this repo).\n\n## Consequences\n\nWe keep `/v1` alive for at least 12 months after `/v2` ships.\n"
+    },
+    {
+      "path": "docs/adr/0008-offline-first-pwa.md",
+      "sha": "36903243f4f16b830e11c08141ecdda4bc936adf",
+      "content": "# ADR-0008: Offline-first PWA instead of native mobile apps\n\n- Status: Accepted (re-confirmed 2026-04-28)\n- Date: 2025-08-05\n- Deciders: @lena-park (proposed), @maya-chen, @sam-whitfield; product input from @ines-duarte\n\n## Context\n\nInspectors work in basements, crawl spaces and rural properties with no signal. They must\nbe able to capture an entire inspection offline (text, photos, checklists) and sync later.\n\n## Decision\n\nBuild the mobile experience as an **offline-first Progressive Web App**: a service worker,\nIndexedDB for drafts and a durable outbox for photo uploads, synced with background sync\nwhere available. No native iOS/Android apps for now.\n\nWe considered React Native. It would give better background upload on iOS, but it means a\nsecond codebase, app store releases and review delays, for a team of two frontend engineers.\n\n## Consequences\n\n- iOS Safari storage limits and missing Background Sync need workarounds (client-side photo\n  compression, foreground sync on app open).\n- We'll revisit native apps if a large customer requires MDM distribution or if offline\n  photo loss becomes a real support problem.\n- 2026-04-28: re-confirmed after a customer asked for a native app; see the closed issue\n  in `larkspur/web`. Revisit at 50 enterprise seats.\n"
+    },
+    {
+      "path": "docs/adr/0009-uuidv7-primary-keys.md",
+      "sha": "2268c42434669788db84fca32c4d713d9025cd48",
+      "content": "# ADR-0009: UUIDv7 primary keys for new tables\n\n- Status: Accepted\n- Date: 2025-10-02\n- Deciders: @priya-natarajan (proposed), @tomas-rivera, @maya-chen\n\n## Context\n\nOffline PWA clients create reports, findings and photos before the server knows about them.\nSequential integer ids need a server round trip and leak business volume in URLs. Random\nUUIDv4 keys fragment B-tree indexes on our largest tables.\n\n## Decision\n\nNew tables use **UUIDv7** primary keys, generated on the client or server. Existing tables\nkeep their bigint keys; we won't migrate them.\n\n## Consequences\n\nTime-ordered keys keep inserts index-friendly. Ids can be created offline without\ncollisions.\n"
+    },
+    {
+      "path": "docs/adr/0010-aws-ecs-fargate-hosting.md",
+      "sha": "d14efe9c1798971d9885966ac68912221f836a22",
+      "content": "# ADR-0010: Move hosting from Heroku to AWS (ECS Fargate + RDS)\n\n- Status: Accepted\n- Date: 2025-11-18\n- Supersedes: [ADR-0003](https://github.com/larkspur/handbook/blob/main/docs/adr/0003-heroku-hosting.md)\n- Deciders: @kofi-mensah (proposed), @maya-chen, @tomas-rivera\n\n## Context\n\nADR-0003 chose Heroku while we had no platform engineer. Since then:\n\n1. **Cost.** The Heroku bill reached about $2,900/month in October 2025 (mostly\n   Performance dynos for PDF rendering). The same workload on Fargate + RDS is estimated\n   at about $1,700/month.\n2. **Memory.** PDF workers hit R14/R15 memory errors on 1 GB dynos (see the R14 issue in\n   `larkspur/api`); the next dyno size doubles the price.\n3. **Private networking.** Our first enterprise prospect requires VPC peering for their\n   SSO and data warehouse, which on Heroku means Private Spaces (about $1,000/month extra).\n4. We now have a platform engineer (@kofi-mensah).\n\n## Decision\n\nRun the API, workers and web app on **AWS ECS Fargate** in `eu-west-1` and `us-east-1`,\nwith **RDS for PostgreSQL**, ElastiCache for Redis and S3 for photos. Infrastructure is\nmanaged with Terraform in `larkspur/api/infra`.\n\n## Consequences\n\n- We own more operations: patching base images, alarms, Terraform state.\n- Deploys go through GitHub Actions to ECS instead of `git push heroku`.\n- Heroku was decommissioned on 2025-12-03.\n"
+    },
+    {
+      "path": "docs/adr/0011-tanstack-query-for-server-state.md",
+      "sha": "8ad17e2aa920fb75549e9f1d7569a49c6b60e4d8",
+      "content": "# ADR-0011: TanStack Query for server state, Zustand for client state\n\n- Status: Accepted\n- Date: 2026-02-10\n- Supersedes: [ADR-0006](https://github.com/larkspur/handbook/blob/main/docs/adr/0006-redux-toolkit-frontend-state.md)\n- Deciders: @lena-park (proposed), @sam-whitfield\n\n## Context\n\nADR-0006 put all state in Redux Toolkit slices. A year in, about 80% of what lives in\nRedux is a cache of server data: we hand-write loading/error flags, cache invalidation and\noptimistic updates in every slice, and offline replay of thunks is fragile. Adding a new\nscreen takes a slice, thunks, selectors and tests.\n\n## Decision\n\n- **TanStack Query** owns server state (fetching, caching, invalidation, retries) and\n  persists its cache to IndexedDB for offline use.\n- **Zustand** holds the small amount of real client state (editor UI, the offline outbox\n  status).\n- Redux is removed once the last slice is migrated.\n\n## Consequences\n\nLess code per feature and one place for cache policy. We lose time-travel devtools, which\nnobody used. Migration happens screen by screen.\n"
+    },
+    {
+      "path": "docs/adr/0012-postgres-full-text-search.md",
+      "sha": "64a82458738a421a76705396e4d517bc20ebea14",
+      "content": "# ADR-0012: Replace Elasticsearch with Postgres full-text search\n\n- Status: Accepted\n- Date: 2026-03-17\n- Supersedes: [ADR-0005](https://github.com/larkspur/handbook/blob/main/docs/adr/0005-elasticsearch-for-report-search.md)\n- Deciders: @priya-natarajan (proposed), @maya-chen, @tomas-rivera\n\n## Context\n\nADR-0005 chose Elasticsearch expecting 10M+ reports and heavy relevance tuning. A year\nlater:\n\n- We have **2.1M reports**, growing about 90k/month, far below the projection.\n- Keeping ES in sync with Postgres has caused incidents, the worst on 2025-12-04 when a\n  reindex left about 18% of reports unsearchable for nine hours.\n- Permission filtering is implemented twice (SQL and ES queries) and has drifted.\n- Elastic Cloud costs about **$1,380/month** after we scaled the cluster for reindexing.\n- We never used most of the relevance tuning we chose ES for.\n\nA spike in February 2026 measured Postgres FTS (`tsvector` + GIN index, `websearch_to_tsquery`)\non a production-sized copy: p95 38 ms vs 22 ms on ES, well inside our 150 ms budget.\n\n## Decision\n\nServe report search from **Postgres full-text search** on the primary database: a\ngenerated `tsvector` column with weights (address and client name A, findings B, notes C),\na GIN index, and `ts_rank_cd` ordering. Remove Elasticsearch after a shadow-read period.\n\nAlternatives considered: Meilisearch and Typesense (still a second datastore to sync) and\nstaying on ES with a better reindex procedure (keeps the cost and the duplicate permission\nlogic).\n\n## Consequences\n\n- One datastore, one permission model, no sync job.\n- Fuzzy address matching is weaker than ES; we accept that and will add `pg_trgm` if\n  inspectors complain (done in ADR-0015).\n- If we pass about 20M reports or search load hurts the primary, we revisit (read replica\n  first).\n"
+    },
+    {
+      "path": "docs/adr/0013-workos-for-sso-and-auth.md",
+      "sha": "13bf6da81d39550dd85e47c4a7ed8b7dd6151792",
+      "content": "# ADR-0013: Use WorkOS for authentication, SSO and SCIM\n\n- Status: Accepted\n- Date: 2026-05-20\n- Supersedes: [ADR-0004](https://github.com/larkspur/handbook/blob/main/docs/adr/0004-auth0-for-authentication.md)\n- Deciders: @ravi-kapoor (proposed), @maya-chen; pricing input from @ines-duarte\n\n## Context\n\nLarger inspection firms now require SAML SSO and SCIM user provisioning. On Auth0 that\nneeds the Enterprise plan; the quote we received was far above our budget, and SCIM was an\nadd-on on top. Our first three enterprise customers each use a different IdP (Okta, Entra ID,\nGoogle Workspace).\n\n## Decision\n\nMove authentication to **WorkOS** (AuthKit for email/password and Google, SSO and Directory\nSync for SCIM). WorkOS charges per SSO connection, which matches how we sell enterprise\nplans. Existing Auth0 users are migrated by importing password hashes, so nobody has to\nreset their password.\n\n## Consequences\n\n- One integration covers SAML, OIDC and SCIM for every IdP.\n- Auth0 is removed after migration.\n- Per-connection pricing must be built into the enterprise plan price.\n"
+    },
+    {
+      "path": "docs/adr/0014-photo-and-report-retention.md",
+      "sha": "b93751fd79bd588ba846cc7e6ed282f6974d40b5",
+      "content": "# ADR-0014: Retention of inspection photos and reports\n\n- Status: Accepted\n- Date: 2026-08-11\n- Deciders: @ravi-kapoor, @ines-duarte, @maya-chen\n\n## Context\n\nInspection reports are legal records: several US states and UK surveying bodies expect\nfirms to keep them for 5 to 7 years. Photos are 85% of our storage cost and are rarely\nopened after the first 90 days.\n\n## Decision\n\n- Keep reports and photos for **7 years** after the inspection date, then delete them\n  unless the customer has enabled legal hold.\n- Move photo **originals** to S3 Glacier Instant Retrieval after **90 days**; keep the\n  compressed web versions in S3 Standard.\n- Customers can export everything at any time; deletion after 7 years is announced 30 days\n  ahead.\n\n## Consequences\n\nStorage cost for photos drops by about 60%. Opening an old original is slightly slower.\n"
+    },
+    {
+      "path": "docs/adr/0015-pg-trgm-fuzzy-address-search.md",
+      "sha": "3e3932eaca0be4a66a592bd34fe746c8436f02a5",
+      "content": "# ADR-0015: Fuzzy address matching with pg_trgm\n\n- Status: Accepted\n- Date: 2026-09-08\n- Amends: [ADR-0012](https://github.com/larkspur/handbook/blob/main/docs/adr/0012-postgres-full-text-search.md)\n- Deciders: @priya-natarajan (proposed), @tomas-rivera\n\n## Context\n\nAfter moving search to Postgres FTS (ADR-0012), inspectors reported that misspelled or\nabbreviated addresses (\"1428 Elm Stret\", \"Mt Pleasant Rd\") no longer match, which ES's fuzzy\nqueries handled.\n\n## Decision\n\nAdd the `pg_trgm` extension and a trigram GIN index on the normalized address. Address\nqueries combine FTS rank with trigram similarity (`similarity() > 0.3`). Full-text search\nstays the main engine; we are **not** bringing back Elasticsearch.\n\n## Consequences\n\nSlightly larger index (about 1.2 GB). Address search recall is back to the ES level in our\ntest set.\n"
+    },
+    {
+      "path": "docs/adr/template.md",
+      "sha": "d8b91931ddee01d64ef8b750d8bbe58b82ad98be",
+      "content": "# ADR-NNNN: Title\n\n- Status: Proposed | Accepted | Superseded by ADR-NNNN\n- Date: YYYY-MM-DD\n- Deciders: @login, ...\n\n## Context\n\nWhat forces are at play? What problem are we solving?\n\n## Decision\n\nWhat did we decide, and which alternatives did we reject?\n\n## Consequences\n\nWhat becomes easier or harder?\n"
+    },
+    {
+      "path": "docs/engineering/code-review.md",
+      "sha": "98b249e6ce6aec6ea385d8ad6bc81a76e3403f66",
+      "content": "# Code review\n\n## Everyday PRs\n\n- One approval from someone who knows the area. Authors merge their own PRs (squash).\n- Keep PRs small. Over ~400 changed lines, split it or explain why not.\n- \"Nit:\" means optional. Anything else, resolve or reply before merging.\n\n## ADRs\n\n- ADR PRs need an approval from the CTO (@maya-chen) **and** from an engineer who will own\n  the change.\n- Decisions about vendors that cost more than $500/month also need a 👍 from the CEO\n  (@ines-duarte) on the PR.\n- Leave an ADR PR open at least two working days so people can weigh in.\n\n## Security-sensitive changes\n\nAuth, permissions, billing and data retention changes need a review from @ravi-kapoor\n(since January 2026; before that @tomas-rivera).\n"
+    },
+    {
+      "path": "docs/engineering/oncall.md",
+      "sha": "ed694b0eb7fd5b3a303f9a655021713a3840485b",
+      "content": "# On-call\n\nOne engineer is on call each week (Monday 10:00 to Monday 10:00 UK time). Pages come from\nCloudWatch alarms via PagerDuty.\n\n## Runbooks\n\n### Search is slow or returns nothing\n\nSearch runs on Postgres full-text search (ADR-0012); there is no separate search cluster\nany more.\n\n1. Check RDS CPU and the `report_search_p95` dashboard.\n2. `EXPLAIN ANALYZE` the slow query from the API logs; make sure it uses\n   `reports_search_gin` (and `reports_address_trgm` for address queries).\n3. If the GIN index is bloated, `REINDEX INDEX CONCURRENTLY reports_search_gin`.\n\n### PDF rendering backlog\n\nPDFs are rendered by headless Chromium (Playwright) in the `pdf` Celery queue. See\n`docs/runbooks/pdf-rendering.md` in `larkspur/api`.\n\n### Login failures\n\nAuth is WorkOS (ADR-0013). Check status.workos.com first, then the `auth_callback_errors`\nmetric.\n"
+    },
+    {
+      "path": "docs/engineering/tech-radar.md",
+      "sha": "fdac90500d38ccebcf17a3f2e9fc804a727494ab",
+      "content": "# Tech radar\n\nLast updated 2026-06-02.\n\n## Adopt\n\n- Python 3.12, FastAPI, SQLAlchemy 2, Alembic\n- PostgreSQL (RDS), including full-text search and pg_trgm\n- Celery + Redis for background jobs\n- TanStack Query, Zustand, Next.js\n- Playwright (headless Chromium) for PDF rendering\n- WorkOS for auth, SSO and SCIM\n- Terraform, ECS Fargate\n\n## Trial\n\n- OpenTelemetry tracing to Honeycomb\n\n## Hold\n\n- Redux Toolkit (being removed, ADR-0011)\n- GraphQL (rejected for the public API, see ADR-0007)\n\n## Retired\n\n- Elasticsearch (replaced by Postgres FTS, ADR-0012; cluster deleted April 2026)\n- Heroku (replaced by AWS, ADR-0010)\n- Auth0 (replaced by WorkOS, ADR-0013)\n- wkhtmltopdf (replaced by Playwright, January 2026)\n"
+    }
+  ]
+}

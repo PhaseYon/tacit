@@ -4,11 +4,15 @@ import { Suspense } from "react";
 import { AuthForm } from "@/components/auth-form";
 import { getSession, githubLoginEnabled } from "@/lib/session";
 
-export default async function Page() {
+async function AuthPageContent() {
   if (await getSession()) redirect("/dashboard");
+  return <AuthForm mode="sign-in" githubEnabled={githubLoginEnabled} />;
+}
+
+export default function Page() {
   return (
     <Suspense>
-      <AuthForm mode="sign-in" githubEnabled={githubLoginEnabled} />
+      <AuthPageContent />
     </Suspense>
   );
 }

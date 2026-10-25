@@ -8,10 +8,11 @@ services:
       POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-tacit}
-      # Read by infra/postgres/init/01-roles.sh to create the three app roles.
+      # Read by infra/postgres/init/01-roles.sh to create the app roles.
       TACIT_MIGRATOR_PASSWORD: ${TACIT_MIGRATOR_PASSWORD:-migrator}
       TACIT_AUTH_PASSWORD: ${TACIT_AUTH_PASSWORD:-auth}
       TACIT_API_PASSWORD: ${TACIT_API_PASSWORD:-api}
+      TACIT_WORKER_PASSWORD: ${TACIT_WORKER_PASSWORD:-worker}
     ports:
       - "5432:5432"
     volumes:
@@ -40,12 +41,14 @@ services:
       - "1025:1025"
       - "8025:8025"
 
-  # Not used until the graph layer (build step 4). Start with: docker compose --profile graph up
+  # Graph layer (Graphiti). Optional: docker compose --profile graph up -d neo4j
   neo4j:
-    image: neo4j:5
+    image: neo4j:5.26
     profiles: ["graph"]
     environment:
       NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-tacit-dev-password}
+      NEO4J_server_memory_heap_max__size: 1G
+      NEO4J_server_memory_pagecache_size: 512M
     ports:
       - "7474:7474"
       - "7687:7687"

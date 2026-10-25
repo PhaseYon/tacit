@@ -17,5 +17,5 @@ export async function requireSession() {
 }
 
 export const githubLoginEnabled = Boolean(
-  process.env.GITHUB_CLIENT_ID && process.env.GITHUB_CLIENT_SECRET,
+  process.env.GITHUB_APP_CLIENT_ID && process.env.GITHUB_APP_CLIENT_SECRET,
 );

@@ -20,7 +20,13 @@ from httpx import ASGITransport, AsyncClient
 SUPERUSER_URL = os.environ.get(
     "TEST_SUPERUSER_URL", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
-TEST_DB = "tacit_test"
+# One test database per checkout, so parallel runs (e.g. git worktrees) don't drop each
+# other's database mid-run. Override with TEST_DB_NAME.
+TEST_DB = os.environ.get(
+    "TEST_DB_NAME",
+    "tacit_test_"
+    + __import__("hashlib").sha1(str(Path(__file__).resolve()).encode()).hexdigest()[:8],
+)
 API_DIR = Path(__file__).resolve().parents[1]
 
 ISSUER = "http://test-issuer"
@@ -28,6 +34,11 @@ AUDIENCE = "tacit-api"
 
 # Point the app at the test DB before anything reads settings.
 os.environ["API_DATABASE_URL"] = f"postgresql+asyncpg://tacit_api:api@localhost:5432/{TEST_DB}"
+os.environ["WORKER_DATABASE_URL"] = (
+    f"postgresql+asyncpg://tacit_worker:worker@localhost:5432/{TEST_DB}"
+)
+# Deterministic hashing embedder: no model download, same vectors everywhere.
+os.environ["EMBEDDING_PROVIDER"] = "fake"
 os.environ["AUTH_JWT_ISSUER"] = ISSUER
 os.environ["AUTH_JWT_AUDIENCE"] = AUDIENCE
 
@@ -40,7 +51,8 @@ def _create_test_db() -> None:
         conn.execute(f"CREATE DATABASE {TEST_DB}")
         conn.execute(f"REVOKE ALL ON DATABASE {TEST_DB} FROM PUBLIC")
         conn.execute(
-            f"GRANT CONNECT ON DATABASE {TEST_DB} TO tacit_migrator, tacit_auth, tacit_api"
+            f"GRANT CONNECT ON DATABASE {TEST_DB}"
+            " TO tacit_migrator, tacit_auth, tacit_api, tacit_worker"
         )
         conn.execute(f"GRANT CREATE ON DATABASE {TEST_DB} TO tacit_migrator")
     # Same setup as infra/postgres/init/01-roles.sh, minus role creation.
@@ -49,7 +61,7 @@ def _create_test_db() -> None:
         conn.execute("CREATE EXTENSION IF NOT EXISTS pg_trgm")
         conn.execute("REVOKE CREATE ON SCHEMA public FROM PUBLIC")
         conn.execute("ALTER SCHEMA public OWNER TO tacit_migrator")
-        conn.execute("GRANT USAGE ON SCHEMA public TO tacit_auth, tacit_api")
+        conn.execute("GRANT USAGE ON SCHEMA public TO tacit_auth, tacit_api, tacit_worker")
 
 
 def _migrate() -> None:
