@@ -20,7 +20,7 @@ celery_app.conf.update(
     worker_prefetch_multiplier=1,
     task_default_queue="realtime",
     # Webhooks and ACL changes go to "realtime" so a big backfill can't delay them.
-    task_routes={"tacit_api.connectors.github.tasks.backfill_*": {"queue": "backfill"}},
+    task_routes={"tacit_api.connectors.github.tasks.backfill_repo": {"queue": "backfill"}},
     task_serializer="json",
     accept_content=["json"],
     timezone="UTC",

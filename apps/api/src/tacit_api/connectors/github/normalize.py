@@ -106,8 +106,8 @@ def normalize_issue(issue: dict, repo: dict) -> NormalizedDocument | None:
         body=body,
         author_external_id=author_id,
         author_login=author_login,
-        source_created_at=_ts(issue.get("created_at")),
-        source_updated_at=_ts(issue.get("updated_at")),
+        source_created_at=parse_ts(issue.get("created_at")),
+        source_updated_at=parse_ts(issue.get("updated_at")),
         metadata=metadata,
         hash_fields={
             "state": issue.get("state"),
@@ -138,8 +138,8 @@ def normalize_issue_comment(comment: dict, repo: dict) -> NormalizedDocument | N
         body=body,
         author_external_id=author_id,
         author_login=author_login,
-        source_created_at=_ts(comment.get("created_at")),
-        source_updated_at=_ts(comment.get("updated_at")),
+        source_created_at=parse_ts(comment.get("created_at")),
+        source_updated_at=parse_ts(comment.get("updated_at")),
         parent_external_id=None,
         metadata=metadata,
     )
@@ -156,7 +156,7 @@ def normalize_pr_review(review: dict, pr_number: int, repo: dict) -> NormalizedD
     if not body:
         return None
     author_id, author_login = _author(review.get("user"))
-    submitted_at = _ts(review.get("submitted_at"))
+    submitted_at = parse_ts(review.get("submitted_at"))
     metadata: dict[str, Any] = {
         "state": state,
         "parent_number": pr_number,
@@ -211,8 +211,8 @@ def normalize_pr_review_comment(comment: dict, repo: dict) -> NormalizedDocument
         body=body,
         author_external_id=author_id,
         author_login=author_login,
-        source_created_at=_ts(comment.get("created_at")),
-        source_updated_at=_ts(comment.get("updated_at")),
+        source_created_at=parse_ts(comment.get("created_at")),
+        source_updated_at=parse_ts(comment.get("updated_at")),
         parent_external_id=None,
         metadata=metadata,
         hash_fields={"path": comment.get("path")},
@@ -246,7 +246,7 @@ def normalize_markdown_file(
 # --- helpers ---------------------------------------------------------------
 
 
-def _ts(value: str | None) -> datetime | None:
+def parse_ts(value: str | None) -> datetime | None:
     if not value:
         return None
     dt = datetime.fromisoformat(value)
