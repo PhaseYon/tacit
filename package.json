@@ -15,7 +15,8 @@
     "typecheck": "pnpm --filter web typecheck",
     "dev:worker": "cd apps/api && uv run celery -A tacit_api.worker worker -B -Q realtime,backfill,index,graph --loglevel=info",
     "dev:webhooks": "dotenv -e .env -- sh -c 'smee --url \"$GITHUB_WEBHOOK_PROXY_URL\" --target http://localhost:8000/webhooks/github'",
-    "github:create-app": "cd apps/api && uv run python ../../scripts/create_github_app.py"
+    "github:create-app": "cd apps/api && uv run python ../../scripts/create_github_app.py",
+    "demo:load": "cd apps/api && uv run python -m tacit_api.demo"
   },
   "devDependencies": {
     "dotenv-cli": "^11.0.0",
