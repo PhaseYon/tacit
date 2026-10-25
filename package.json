@@ -3,8 +3,14 @@
   "private": true,
   "packageManager": "pnpm@12.15.0",
   "scripts": {
+    "bootstrap": "node scripts/setup-env.mjs && pnpm install && cd apps/api && uv sync",
+    "infra:up": "docker compose up -d --wait postgres redis mailpit",
+    "infra:down": "docker compose down",
+    "db:migrate": "cd apps/api && uv run alembic upgrade head",
+    "dev:api": "cd apps/api && uv run uvicorn tacit_api.main:app --reload --port 8000",
     "dev:web": "pnpm --filter web dev",
-    "build:web": "pnpm --filter web build",
-    "lint:web": "pnpm --filter web lint"
+    "test": "cd apps/api && uv run pytest -q",
+    "lint": "cd apps/api && uv run ruff check . && uv run ruff format --check . && cd ../.. && pnpm --filter web lint",
+    "typecheck": "pnpm --filter web typecheck"
   }
 }

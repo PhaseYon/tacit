@@ -32,11 +32,11 @@ Browser ──► Next.js (apps/web) ── Better Auth ──► Postgres (auth
 Needs Docker, [uv](https://docs.astral.sh/uv/), Node 22+ and pnpm.
 
 ```bash
-make setup     # .env + dependencies
-make up        # Postgres (pgvector), Redis, Mailpit
-make migrate   # create tables, grants, RLS policies
-make dev-api   # http://localhost:8000  (in one terminal)
-make dev-web   # http://localhost:3000  (in another)
+pnpm bootstrap    # .env + dependencies
+pnpm infra:up     # Postgres (pgvector), Redis, Mailpit
+pnpm db:migrate   # create tables, grants, RLS policies
+pnpm dev:api      # http://localhost:8000  (in one terminal)
+pnpm dev:web      # http://localhost:3000  (in another)
 ```
 
 Emails (verification, invites) land in Mailpit at http://localhost:8025.
@@ -46,8 +46,8 @@ To enable "Continue with GitHub", create a GitHub OAuth App with callback
 `GITHUB_CLIENT_SECRET` in `.env`.
 
 ```bash
-make test       # API tests (uses a throwaway tacit_test database)
-make lint typecheck
+pnpm test         # API tests (uses a throwaway tacit_test database)
+pnpm lint && pnpm typecheck
 ```
 
 ## Repo layout
