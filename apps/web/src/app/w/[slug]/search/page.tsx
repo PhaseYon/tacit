@@ -4,8 +4,10 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { AppHeader } from "@/components/app-header";
+import { type AskResult, AskAnswer } from "@/components/ask-answer";
 import { PageSkeleton } from "@/components/page-skeleton";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { apiFetch } from "@/lib/api";
 import { auth } from "@/lib/auth";
@@ -59,18 +61,27 @@ async function SearchContent({
 }) {
   const [{ slug }, query, session] = await Promise.all([params, searchParams, requireSession()]);
   const q = typeof query.q === "string" ? query.q.trim() : "";
+  const wantsAnswer = query.ask === "1";
   const workspace = await auth.api
     .getFullOrganization({ headers: await headers(), query: { organizationSlug: slug } })
     .catch(() => null);
   if (!workspace) notFound();
 
-  const results = q
-    ? (
-        await apiFetch<{ results: Result[] }>(
+  const [results, answer] = await Promise.all([
+    q
+      ? apiFetch<{ results: Result[] }>(
           `/workspaces/${workspace.id}/search?${new URLSearchParams({ q, limit: "20" })}`,
-        )
-      ).results
-    : [];
+        ).then((r) => r.results)
+      : Promise.resolve([] as Result[]),
+    // Generating an answer costs money, so only when asked for explicitly.
+    q.length >= 3 && wantsAnswer
+      ? apiFetch<AskResult>(`/workspaces/${workspace.id}/ask`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ question: q }),
+        }).catch(() => null)
+      : Promise.resolve(null),
+  ]);
 
   return (
     <>
@@ -89,7 +100,14 @@ async function SearchContent({
             autoFocus
             aria-label="Search"
           />
+          <Button type="submit" variant="outline">
+            Search
+          </Button>
+          <Button type="submit" name="ask" value="1">
+            Ask Tacit
+          </Button>
         </form>
+        {answer && <AskAnswer result={answer} />}
         {q && results.length === 0 && (
           <p className="text-muted-foreground">
             No results you have access to. Try other words, or check that your GitHub account is
