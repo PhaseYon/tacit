@@ -32,10 +32,13 @@ HYBRID_SQL = text(
       LIMIT :cand
     ),
     fts AS (
-      SELECT c.id, row_number() OVER (ORDER BY ts_rank_cd(c.tsv, q.tq) DESC) AS r
-      FROM document_chunk c, q
+      -- Ties in ts_rank_cd are common; break them on stable keys so results (and the
+      -- benchmark) are deterministic across reloads.
+      SELECT c.id, row_number() OVER (
+               ORDER BY ts_rank_cd(c.tsv, q.tq) DESC, sd.external_id, c.chunk_index) AS r
+      FROM document_chunk c JOIN source_document sd ON sd.id = c.document_id, q
       WHERE c.tsv @@ q.tq
-      ORDER BY ts_rank_cd(c.tsv, q.tq) DESC
+      ORDER BY ts_rank_cd(c.tsv, q.tq) DESC, sd.external_id, c.chunk_index
       LIMIT :cand
     ),
     fused AS (
@@ -48,7 +51,7 @@ HYBRID_SQL = text(
       SELECT DISTINCT ON (c.document_id) c.document_id, c.id AS chunk_id, c.content,
              f.score, f.by_vec, f.by_fts
       FROM fused f JOIN document_chunk c ON c.id = f.id
-      ORDER BY c.document_id, f.score DESC
+      ORDER BY c.document_id, f.score DESC, c.chunk_index
     )
     SELECT b.document_id::text, b.chunk_id::text, b.score, b.by_vec, b.by_fts,
            d.kind, COALESCE(d.title, p.title) AS title, d.url, d.author_login,
@@ -61,7 +64,7 @@ HYBRID_SQL = text(
     JOIN source_container sc ON sc.id = d.container_id
     CROSS JOIN q
     WHERE d.deleted_at IS NULL
-    ORDER BY b.score DESC
+    ORDER BY b.score DESC, d.external_id
     LIMIT :limit
     """
 )
@@ -119,12 +122,14 @@ async def hybrid_search(session: AsyncSession, query: str, limit: int = 10) -> l
 _BASELINE_SQL = """
     WITH q AS (SELECT CAST(:emb AS vector) AS e, {tsq} AS tq),
     ranked AS (
-      SELECT c.document_id, c.id AS chunk_id, c.content, {score} AS score
-      FROM document_chunk c, q {where}
-      ORDER BY {order} LIMIT :cand
+      SELECT c.document_id, c.id AS chunk_id, c.chunk_index, c.content, {score} AS score,
+             sd.external_id
+      FROM document_chunk c JOIN source_document sd ON sd.id = c.document_id, q {where}
+      ORDER BY {order}, sd.external_id, c.chunk_index LIMIT :cand
     ),
     best AS (
-      SELECT DISTINCT ON (document_id) * FROM ranked ORDER BY document_id, score DESC
+      SELECT DISTINCT ON (document_id) * FROM ranked
+      ORDER BY document_id, score DESC, chunk_index
     )
     SELECT b.document_id::text, b.chunk_id::text, b.score, d.kind,
            COALESCE(d.title, p.title) AS title, d.url, d.author_login, d.source_created_at,
@@ -134,7 +139,7 @@ _BASELINE_SQL = """
     LEFT JOIN source_document p ON p.id = d.parent_id
     JOIN source_container sc ON sc.id = d.container_id
     WHERE d.deleted_at IS NULL
-    ORDER BY b.score DESC LIMIT :limit
+    ORDER BY b.score DESC, b.external_id LIMIT :limit
 """
 _TSQ = "to_tsquery('english', replace(plainto_tsquery('english', :q)::text, ' & ', ' | '))"
 VECTOR_SQL = text(

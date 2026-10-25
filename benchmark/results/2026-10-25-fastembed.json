@@ -1,0 +1,1530 @@
+{
+  "date": "2026-10-25T04:37:41+00:00",
+  "embedder": "BAAI/bge-small-en-v1.5",
+  "k": 10,
+  "dataset": {
+    "questions": 52,
+    "installation_id": 11966873620,
+    "repos": {
+      "larkspur/handbook": {
+        "container_id": "76fd35cb-7df7-461d-b9e1-2b4a8968b7b5",
+        "visibility": "public",
+        "parents": 28,
+        "issue_comments": 21,
+        "review_comments": 2,
+        "reviews": 19,
+        "markdown": 20
+      },
+      "larkspur/api": {
+        "container_id": "972c23bb-e344-4236-a1d9-81fcde4eb4a3",
+        "visibility": "private",
+        "parents": 57,
+        "issue_comments": 71,
+        "review_comments": 15,
+        "reviews": 22,
+        "markdown": 5
+      },
+      "larkspur/web": {
+        "container_id": "a32dfd7c-25d8-405f-922f-d7ff1435fd70",
+        "visibility": "private",
+        "parents": 28,
+        "issue_comments": 28,
+        "review_comments": 5,
+        "reviews": 6,
+        "markdown": 1
+      }
+    },
+    "indexed": {
+      "documents": 328,
+      "chunks": 334,
+      "tokens": 17650
+    },
+    "load_and_index_seconds": 48.5
+  },
+  "arms": {
+    "vector": {
+      "n": 52,
+      "recall@5": 0.615,
+      "recall@10": 0.75,
+      "gold_coverage": 0.631,
+      "mrr": 0.386,
+      "p50_ms": 56.0,
+      "p95_ms": 86.6
+    },
+    "keyword": {
+      "n": 52,
+      "recall@5": 0.788,
+      "recall@10": 0.904,
+      "gold_coverage": 0.704,
+      "mrr": 0.576,
+      "p50_ms": 54.1,
+      "p95_ms": 73.9
+    },
+    "hybrid": {
+      "n": 52,
+      "recall@5": 0.731,
+      "recall@10": 0.865,
+      "gold_coverage": 0.713,
+      "mrr": 0.545,
+      "p50_ms": 67.3,
+      "p95_ms": 85.6
+    }
+  },
+  "by_type": {
+    "vector": {
+      "evidence": {
+        "n": 7,
+        "recall@5": 0.429,
+        "recall@10": 0.571,
+        "gold_coverage": 0.5,
+        "mrr": 0.375,
+        "p50_ms": 54.0,
+        "p95_ms": 57.8
+      },
+      "multi-hop": {
+        "n": 7,
+        "recall@5": 0.286,
+        "recall@10": 0.429,
+        "gold_coverage": 0.238,
+        "mrr": 0.088,
+        "p50_ms": 63.4,
+        "p95_ms": 86.0
+      },
+      "what-changed": {
+        "n": 10,
+        "recall@5": 0.5,
+        "recall@10": 0.7,
+        "gold_coverage": 0.55,
+        "mrr": 0.347,
+        "p50_ms": 62.7,
+        "p95_ms": 95.5
+      },
+      "when": {
+        "n": 5,
+        "recall@5": 0.8,
+        "recall@10": 1.0,
+        "gold_coverage": 0.8,
+        "mrr": 0.495,
+        "p50_ms": 50.7,
+        "p95_ms": 59.5
+      },
+      "who": {
+        "n": 10,
+        "recall@5": 0.8,
+        "recall@10": 0.8,
+        "gold_coverage": 0.75,
+        "mrr": 0.55,
+        "p50_ms": 54.4,
+        "p95_ms": 114.1
+      },
+      "why": {
+        "n": 13,
+        "recall@5": 0.769,
+        "recall@10": 0.923,
+        "gold_coverage": 0.821,
+        "mrr": 0.414,
+        "p50_ms": 55.2,
+        "p95_ms": 76.9
+      }
+    },
+    "keyword": {
+      "evidence": {
+        "n": 7,
+        "recall@5": 0.714,
+        "recall@10": 0.714,
+        "gold_coverage": 0.476,
+        "mrr": 0.505,
+        "p50_ms": 56.2,
+        "p95_ms": 71.0
+      },
+      "multi-hop": {
+        "n": 7,
+        "recall@5": 0.571,
+        "recall@10": 0.857,
+        "gold_coverage": 0.44,
+        "mrr": 0.431,
+        "p50_ms": 59.0,
+        "p95_ms": 71.6
+      },
+      "what-changed": {
+        "n": 10,
+        "recall@5": 0.9,
+        "recall@10": 0.9,
+        "gold_coverage": 0.7,
+        "mrr": 0.767,
+        "p50_ms": 50.6,
+        "p95_ms": 79.0
+      },
+      "when": {
+        "n": 5,
+        "recall@5": 1.0,
+        "recall@10": 1.0,
+        "gold_coverage": 0.8,
+        "mrr": 0.617,
+        "p50_ms": 53.6,
+        "p95_ms": 73.5
+      },
+      "who": {
+        "n": 10,
+        "recall@5": 0.7,
+        "recall@10": 0.9,
+        "gold_coverage": 0.833,
+        "mrr": 0.342,
+        "p50_ms": 52.4,
+        "p95_ms": 65.7
+      },
+      "why": {
+        "n": 13,
+        "recall@5": 0.846,
+        "recall@10": 1.0,
+        "gold_coverage": 0.833,
+        "mrr": 0.712,
+        "p50_ms": 58.2,
+        "p95_ms": 80.2
+      }
+    },
+    "hybrid": {
+      "evidence": {
+        "n": 7,
+        "recall@5": 0.571,
+        "recall@10": 0.714,
+        "gold_coverage": 0.571,
+        "mrr": 0.518,
+        "p50_ms": 73.9,
+        "p95_ms": 104.3
+      },
+      "multi-hop": {
+        "n": 7,
+        "recall@5": 0.429,
+        "recall@10": 0.714,
+        "gold_coverage": 0.393,
+        "mrr": 0.302,
+        "p50_ms": 72.7,
+        "p95_ms": 78.4
+      },
+      "what-changed": {
+        "n": 10,
+        "recall@5": 0.9,
+        "recall@10": 0.9,
+        "gold_coverage": 0.7,
+        "mrr": 0.612,
+        "p50_ms": 69.9,
+        "p95_ms": 87.3
+      },
+      "when": {
+        "n": 5,
+        "recall@5": 0.8,
+        "recall@10": 1.0,
+        "gold_coverage": 0.8,
+        "mrr": 0.725,
+        "p50_ms": 63.7,
+        "p95_ms": 75.9
+      },
+      "who": {
+        "n": 10,
+        "recall@5": 0.7,
+        "recall@10": 0.9,
+        "gold_coverage": 0.867,
+        "mrr": 0.498,
+        "p50_ms": 65.4,
+        "p95_ms": 78.4
+      },
+      "why": {
+        "n": 13,
+        "recall@5": 0.846,
+        "recall@10": 0.923,
+        "gold_coverage": 0.821,
+        "mrr": 0.606,
+        "p50_ms": 66.1,
+        "p95_ms": 79.0
+      }
+    }
+  },
+  "requires_history": {
+    "vector": {
+      "n": 29,
+      "recall@5": 0.517,
+      "recall@10": 0.69,
+      "gold_coverage": 0.529,
+      "mrr": 0.297,
+      "p50_ms": 57.3,
+      "p95_ms": 95.5
+    },
+    "keyword": {
+      "n": 29,
+      "recall@5": 0.724,
+      "recall@10": 0.897,
+      "gold_coverage": 0.612,
+      "mrr": 0.513,
+      "p50_ms": 52.4,
+      "p95_ms": 73.5
+    },
+    "hybrid": {
+      "n": 29,
+      "recall@5": 0.655,
+      "recall@10": 0.828,
+      "gold_coverage": 0.606,
+      "mrr": 0.461,
+      "p50_ms": 69.5,
+      "p95_ms": 80.8
+    }
+  },
+  "graph": "not run: needs GRAPH_ENABLED=true, Neo4j and an LLM API key (costs money)",
+  "per_question": {
+    "vector": [
+      {
+        "id": "q01",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 10,
+        "gold_found": 0.5,
+        "latency_ms": 77.54837302491069
+      },
+      {
+        "id": "q02",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 56.21985002653673
+      },
+      {
+        "id": "q03",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 57.49646702315658
+      },
+      {
+        "id": "q04",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 4,
+        "gold_found": 0.5,
+        "latency_ms": 53.66871604928747
+      },
+      {
+        "id": "q05",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 8,
+        "gold_found": 0.5,
+        "latency_ms": 50.234333029948175
+      },
+      {
+        "id": "q06",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 59.104639978613704
+      },
+      {
+        "id": "q07",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 62.69455002620816
+      },
+      {
+        "id": "q08",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 95.49932199297473
+      },
+      {
+        "id": "q09",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 86.57670702086762
+      },
+      {
+        "id": "q10",
+        "type": "why",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 76.92386698909104
+      },
+      {
+        "id": "q11",
+        "type": "what-changed",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 84.63317702990025
+      },
+      {
+        "id": "q12",
+        "type": "who",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 114.09588099922985
+      },
+      {
+        "id": "q13",
+        "type": "who",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 55.96900696400553
+      },
+      {
+        "id": "q14",
+        "type": "who",
+        "requires_history": false,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 49.78855699300766
+      },
+      {
+        "id": "q15",
+        "type": "who",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 56.982679991051555
+      },
+      {
+        "id": "q16",
+        "type": "who",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 54.08368696225807
+      },
+      {
+        "id": "q17",
+        "type": "who",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 53.49428695626557
+      },
+      {
+        "id": "q18",
+        "type": "who",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 54.5336629729718
+      },
+      {
+        "id": "q19",
+        "type": "who",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 0.5,
+        "latency_ms": 54.39053999725729
+      },
+      {
+        "id": "q20",
+        "type": "who",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 46.97798000415787
+      },
+      {
+        "id": "q21",
+        "type": "who",
+        "requires_history": false,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 51.31321703083813
+      },
+      {
+        "id": "q22",
+        "type": "why",
+        "requires_history": true,
+        "rank": 7,
+        "gold_found": 1.0,
+        "latency_ms": 57.321336993481964
+      },
+      {
+        "id": "q23",
+        "type": "why",
+        "requires_history": true,
+        "rank": 5,
+        "gold_found": 1.0,
+        "latency_ms": 55.16157002421096
+      },
+      {
+        "id": "q24",
+        "type": "why",
+        "requires_history": true,
+        "rank": 8,
+        "gold_found": 0.5,
+        "latency_ms": 51.36722599854693
+      },
+      {
+        "id": "q25",
+        "type": "why",
+        "requires_history": true,
+        "rank": 3,
+        "gold_found": 0.6666666666666666,
+        "latency_ms": 50.76652398565784
+      },
+      {
+        "id": "q26",
+        "type": "why",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 58.63876099465415
+      },
+      {
+        "id": "q27",
+        "type": "why",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 65.6273479689844
+      },
+      {
+        "id": "q28",
+        "type": "why",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 60.11741200927645
+      },
+      {
+        "id": "q29",
+        "type": "why",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 49.410592997446656
+      },
+      {
+        "id": "q30",
+        "type": "why",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 60.22282998310402
+      },
+      {
+        "id": "q31",
+        "type": "why",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 51.48354597622529
+      },
+      {
+        "id": "q32",
+        "type": "why",
+        "requires_history": true,
+        "rank": 4,
+        "gold_found": 0.5,
+        "latency_ms": 50.682409026194364
+      },
+      {
+        "id": "q33",
+        "type": "why",
+        "requires_history": false,
+        "rank": 3,
+        "gold_found": 1.0,
+        "latency_ms": 55.244685034267604
+      },
+      {
+        "id": "q34",
+        "type": "when",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 50.71821599267423
+      },
+      {
+        "id": "q35",
+        "type": "when",
+        "requires_history": true,
+        "rank": 7,
+        "gold_found": 0.5,
+        "latency_ms": 59.517809946555644
+      },
+      {
+        "id": "q36",
+        "type": "when",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 0.5,
+        "latency_ms": 51.52725300285965
+      },
+      {
+        "id": "q37",
+        "type": "when",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 49.476304033305496
+      },
+      {
+        "id": "q38",
+        "type": "when",
+        "requires_history": false,
+        "rank": 3,
+        "gold_found": 1.0,
+        "latency_ms": 50.343751965556294
+      },
+      {
+        "id": "q39",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 53.98997099837288
+      },
+      {
+        "id": "q40",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 8,
+        "gold_found": 0.5,
+        "latency_ms": 51.37572798412293
+      },
+      {
+        "id": "q41",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 53.4915869939141
+      },
+      {
+        "id": "q42",
+        "type": "evidence",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 56.08112597838044
+      },
+      {
+        "id": "q43",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 57.78371501946822
+      },
+      {
+        "id": "q44",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 63.40497103519738
+      },
+      {
+        "id": "q45",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": 4,
+        "gold_found": 0.3333333333333333,
+        "latency_ms": 49.910778005141765
+      },
+      {
+        "id": "q46",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": 5,
+        "gold_found": 0.3333333333333333,
+        "latency_ms": 86.01601101690903
+      },
+      {
+        "id": "q47",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 77.20601500477642
+      },
+      {
+        "id": "q48",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 58.66246402729303
+      },
+      {
+        "id": "q49",
+        "type": "multi-hop",
+        "requires_history": false,
+        "rank": 6,
+        "gold_found": 1.0,
+        "latency_ms": 59.14134602062404
+      },
+      {
+        "id": "q50",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 69.2326599964872
+      },
+      {
+        "id": "q51",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 54.9447339726612
+      },
+      {
+        "id": "q52",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 52.52262199064717
+      }
+    ],
+    "keyword": [
+      {
+        "id": "q01",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 3,
+        "gold_found": 0.5,
+        "latency_ms": 54.06408297130838
+      },
+      {
+        "id": "q02",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 3,
+        "gold_found": 1.0,
+        "latency_ms": 31.43874101806432
+      },
+      {
+        "id": "q03",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 0.5,
+        "latency_ms": 33.06791698560119
+      },
+      {
+        "id": "q04",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 0.5,
+        "latency_ms": 31.57586301676929
+      },
+      {
+        "id": "q05",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 0.5,
+        "latency_ms": 42.24407603032887
+      },
+      {
+        "id": "q06",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 48.28000196721405
+      },
+      {
+        "id": "q07",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 52.1958660101518
+      },
+      {
+        "id": "q08",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 50.593693973496556
+      },
+      {
+        "id": "q09",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 78.95551202818751
+      },
+      {
+        "id": "q10",
+        "type": "why",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 49.02122699422762
+      },
+      {
+        "id": "q11",
+        "type": "what-changed",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 52.35379299847409
+      },
+      {
+        "id": "q12",
+        "type": "who",
+        "requires_history": true,
+        "rank": 3,
+        "gold_found": 1.0,
+        "latency_ms": 57.293232006486505
+      },
+      {
+        "id": "q13",
+        "type": "who",
+        "requires_history": true,
+        "rank": 4,
+        "gold_found": 1.0,
+        "latency_ms": 65.71526301559061
+      },
+      {
+        "id": "q14",
+        "type": "who",
+        "requires_history": false,
+        "rank": 7,
+        "gold_found": 1.0,
+        "latency_ms": 48.1676830095239
+      },
+      {
+        "id": "q15",
+        "type": "who",
+        "requires_history": false,
+        "rank": 4,
+        "gold_found": 1.0,
+        "latency_ms": 64.47965296683833
+      },
+      {
+        "id": "q16",
+        "type": "who",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 51.61726800724864
+      },
+      {
+        "id": "q17",
+        "type": "who",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 34.17040401836857
+      },
+      {
+        "id": "q18",
+        "type": "who",
+        "requires_history": true,
+        "rank": 9,
+        "gold_found": 0.3333333333333333,
+        "latency_ms": 52.42880602600053
+      },
+      {
+        "id": "q19",
+        "type": "who",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 48.42442600056529
+      },
+      {
+        "id": "q20",
+        "type": "who",
+        "requires_history": false,
+        "rank": 3,
+        "gold_found": 1.0,
+        "latency_ms": 57.5439750100486
+      },
+      {
+        "id": "q21",
+        "type": "who",
+        "requires_history": false,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 51.165691984351724
+      },
+      {
+        "id": "q22",
+        "type": "why",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 47.372848028317094
+      },
+      {
+        "id": "q23",
+        "type": "why",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 50.02349696587771
+      },
+      {
+        "id": "q24",
+        "type": "why",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 0.5,
+        "latency_ms": 56.26245797611773
+      },
+      {
+        "id": "q25",
+        "type": "why",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 0.3333333333333333,
+        "latency_ms": 58.17118100821972
+      },
+      {
+        "id": "q26",
+        "type": "why",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 65.44811796629801
+      },
+      {
+        "id": "q27",
+        "type": "why",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 73.94436094909906
+      },
+      {
+        "id": "q28",
+        "type": "why",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 64.72499499795958
+      },
+      {
+        "id": "q29",
+        "type": "why",
+        "requires_history": true,
+        "rank": 9,
+        "gold_found": 0.5,
+        "latency_ms": 54.22771204030141
+      },
+      {
+        "id": "q30",
+        "type": "why",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 60.69541099714115
+      },
+      {
+        "id": "q31",
+        "type": "why",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 80.22172702476382
+      },
+      {
+        "id": "q32",
+        "type": "why",
+        "requires_history": true,
+        "rank": 7,
+        "gold_found": 0.5,
+        "latency_ms": 44.771604996640235
+      },
+      {
+        "id": "q33",
+        "type": "why",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 61.16649095201865
+      },
+      {
+        "id": "q34",
+        "type": "when",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 46.00591497728601
+      },
+      {
+        "id": "q35",
+        "type": "when",
+        "requires_history": true,
+        "rank": 4,
+        "gold_found": 0.5,
+        "latency_ms": 73.46117898123339
+      },
+      {
+        "id": "q36",
+        "type": "when",
+        "requires_history": false,
+        "rank": 3,
+        "gold_found": 0.5,
+        "latency_ms": 59.6453319885768
+      },
+      {
+        "id": "q37",
+        "type": "when",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 53.5995049867779
+      },
+      {
+        "id": "q38",
+        "type": "when",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 52.820672979578376
+      },
+      {
+        "id": "q39",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 5,
+        "gold_found": 0.5,
+        "latency_ms": 70.99895999999717
+      },
+      {
+        "id": "q40",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 0.5,
+        "latency_ms": 56.15283903898671
+      },
+      {
+        "id": "q41",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 3,
+        "gold_found": 0.3333333333333333,
+        "latency_ms": 47.70680400542915
+      },
+      {
+        "id": "q42",
+        "type": "evidence",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 42.58073400706053
+      },
+      {
+        "id": "q43",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 62.047040031757206
+      },
+      {
+        "id": "q44",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 0.5,
+        "latency_ms": 60.78322499524802
+      },
+      {
+        "id": "q45",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 0.6666666666666666,
+        "latency_ms": 57.876831968314946
+      },
+      {
+        "id": "q46",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": 6,
+        "gold_found": 0.3333333333333333,
+        "latency_ms": 65.50472701201215
+      },
+      {
+        "id": "q47",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": 4,
+        "gold_found": 0.25,
+        "latency_ms": 71.5541549725458
+      },
+      {
+        "id": "q48",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 58.998822001740336
+      },
+      {
+        "id": "q49",
+        "type": "multi-hop",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 48.20528900017962
+      },
+      {
+        "id": "q50",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": 10,
+        "gold_found": 0.3333333333333333,
+        "latency_ms": 52.87608195794746
+      },
+      {
+        "id": "q51",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 66.42968399683014
+      },
+      {
+        "id": "q52",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 38.12287497567013
+      }
+    ],
+    "hybrid": [
+      {
+        "id": "q01",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 3,
+        "gold_found": 0.5,
+        "latency_ms": 79.166647978127
+      },
+      {
+        "id": "q02",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 4,
+        "gold_found": 1.0,
+        "latency_ms": 61.48874497739598
+      },
+      {
+        "id": "q03",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 5,
+        "gold_found": 0.5,
+        "latency_ms": 67.73130502551794
+      },
+      {
+        "id": "q04",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 0.5,
+        "latency_ms": 87.2933289501816
+      },
+      {
+        "id": "q05",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 3,
+        "gold_found": 0.5,
+        "latency_ms": 69.92797902785242
+      },
+      {
+        "id": "q06",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 60.8779420144856
+      },
+      {
+        "id": "q07",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 62.97571101458743
+      },
+      {
+        "id": "q08",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 65.52651902893558
+      },
+      {
+        "id": "q09",
+        "type": "what-changed",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 80.76647500274703
+      },
+      {
+        "id": "q10",
+        "type": "why",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 75.9540360304527
+      },
+      {
+        "id": "q11",
+        "type": "what-changed",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 81.10843499889597
+      },
+      {
+        "id": "q12",
+        "type": "who",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 76.76697801798582
+      },
+      {
+        "id": "q13",
+        "type": "who",
+        "requires_history": true,
+        "rank": 3,
+        "gold_found": 1.0,
+        "latency_ms": 78.40476295677945
+      },
+      {
+        "id": "q14",
+        "type": "who",
+        "requires_history": false,
+        "rank": 6,
+        "gold_found": 1.0,
+        "latency_ms": 65.38139400072396
+      },
+      {
+        "id": "q15",
+        "type": "who",
+        "requires_history": false,
+        "rank": 3,
+        "gold_found": 1.0,
+        "latency_ms": 69.68584400601685
+      },
+      {
+        "id": "q16",
+        "type": "who",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 64.55344898859039
+      },
+      {
+        "id": "q17",
+        "type": "who",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 59.503370022866875
+      },
+      {
+        "id": "q18",
+        "type": "who",
+        "requires_history": true,
+        "rank": 7,
+        "gold_found": 0.6666666666666666,
+        "latency_ms": 64.59375703707337
+      },
+      {
+        "id": "q19",
+        "type": "who",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 64.36301703797653
+      },
+      {
+        "id": "q20",
+        "type": "who",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 58.717732958029956
+      },
+      {
+        "id": "q21",
+        "type": "who",
+        "requires_history": false,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 67.2769239754416
+      },
+      {
+        "id": "q22",
+        "type": "why",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 71.91593298921362
+      },
+      {
+        "id": "q23",
+        "type": "why",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 66.76443497417495
+      },
+      {
+        "id": "q24",
+        "type": "why",
+        "requires_history": true,
+        "rank": 4,
+        "gold_found": 0.5,
+        "latency_ms": 63.0570889916271
+      },
+      {
+        "id": "q25",
+        "type": "why",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 0.6666666666666666,
+        "latency_ms": 58.262253005523235
+      },
+      {
+        "id": "q26",
+        "type": "why",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 62.19843897270039
+      },
+      {
+        "id": "q27",
+        "type": "why",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 66.09401904279366
+      },
+      {
+        "id": "q28",
+        "type": "why",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 66.45658100023866
+      },
+      {
+        "id": "q29",
+        "type": "why",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 61.27497903071344
+      },
+      {
+        "id": "q30",
+        "type": "why",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 66.34906295221299
+      },
+      {
+        "id": "q31",
+        "type": "why",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 79.01006902102381
+      },
+      {
+        "id": "q32",
+        "type": "why",
+        "requires_history": true,
+        "rank": 8,
+        "gold_found": 0.5,
+        "latency_ms": 63.184310973156244
+      },
+      {
+        "id": "q33",
+        "type": "why",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 62.94066796544939
+      },
+      {
+        "id": "q34",
+        "type": "when",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 54.17804198805243
+      },
+      {
+        "id": "q35",
+        "type": "when",
+        "requires_history": true,
+        "rank": 8,
+        "gold_found": 0.5,
+        "latency_ms": 66.5479979943484
+      },
+      {
+        "id": "q36",
+        "type": "when",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 0.5,
+        "latency_ms": 63.65579302655533
+      },
+      {
+        "id": "q37",
+        "type": "when",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 63.66459495620802
+      },
+      {
+        "id": "q38",
+        "type": "when",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 75.94973599771038
+      },
+      {
+        "id": "q39",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 8,
+        "gold_found": 0.5,
+        "latency_ms": 73.86967301135883
+      },
+      {
+        "id": "q40",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 0.5,
+        "latency_ms": 72.68686697352678
+      },
+      {
+        "id": "q41",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 61.562129005324095
+      },
+      {
+        "id": "q42",
+        "type": "evidence",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 80.51233098376542
+      },
+      {
+        "id": "q43",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 104.30227703182027
+      },
+      {
+        "id": "q44",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": 1,
+        "gold_found": 0.5,
+        "latency_ms": 75.66978700924665
+      },
+      {
+        "id": "q45",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": 2,
+        "gold_found": 0.6666666666666666,
+        "latency_ms": 69.50191198848188
+      },
+      {
+        "id": "q46",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": 9,
+        "gold_found": 0.3333333333333333,
+        "latency_ms": 72.69656896824017
+      },
+      {
+        "id": "q47",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": 6,
+        "gold_found": 0.25,
+        "latency_ms": 75.02807601122186
+      },
+      {
+        "id": "q48",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 78.41326500056311
+      },
+      {
+        "id": "q49",
+        "type": "multi-hop",
+        "requires_history": false,
+        "rank": 3,
+        "gold_found": 1.0,
+        "latency_ms": 66.759234003257
+      },
+      {
+        "id": "q50",
+        "type": "multi-hop",
+        "requires_history": true,
+        "rank": null,
+        "gold_found": 0.0,
+        "latency_ms": 70.67801797529683
+      },
+      {
+        "id": "q51",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 2,
+        "gold_found": 1.0,
+        "latency_ms": 85.5518089956604
+      },
+      {
+        "id": "q52",
+        "type": "evidence",
+        "requires_history": false,
+        "rank": 1,
+        "gold_found": 1.0,
+        "latency_ms": 72.42752198362723
+      }
+    ]
+  },
+  "cost_usd": 0.0
+}

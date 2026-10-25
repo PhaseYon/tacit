@@ -62,6 +62,14 @@ and what it superseded.
   recorded in `llm_usage`, and a monthly budget per workspace is a hard stop.
 - Run `docker compose --profile graph up -d neo4j`. See `docs/design/graph-layer.md`.
 
+## Benchmark
+
+On the fictional Larkspur dataset (52 "why" questions, local embeddings, $0), **hybrid
+search beats vector-only RAG** (recall@10 0.865 vs 0.750, MRR 0.545 vs 0.386). Keyword-only
+scored highest (0.904), probably because the questions reuse the corpus's wording. The
+graph arm hasn't run yet. Numbers, caveats and how to reproduce:
+[benchmark/README.md](benchmark/README.md).
+
 ## Use it from Claude or Cursor (MCP)
 
 Tacit is a remote MCP server at `http://localhost:8000/mcp` with OAuth 2.1. The web app is
