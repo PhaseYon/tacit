@@ -6,8 +6,8 @@ Tacit syncs a team's Slack, GitHub and Notion into a permission-aware knowledge 
 can ask *"why did we do X, who decided, and where's the evidence?"* from the web app, or from
 Claude and Cursor over MCP.
 
-> Status: early development. Auth, workspaces, invites and the GitHub connector work;
-> search and the graph layer are next.
+> Status: early development. Auth, workspaces, the GitHub connector and hybrid search
+> with citations work. The graph layer (Graphiti) and the MCP server are next.
 
 ## Architecture (so far)
 
@@ -31,6 +31,19 @@ Browser ──► Next.js (apps/web) ── Better Auth ──► Postgres (auth
 - **Source permissions are enforced in Postgres**: a restrictive RLS policy shows a
   synced document only if it's public or your linked GitHub account can access the repo,
   based on access data less than 6 hours old. Otherwise access is denied.
+
+## Search
+
+Synced documents are split into ~400-token chunks and indexed two ways: embeddings
+(pgvector, HNSW) and Postgres full-text (tsvector). A query runs both and fuses them with
+Reciprocal Rank Fusion. Each result is the best chunk per document, with a highlighted
+snippet and a link to the exact PR, issue, comment or doc. Documents are only re-embedded
+when their content hash changes.
+
+Embeddings default to a **local** model (fastembed `bge-small-en-v1.5`, 384 dims): no API
+key, no per-document cost, reproducible. Set `EMBEDDING_PROVIDER=openai` (plus
+`OPENAI_API_KEY`) to use `text-embedding-3-small` at 384 dims instead. Ranking weights
+and re-ranking are deliberately untuned until the benchmark (build step 7) measures them.
 
 ## Local development
 

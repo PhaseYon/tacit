@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
@@ -47,6 +48,9 @@ async function WorkspacePageContent({
       <AppHeader email={session.user.email}>
         <span className="text-muted-foreground">/</span>
         <span className="font-medium">{workspace.name}</span>
+        <Link href={`/w/${slug}/search`} className="text-sm text-muted-foreground hover:text-foreground">
+          Search
+        </Link>
       </AppHeader>
       <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-10">
         <Card>
