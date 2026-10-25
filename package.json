@@ -13,7 +13,7 @@
     "test": "cd apps/api && uv run pytest -q",
     "lint": "cd apps/api && uv run ruff check . && uv run ruff format --check . && cd ../.. && pnpm --filter web lint",
     "typecheck": "pnpm --filter web typecheck",
-    "dev:worker": "cd apps/api && uv run celery -A tacit_api.worker worker -B -Q realtime,backfill,index --loglevel=info",
+    "dev:worker": "cd apps/api && uv run celery -A tacit_api.worker worker -B -Q realtime,backfill,index,graph --loglevel=info",
     "dev:webhooks": "dotenv -e .env -- sh -c 'smee --url \"$GITHUB_WEBHOOK_PROXY_URL\" --target http://localhost:8000/webhooks/github'",
     "github:create-app": "cd apps/api && uv run python ../../scripts/create_github_app.py"
   },

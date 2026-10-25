@@ -190,4 +190,47 @@ async def get_document(
     }
 
 
+@mcp.tool
+async def search_facts(
+    query: Annotated[
+        str, Field(description="What decision or relationship to look up", min_length=1)
+    ],
+    workspace: Annotated[str | None, Field(description="Workspace slug or id")] = None,
+    include_history: Annotated[
+        bool, Field(description="Also return superseded facts (what changed and when)")
+    ] = False,
+    limit: Annotated[int, Field(ge=1, le=25)] = 10,
+) -> dict[str, Any]:
+    """Time-aware facts from the team knowledge graph: who decided what, what a component
+    uses, and what replaced what. Each fact has valid_at / invalid_at and citations.
+    Use include_history=true for "what did we use before" questions."""
+    from .graph.access import search_facts as _search_facts
+    from .graph.client import graph_reader
+
+    graph = graph_reader()
+    if graph is None:
+        raise ToolError("The knowledge graph isn't enabled on this server; use `search` instead.")
+    user_id = _user_id()
+    ws_id, ws_name = await _resolve_workspace(user_id, workspace)
+    async with rls_session(user_id, ws_id) as s:
+        facts = await _search_facts(s, graph, query, include_history=include_history, limit=limit)
+    return {
+        "workspace": ws_name,
+        "facts": [
+            {
+                "fact": f.fact,
+                "relation": f.relation,
+                "status": f.status,
+                "valid_at": f.valid_at.isoformat() if f.valid_at else None,
+                "invalid_at": f.invalid_at.isoformat() if f.invalid_at else None,
+                "sources": [
+                    {"url": c.url, "title": c.title, "kind": c.kind, "repo": c.container}
+                    for c in f.citations
+                ],
+            }
+            for f in facts
+        ],
+    }
+
+
 mcp_app = mcp.http_app(path="/mcp")

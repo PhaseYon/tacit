@@ -104,6 +104,17 @@ async def tombstone(workspace_id: str, external_ids: list[str]) -> None:
             ),
             {"ids": external_ids},
         )
+        # Facts from a bundle that contained a deleted document are hidden at once
+        # (graph reads require status='done'); the graph worker rebuilds it.
+        await s.execute(
+            text(
+                "UPDATE graph_episode SET status = 'stale', updated_at = now() WHERE id IN ("
+                " SELECT ged.graph_episode_id FROM graph_episode_document ged"
+                " JOIN source_document d ON d.id = ged.document_id"
+                " WHERE d.source = 'github' AND d.external_id = ANY(:ids))"
+            ),
+            {"ids": external_ids},
+        )
 
 
 async def link_orphans(workspace_id: str, container_id: str) -> None:
