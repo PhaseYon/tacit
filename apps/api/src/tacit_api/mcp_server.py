@@ -22,15 +22,21 @@ from .models import Member, Workspace
 from .search.hybrid import hybrid_search
 
 
+def make_verifier(public_key: str | None = None) -> JWTVerifier:
+    s = get_settings()
+    return JWTVerifier(
+        jwks_uri=None if public_key else s.auth_jwks_url,
+        public_key=public_key,
+        issuer=s.auth_jwt_issuer,
+        audience=s.mcp_resource_url,
+        algorithm="EdDSA",  # Better Auth's JWT plugin default (Ed25519)
+    )
+
+
 def _auth() -> RemoteAuthProvider:
     s = get_settings()
     return RemoteAuthProvider(
-        token_verifier=JWTVerifier(
-            jwks_uri=s.auth_jwks_url,
-            issuer=s.auth_jwt_issuer,
-            audience=s.mcp_resource_url,
-            algorithm="EdDSA",  # Better Auth's JWT plugin default (Ed25519)
-        ),
+        token_verifier=make_verifier(),
         authorization_servers=[s.auth_jwt_issuer],
         base_url=s.api_public_url,
         resource_name="Tacit",
