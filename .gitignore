@@ -1,0 +1,43 @@
+# Secrets / local config
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Node
+node_modules/
+.pnpm-store/
+.next/
+out/
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+pnpm-debug.log*
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Data dumps: never commit real team data
+data/private/
+*.dump
+
+# Claude Code local state (agent worktrees)
+.claude/worktrees/
+.claude/settings.local.json
