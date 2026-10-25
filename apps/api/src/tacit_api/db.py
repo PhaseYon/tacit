@@ -50,9 +50,7 @@ async def set_rls_context(
 
 
 @asynccontextmanager
-async def rls_session(
-    user_id: str, workspace_id: str | None = None
-) -> AsyncIterator[AsyncSession]:
+async def rls_session(user_id: str, workspace_id: str | None = None) -> AsyncIterator[AsyncSession]:
     """A transaction scoped to one user (and optionally one workspace)."""
     get_engine()
     assert _sessionmaker is not None
