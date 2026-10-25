@@ -9,10 +9,13 @@ requires-python = ">=3.13"
 dependencies = [
     "alembic>=1.20.1",
     "asyncpg>=0.32.0",
+    "celery[redis]>=5.6.3",
     "fastapi>=0.162.0",
+    "githubkit[auth-app]~=0.16.1",
     "psycopg[binary]>=3.3.6",
     "pydantic-settings>=2.16.1",
     "pyjwt[crypto]>=2.15.1",
+    "redis>=6.4.0",
     "sqlalchemy[asyncio]>=2.1.6",
     "uvicorn[standard]>=0.54.0",
 ]
@@ -29,6 +32,7 @@ dev = [
     "httpx>=0.28.1",
     "pytest>=9.1.1",
     "pytest-asyncio>=1.4.0",
+    "respx>=0.23.1",
     "ruff>=0.17.2",
 ]
 

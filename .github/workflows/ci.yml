@@ -27,7 +27,7 @@ jobs:
           docker run --rm --network host -v "$PWD/infra/postgres/init:/init:ro" \
             -e PGHOST=localhost -e PGPASSWORD=postgres \
             -e POSTGRES_USER=postgres -e POSTGRES_DB=tacit \
-            -e TACIT_MIGRATOR_PASSWORD=migrator -e TACIT_AUTH_PASSWORD=auth -e TACIT_API_PASSWORD=api \
+            -e TACIT_MIGRATOR_PASSWORD=migrator -e TACIT_AUTH_PASSWORD=auth -e TACIT_API_PASSWORD=api -e TACIT_WORKER_PASSWORD=worker \
             pgvector/pgvector:pg17 bash /init/01-roles.sh
       - uses: astral-sh/setup-uv@v6
       - working-directory: apps/api

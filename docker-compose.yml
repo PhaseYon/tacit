@@ -8,10 +8,11 @@ services:
       POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
       POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:-postgres}
       POSTGRES_DB: ${POSTGRES_DB:-tacit}
-      # Read by infra/postgres/init/01-roles.sh to create the three app roles.
+      # Read by infra/postgres/init/01-roles.sh to create the app roles.
       TACIT_MIGRATOR_PASSWORD: ${TACIT_MIGRATOR_PASSWORD:-migrator}
       TACIT_AUTH_PASSWORD: ${TACIT_AUTH_PASSWORD:-auth}
       TACIT_API_PASSWORD: ${TACIT_API_PASSWORD:-api}
+      TACIT_WORKER_PASSWORD: ${TACIT_WORKER_PASSWORD:-worker}
     ports:
       - "5432:5432"
     volumes:
