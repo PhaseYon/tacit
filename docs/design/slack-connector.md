@@ -53,8 +53,9 @@ GitHub). Only `connectors/slack/client.py` imports `slack_sdk`.
 | `slack_bolt` | A whole app framework with its own OAuth flow and installation store. We already have routes, workers and an encrypted token store; we need three pieces of the SDK, not a second web framework. |
 | Raw `httpx` | Signature checks, pagination, rate-limit retries all become custom code. |
 
-The async client runs on `aiohttp`, so tests mock `https://slack.com/api/*` with
-**`aioresponses`** (respx only intercepts httpx). Same rule: no network in tests.
+The async client runs on `aiohttp`, which respx can't intercept (and `aioresponses`
+doesn't support aiohttp 3.14), so tests point `SLACK_API_URL` at an **in-process fake
+Slack Web API** on localhost (`tests/slack_mock.py`). Same rule: no network in tests.
 
 ## 3. Install flow (OAuth v2)
 
@@ -141,7 +142,7 @@ sets `acl_synced_at`. Any API error → nothing written; access goes stale after
 channel **deletes that user's row immediately** (no API call) before the resync.
 `channel_deleted`, bot removed (`channel_left`/`group_left`), `app_uninstalled`,
 `tokens_revoked` → container(s) deactivated, access rows deleted, docs tombstoned in one
-transaction. Archived channels stay readable (as in Slack) but stop syncing new messages.
+transaction. Archived channels stay readable (as in Slack) and keep their ACL refresh.
 
 ## 6. Identity linking
 
