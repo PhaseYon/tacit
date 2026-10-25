@@ -6,8 +6,8 @@ Tacit syncs a team's Slack, GitHub and Notion into a permission-aware knowledge 
 can ask *"why did we do X, who decided, and where's the evidence?"* from the web app, or from
 Claude and Cursor over MCP.
 
-> Status: early development. Auth, workspaces, the GitHub connector and hybrid search
-> with citations work. The graph layer (Graphiti) and the MCP server are next.
+> Status: early development. Auth, workspaces, the GitHub connector, hybrid search with
+> citations and the MCP server work. The graph layer (Graphiti) is designed and next.
 
 ## Architecture (so far)
 
@@ -44,6 +44,24 @@ Embeddings default to a **local** model (fastembed `bge-small-en-v1.5`, 384 dims
 key, no per-document cost, reproducible. Set `EMBEDDING_PROVIDER=openai` (plus
 `OPENAI_API_KEY`) to use `text-embedding-3-small` at 384 dims instead. Ranking weights
 and re-ranking are deliberately untuned until the benchmark (build step 7) measures them.
+
+## Use it from Claude or Cursor (MCP)
+
+Tacit is a remote MCP server at `http://localhost:8000/mcp` with OAuth 2.1. The web app is
+the authorization server (dynamic client registration, PKCE, consent screen), and tokens
+are bound to the MCP resource. Every tool call runs with your permissions, so the
+assistant sees exactly what you can see.
+
+```bash
+# Claude Code
+claude mcp add --transport http tacit http://localhost:8000/mcp
+```
+
+For Claude Desktop or Cursor, add a remote MCP server with that URL. The client opens a
+browser to sign in and approve access.
+
+Tools: `list_workspaces`, `search` (hybrid, cited) and `get_document` (a source plus its
+review/comment thread).
 
 ## Local development
 
