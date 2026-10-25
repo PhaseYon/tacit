@@ -38,6 +38,11 @@ class Settings(BaseSettings):
     # "redis" shares installation tokens + ETag cache across workers; "memory" for tests.
     github_cache: str = "redis"
 
+    # Embeddings: "fastembed" (local, free, default), "openai", or "fake" (tests).
+    embedding_provider: str = "fastembed"
+    embedding_model: str = "BAAI/bge-small-en-v1.5"
+    openai_api_key: SecretStr = SecretStr("")
+
     @property
     def github_enabled(self) -> bool:
         return bool(self.github_app_id and self.github_app_private_key_path)

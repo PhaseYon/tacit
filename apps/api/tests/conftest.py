@@ -31,6 +31,8 @@ os.environ["API_DATABASE_URL"] = f"postgresql+asyncpg://tacit_api:api@localhost:
 os.environ["WORKER_DATABASE_URL"] = (
     f"postgresql+asyncpg://tacit_worker:worker@localhost:5432/{TEST_DB}"
 )
+# Deterministic hashing embedder: no model download, same vectors everywhere.
+os.environ["EMBEDDING_PROVIDER"] = "fake"
 os.environ["AUTH_JWT_ISSUER"] = ISSUER
 os.environ["AUTH_JWT_AUDIENCE"] = AUDIENCE
 

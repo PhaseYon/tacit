@@ -11,6 +11,7 @@ from .connectors.github.routes import router as github_router
 from .db import dispose_engine
 from .deps import CurrentPrincipal, CurrentWorkspace, UserDB
 from .models import Member, User, Workspace
+from .search.routes import router as search_router
 
 
 @asynccontextmanager
@@ -21,6 +22,7 @@ async def lifespan(_: FastAPI):
 
 app = FastAPI(title="Tacit API", version="0.1.0", lifespan=lifespan)
 app.include_router(github_router)
+app.include_router(search_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[get_settings().web_origin],

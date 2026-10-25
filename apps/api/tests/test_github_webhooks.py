@@ -118,12 +118,15 @@ async def test_handler_runs_with_resolved_workspace(client, queued, seed, monkey
         return "done"
 
     monkeypatch.setitem(handlers.HANDLERS, "issues", fake)
+    indexed = []
+    monkeypatch.setattr(handlers, "_index_soon", indexed.append)
     body = json.dumps({"action": "edited", "installation": {"id": 5151}}).encode()
     h = _headers(body)
     await client.post("/webhooks/github", content=body, headers=h)
     assert await handlers.process_delivery(h["X-GitHub-Delivery"]) == "done"
     assert await handlers.process_delivery(h["X-GitHub-Delivery"]) == "skipped"
     assert seen == [(seed.acme, "edited")]
+    assert indexed == [seed.acme]  # content changed -> indexing queued
     await dispose_engine()
 
 

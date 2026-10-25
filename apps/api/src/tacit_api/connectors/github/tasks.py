@@ -109,6 +109,9 @@ def backfill_repo(self: Task, workspace_id: str, container_id: str, resource: st
         raise
     if more is None:
         return
+    from ...search.tasks import index_workspace_task
+
+    index_workspace_task.delay(workspace_id)
     if more:
         backfill_repo.delay(workspace_id, container_id, resource)
         return
@@ -192,6 +195,7 @@ def purge_old_deliveries() -> None:
 
 
 celery_app.conf.beat_schedule = {
+    **(celery_app.conf.beat_schedule or {}),
     "github-refresh-acls": {"task": PREFIX + "refresh_all_acls", "schedule": crontab(minute=7)},
     "github-reconcile": {
         "task": PREFIX + "reconcile_all",
