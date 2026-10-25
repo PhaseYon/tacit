@@ -28,6 +28,28 @@ export async function connectGitHub(
   redirect(url);
 }
 
+/** Ask the API for a Slack OAuth install URL (with a signed state) and go there. */
+export async function connectSlack(
+  workspaceId: string,
+  slug: string,
+  _prev: ConnectState,
+): Promise<ConnectState> {
+  let url: string;
+  try {
+    ({ url } = await apiFetch<{ url: string }>(`/workspaces/${workspaceId}/slack/connect`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ return_to: `/w/${slug}` }),
+    }));
+  } catch (e) {
+    if (e instanceof ApiError && e.status === 409) return { error: "Link your Slack account first." };
+    if (e instanceof ApiError && e.status === 403) return { error: "Only workspace admins can connect Slack." };
+    if (e instanceof ApiError && e.status === 503) return { error: "The Slack app isn't configured on this server." };
+    return { error: "Could not start the Slack connection." };
+  }
+  redirect(url);
+}
+
 export type GraphSettings = {
   enabled: boolean;
   include_private: boolean;

@@ -1,7 +1,7 @@
 import { mcp } from "@better-auth/mcp";
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
-import { jwt, organization } from "better-auth/plugins";
+import { genericOAuth, jwt, organization } from "better-auth/plugins";
 import { Pool } from "pg";
 
 import { sendMail } from "./mailer";
@@ -18,6 +18,55 @@ const github =
   githubClientId && githubClientSecret
     ? { github: { clientId: githubClientId, clientSecret: githubClientSecret } }
     : undefined;
+
+// "Sign in with Slack" (OpenID Connect) through genericOAuth rather than the built-in
+// Slack provider: the built-in one stores only the Slack user id, but Slack ids are
+// unique per team, so the account id here is "<team_id>:<user_id>" from Slack's verified
+// userInfo claims. The API matches it against channel membership for permission sync.
+const slackClientId = process.env.SLACK_CLIENT_ID;
+const slackClientSecret = process.env.SLACK_CLIENT_SECRET;
+type SlackClaims = Record<string, unknown> & { sub?: string };
+const slackPlugins =
+  slackClientId && slackClientSecret
+    ? [
+        genericOAuth({
+          config: [
+            {
+              providerId: "slack",
+              name: "Slack",
+              clientId: slackClientId,
+              clientSecret: slackClientSecret,
+              authorizationUrl: "https://slack.com/openid/connect/authorize",
+              tokenUrl: "https://slack.com/api/openid.connect.token",
+              userInfoUrl: "https://slack.com/api/openid.connect.userInfo",
+              scopes: ["openid", "profile", "email"],
+              pkce: true,
+              getUserInfo: async (tokens) => {
+                const res = await fetch("https://slack.com/api/openid.connect.userInfo", {
+                  headers: { Authorization: `Bearer ${tokens.accessToken}` },
+                });
+                const p = (await res.json()) as SlackClaims & { ok?: boolean };
+                if (!res.ok || !p.ok) return null;
+                return {
+                  ...p,
+                  id: p.sub,
+                  email: p.email as string | undefined,
+                  emailVerified: Boolean(p.email_verified),
+                  name: (p.name as string | undefined) ?? "",
+                  image: p.picture as string | undefined,
+                };
+              },
+              // Empty claims make Better Auth reject the link (fail closed).
+              accountSubject: ({ profile }) => {
+                const team = profile["https://slack.com/team_id"];
+                const user = profile["https://slack.com/user_id"];
+                return typeof team === "string" && typeof user === "string" ? `${team}:${user}` : "";
+              },
+            },
+          ],
+        }),
+      ]
+    : [];
 
 export const auth = betterAuth({
   baseURL,
@@ -78,6 +127,7 @@ export const auth = betterAuth({
       clientRegistrationDefaultApplicationType: "infer",
       accessTokenExpiresIn: 60 * 15,
     }),
+    ...slackPlugins,
     nextCookies(), // must be last
   ],
 });
