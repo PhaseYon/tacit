@@ -20,6 +20,8 @@ from httpx import ASGITransport, AsyncClient
 SUPERUSER_URL = os.environ.get(
     "TEST_SUPERUSER_URL", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
+# One test database per checkout, so parallel runs (e.g. git worktrees) don't drop each
+# other's database mid-run. Override with TEST_DB_NAME.
 TEST_DB = os.environ.get(
     "TEST_DB_NAME",
     "tacit_test_"

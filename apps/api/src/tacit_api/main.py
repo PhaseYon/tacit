@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from sqlalchemy import select
 
+from .agent.routes import router as ask_router
 from .config import get_settings
 from .connectors.github.routes import router as github_router
 from .db import dispose_engine
@@ -28,6 +29,7 @@ app = FastAPI(title="Tacit API", version="0.1.0", lifespan=lifespan)
 app.include_router(github_router)
 app.include_router(search_router)
 app.include_router(graph_router)
+app.include_router(ask_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[get_settings().web_origin],

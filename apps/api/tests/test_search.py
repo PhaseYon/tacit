@@ -53,7 +53,7 @@ async def corpus(seed: Seed) -> dict[str, str]:
     with psycopg.connect(MIGRATOR_URL, autocommit=True) as conn:
         conn.execute(
             "INSERT INTO container_access (container_id, user_id, workspace_id, permission)"
-            " VALUES (%s, %s, %s, 'write')",
+            " VALUES (%s, %s, %s, 'write') ON CONFLICT DO NOTHING",
             (private.container_id, seed.alice, seed.acme),
         )
         conn.execute(
@@ -89,9 +89,9 @@ async def corpus(seed: Seed) -> dict[str, str]:
             ),
         ],
     )
-    result = await index_workspace(seed.acme)
+    # Fixture may be set up again by modules that import it; indexing is idempotent.
+    await index_workspace(seed.acme)
     await dispose_engine()
-    assert result.documents >= 3  # other test modules may have left docs pending too
     return {"public": public.container_id, "private": private.container_id}
 
 

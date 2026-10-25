@@ -63,10 +63,13 @@ def containers(seed: Seed) -> Containers:
     return c
 
 
+OWN = set(Containers().__dict__.values())  # other modules add containers to the same workspace
+
+
 async def _visible_containers(user_id: str, workspace_id: str | None) -> set[str]:
     async with rls_session(user_id, workspace_id) as s:
         rows = await s.execute(text("SELECT container_id::text FROM source_document"))
-        return set(rows.scalars())
+        return set(rows.scalars()) & OWN
 
 
 @pytest.fixture(autouse=True)
@@ -113,7 +116,7 @@ async def test_api_role_cannot_write_documents(seed, containers):
 async def test_worker_sees_only_selected_workspace(seed, containers):
     c = containers
     async with worker_session(seed.acme) as s:
-        got = set((await s.execute(text("SELECT id::text FROM source_container"))).scalars())
+        got = set((await s.execute(text("SELECT id::text FROM source_container"))).scalars()) & OWN
     assert got == {c.public, c.private_alice, c.private_stale, c.inactive}
 
     async with worker_session() as s:
