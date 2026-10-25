@@ -482,3 +482,21 @@ Each step is one PR-sized commit with tests.
 6. **Approval-only changes** don't re-extract (§7.1). Is it acceptable for "who
    approved" to come only from Postgres metadata and not from the graph?
 7. **Neo4j Community vs Enterprise/Aura** (RBAC, backups): decide at the deploy step.
+
+## 12. Decisions on open questions (2026-10-25)
+
+1. **Default extraction model: `claude-haiku-5-5`** (current Haiku, ~10× cheaper than
+   Haiku 4.5 per the estimate above), behind Tacit's own LLM adapter. Quality is checked in
+   dogfood and the benchmark; switching model bumps `input_hash` and re-extracts.
+2. **Closed-but-unmerged PRs:** not in v1. Revisit after the benchmark measures whether
+   "rejected alternatives" improve answers enough to justify 20–40% more cost.
+3. **Budget:** $5/month per workspace default, covering graph extraction and the agent's
+   LLM calls (one `llm_usage` ledger). Hard stop at the cap.
+4. **Private content and LLM providers:** graph extraction is off by default. Enabling it is
+   per workspace, and **private repos need a separate explicit opt-in** by a workspace admin,
+   with a note that their text is sent to the configured LLM provider. Public repos only by
+   default.
+5. **Nightly rebuild:** manual only in v1 (a "rebuild repo" admin action and task).
+6. **Approvals:** "who approved" comes from Postgres metadata, not re-extraction. Accepted.
+7. **Neo4j:** Community 5.26 for self-hosting and the demo; Aura/Enterprise is a deployment
+   choice, not a code change.
