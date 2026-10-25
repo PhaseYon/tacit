@@ -37,3 +37,7 @@ Thumbs.db
 # Data dumps: never commit real team data
 data/private/
 *.dump
+
+# Claude Code local state (agent worktrees)
+.claude/worktrees/
+.claude/settings.local.json
