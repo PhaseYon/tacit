@@ -1,9 +1,11 @@
 import { headers } from "next/headers";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
 import { AppHeader } from "@/components/app-header";
 import { GitHubSection } from "@/components/github-section";
+import { GraphSection } from "@/components/graph-section";
 import { InviteForm } from "@/components/invite-form";
 import { PageSkeleton } from "@/components/page-skeleton";
 import { Badge } from "@/components/ui/badge";
@@ -47,6 +49,9 @@ async function WorkspacePageContent({
       <AppHeader email={session.user.email}>
         <span className="text-muted-foreground">/</span>
         <span className="font-medium">{workspace.name}</span>
+        <Link href={`/w/${slug}/search`} className="text-sm text-muted-foreground hover:text-foreground">
+          Search
+        </Link>
       </AppHeader>
       <main className="mx-auto flex w-full max-w-3xl flex-col gap-8 px-4 py-10">
         <Card>
@@ -88,6 +93,8 @@ async function WorkspacePageContent({
             error: typeof query.github_error === "string" ? query.github_error : undefined,
           }}
         />
+
+        <GraphSection workspaceId={workspace.id} canManage={canInvite} />
 
         {canInvite && (
           <Card>

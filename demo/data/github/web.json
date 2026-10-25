@@ -1,0 +1,2955 @@
+{
+  "repository": {
+    "id": 710000003,
+    "node_id": "R_kgDOLRK710000003",
+    "name": "web",
+    "full_name": "larkspur/web",
+    "private": true,
+    "visibility": "private",
+    "owner": {
+      "login": "larkspur",
+      "id": 91000000,
+      "type": "Organization"
+    },
+    "html_url": "https://github.com/larkspur/web",
+    "description": "Larkspur web app and offline-first PWA",
+    "url": "https://api.github.com/repos/larkspur/web",
+    "created_at": "2025-04-01T12:00:00Z",
+    "default_branch": "main",
+    "archived": false
+  },
+  "issues": [
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/8",
+      "repository_url": "https://api.github.com/repos/larkspur/web",
+      "comments_url": "https://api.github.com/repos/larkspur/web/issues/8/comments",
+      "html_url": "https://github.com/larkspur/web/issues/8",
+      "id": 2100300008,
+      "node_id": "I_kwDOLRK30008",
+      "number": 8,
+      "title": "iOS evicts offline photos when storage is low",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 5898416404,
+          "node_id": "LA_kwDOLRK5898416404",
+          "name": "bug",
+          "color": "2d8970"
+        },
+        {
+          "id": 6014178784,
+          "node_id": "LA_kwDOLRK6014178784",
+          "name": "mobile",
+          "color": "22684c"
+        },
+        {
+          "id": 8625838130,
+          "node_id": "LA_kwDOLRK8625838130",
+          "name": "offline",
+          "color": "3e88eb"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 3,
+      "created_at": "2025-09-01T10:00:00Z",
+      "updated_at": "2025-09-10T12:00:00Z",
+      "closed_at": "2025-09-10T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "A pilot inspector lost 30 photos: iOS Safari evicted our IndexedDB data after 7 days of\nnot opening the app, and the outbox had unsent full-resolution photos (8 MB each).",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/10",
+      "repository_url": "https://api.github.com/repos/larkspur/web",
+      "comments_url": "https://api.github.com/repos/larkspur/web/issues/10/comments",
+      "html_url": "https://github.com/larkspur/web/issues/10",
+      "id": 2100300010,
+      "node_id": "I_kwDOLRK30010",
+      "number": 10,
+      "title": "Redux boilerplate is slowing us down",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        },
+        {
+          "id": 8233413391,
+          "node_id": "LA_kwDOLRK8233413391",
+          "name": "discussion",
+          "color": "1a887d"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 3,
+      "created_at": "2025-10-20T10:00:00Z",
+      "updated_at": "2026-02-10T12:00:00Z",
+      "closed_at": "2026-02-10T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Adding the client-history screen took a slice, 4 thunks, 6 selectors and the\nloading/error/stale flags, plus cache invalidation when a report changes. ~80% of the store\nis just cached server data. And replaying thunks from the offline outbox is fragile.\n\nProposal: TanStack Query for server state, something tiny (Zustand) for UI state.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/12",
+      "repository_url": "https://api.github.com/repos/larkspur/web",
+      "comments_url": "https://api.github.com/repos/larkspur/web/issues/12/comments",
+      "html_url": "https://github.com/larkspur/web/issues/12",
+      "id": 2100300012,
+      "node_id": "I_kwDOLRK30012",
+      "number": 12,
+      "title": "Initial JS bundle is 1.1 MB",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 7195166849,
+          "node_id": "LA_kwDOLRK7195166849",
+          "name": "performance",
+          "color": "6a55ba"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 2,
+      "created_at": "2025-11-20T10:00:00Z",
+      "updated_at": "2025-11-28T10:00:00Z",
+      "closed_at": "2025-11-28T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Lighthouse on a mid-range Android: 6.2 s TTI. The PDF preview library and moment.js are in the main chunk.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/13",
+      "repository_url": "https://api.github.com/repos/larkspur/web",
+      "comments_url": "https://api.github.com/repos/larkspur/web/issues/13/comments",
+      "html_url": "https://github.com/larkspur/web/issues/13",
+      "id": 2100300013,
+      "node_id": "I_kwDOLRK30013",
+      "number": 13,
+      "title": "Safari: Background Sync never fires",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 6014178784,
+          "node_id": "LA_kwDOLRK6014178784",
+          "name": "mobile",
+          "color": "22684c"
+        },
+        {
+          "id": 8625838130,
+          "node_id": "LA_kwDOLRK8625838130",
+          "name": "offline",
+          "color": "3e88eb"
+        },
+        {
+          "id": 5751931145,
+          "node_id": "LA_kwDOLRK5751931145",
+          "name": "upstream",
+          "color": "9c1d93"
+        }
+      ],
+      "state": "open",
+      "state_reason": null,
+      "locked": false,
+      "assignees": [],
+      "comments": 1,
+      "created_at": "2025-12-08T10:00:00Z",
+      "updated_at": "2025-12-08T14:00:00Z",
+      "closed_at": null,
+      "author_association": "MEMBER",
+      "body": "As expected, Safari has no Background Sync API. Outbox only drains when the app is open. Tracking here in case WebKit ships it.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/14",
+      "repository_url": "https://api.github.com/repos/larkspur/web",
+      "comments_url": "https://api.github.com/repos/larkspur/web/issues/14/comments",
+      "html_url": "https://github.com/larkspur/web/issues/14",
+      "id": 2100300014,
+      "node_id": "I_kwDOLRK30014",
+      "number": 14,
+      "title": "Print layout route for server-side PDF rendering",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 5250665868,
+          "node_id": "LA_kwDOLRK5250665868",
+          "name": "pdf",
+          "color": "8fb11f"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 2,
+      "created_at": "2026-01-08T10:00:00Z",
+      "updated_at": "2026-01-15T12:00:00Z",
+      "closed_at": "2026-01-15T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "For the Playwright switch the PDF worker will open a page in the web app. Can we get `/print/reports/[id]` that renders the report without app chrome, authenticated by a one-time token?",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/20",
+      "repository_url": "https://api.github.com/repos/larkspur/web",
+      "comments_url": "https://api.github.com/repos/larkspur/web/issues/20/comments",
+      "html_url": "https://github.com/larkspur/web/issues/20",
+      "id": 2100300020,
+      "node_id": "I_kwDOLRK30020",
+      "number": 20,
+      "title": "Search empty state says 'Elasticsearch error'",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 1,
+      "created_at": "2026-04-01T10:00:00Z",
+      "updated_at": "2026-04-02T10:00:00Z",
+      "closed_at": "2026-04-02T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Leftover copy from the ES days. Should be a friendly 'No reports match'.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/21",
+      "repository_url": "https://api.github.com/repos/larkspur/web",
+      "comments_url": "https://api.github.com/repos/larkspur/web/issues/21/comments",
+      "html_url": "https://github.com/larkspur/web/issues/21",
+      "id": 2100300021,
+      "node_id": "I_kwDOLRK30021",
+      "number": 21,
+      "title": "Customer request: native iOS app",
+      "user": {
+        "login": "ines-duarte",
+        "id": 91000002,
+        "node_id": "U_kgDO91000002",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000002?v=4",
+        "html_url": "https://github.com/ines-duarte",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 6014178784,
+          "node_id": "LA_kwDOLRK6014178784",
+          "name": "mobile",
+          "color": "22684c"
+        },
+        {
+          "id": 8544843437,
+          "node_id": "LA_kwDOLRK8544843437",
+          "name": "product",
+          "color": "dabf0c"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "not_planned",
+      "locked": false,
+      "assignees": [],
+      "comments": 4,
+      "created_at": "2026-04-20T10:00:00Z",
+      "updated_at": "2026-04-28T12:00:00Z",
+      "closed_at": "2026-04-28T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Harbor & Pine Inspections (35 seats, renewal in June) asked for a native iOS app. Their\nreasons: App Store presence for their inspectors and better photo uploads in the\nbackground. Do we revisit ADR-0008?",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/22",
+      "repository_url": "https://api.github.com/repos/larkspur/web",
+      "comments_url": "https://api.github.com/repos/larkspur/web/issues/22/comments",
+      "html_url": "https://github.com/larkspur/web/issues/22",
+      "id": 2100300022,
+      "node_id": "I_kwDOLRK30022",
+      "number": 22,
+      "title": "Accessibility audit findings",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 5228119274,
+          "node_id": "LA_kwDOLRK5228119274",
+          "name": "accessibility",
+          "color": "f3a1bb"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 2,
+      "created_at": "2026-05-05T10:00:00Z",
+      "updated_at": "2026-05-19T10:00:00Z",
+      "closed_at": "2026-05-19T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Audit for an enterprise RFP found: missing labels on checklist toggles, low contrast on the severity chips, and focus lost after closing the photo viewer.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/24",
+      "repository_url": "https://api.github.com/repos/larkspur/web",
+      "comments_url": "https://api.github.com/repos/larkspur/web/issues/24/comments",
+      "html_url": "https://github.com/larkspur/web/issues/24",
+      "id": 2100300024,
+      "node_id": "I_kwDOLRK30024",
+      "number": 24,
+      "title": "Redirect loop on login for Brightwell SSO users",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 5898416404,
+          "node_id": "LA_kwDOLRK5898416404",
+          "name": "bug",
+          "color": "2d8970"
+        },
+        {
+          "id": 9175343705,
+          "node_id": "LA_kwDOLRK9175343705",
+          "name": "auth",
+          "color": "d31c01"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 2,
+      "created_at": "2026-06-10T09:00:00Z",
+      "updated_at": "2026-06-10T15:00:00Z",
+      "closed_at": "2026-06-10T15:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Brightwell users bounce between /login and their Entra ID page after the WorkOS switch.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/25",
+      "repository_url": "https://api.github.com/repos/larkspur/web",
+      "comments_url": "https://api.github.com/repos/larkspur/web/issues/25/comments",
+      "html_url": "https://github.com/larkspur/web/issues/25",
+      "id": 2100300025,
+      "node_id": "I_kwDOLRK30025",
+      "number": 25,
+      "title": "Two inspectors editing the same report offline overwrite each other",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 8625838130,
+          "node_id": "LA_kwDOLRK8625838130",
+          "name": "offline",
+          "color": "3e88eb"
+        },
+        {
+          "id": 5898416404,
+          "node_id": "LA_kwDOLRK5898416404",
+          "name": "bug",
+          "color": "2d8970"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 3,
+      "created_at": "2026-06-15T10:00:00Z",
+      "updated_at": "2026-07-06T12:00:00Z",
+      "closed_at": "2026-07-06T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Firms with two-person inspections (one outside, one inside) both edit the same report\noffline. On sync, whoever syncs last overwrites whole sections.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/28",
+      "repository_url": "https://api.github.com/repos/larkspur/web",
+      "comments_url": "https://api.github.com/repos/larkspur/web/issues/28/comments",
+      "html_url": "https://github.com/larkspur/web/issues/28",
+      "id": 2100300028,
+      "node_id": "I_kwDOLRK30028",
+      "number": 28,
+      "title": "Photos from some Android phones appear sideways",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "labels": [
+        {
+          "id": 5898416404,
+          "node_id": "LA_kwDOLRK5898416404",
+          "name": "bug",
+          "color": "2d8970"
+        },
+        {
+          "id": 6014178784,
+          "node_id": "LA_kwDOLRK6014178784",
+          "name": "mobile",
+          "color": "22684c"
+        }
+      ],
+      "state": "closed",
+      "state_reason": "completed",
+      "locked": false,
+      "assignees": [],
+      "comments": 1,
+      "created_at": "2026-08-03T10:00:00Z",
+      "updated_at": "2026-08-05T10:00:00Z",
+      "closed_at": "2026-08-05T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Client-side compression drops EXIF orientation on Samsung devices.",
+      "reactions": {
+        "total_count": 0
+      }
+    }
+  ],
+  "pull_requests": [
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/1",
+      "id": 1900300001,
+      "node_id": "PR_kwDOLRK30001",
+      "html_url": "https://github.com/larkspur/web/pull/1",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/1",
+      "number": 1,
+      "state": "closed",
+      "locked": false,
+      "title": "Next.js app skeleton",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "App Router, TypeScript strict, ESLint, Vitest, Playwright for e2e. Nothing product-facing yet.",
+      "labels": [
+        {
+          "id": 7239244242,
+          "node_id": "LA_kwDOLRK7239244242",
+          "name": "chore",
+          "color": "d23a67"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-04-02T10:00:00Z",
+      "updated_at": "2025-04-03T10:00:00Z",
+      "closed_at": "2025-04-03T10:00:00Z",
+      "merged_at": "2025-04-03T10:00:00Z",
+      "merge_commit_sha": "2e2c36faf46971ba977cd5db7ce30cee27408ae5",
+      "head": {
+        "label": "larkspur:pr-skeleton",
+        "ref": "pr-skeleton",
+        "sha": "9503f4a675dabba4369483bf264a9131f8ab71dd"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "fbb0843492519374945e3a573a1859f6864043c2"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/2",
+      "id": 1900300002,
+      "node_id": "PR_kwDOLRK30002",
+      "html_url": "https://github.com/larkspur/web/pull/2",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/2",
+      "number": 2,
+      "state": "closed",
+      "locked": false,
+      "title": "Redux Toolkit store with report, client and template slices",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Per ADR-0006. One slice per domain, thunks for API calls, `createEntityAdapter` for\nnormalized reports. Report editor undo uses a history middleware on the `report` slice.",
+      "labels": [
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-05-06T10:00:00Z",
+      "updated_at": "2025-05-08T10:00:00Z",
+      "closed_at": "2025-05-08T10:00:00Z",
+      "merged_at": "2025-05-08T10:00:00Z",
+      "merge_commit_sha": "369400e98e39f9517e42611242bc64f72856bfb5",
+      "head": {
+        "label": "larkspur:pr-redux-store",
+        "ref": "pr-redux-store",
+        "sha": "40d82e1046f63fddeb4cda27df98d2fa70bb52a3"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "64c2a0763a78da4f183eaa104e5af827869142b2"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/3",
+      "id": 1900300003,
+      "node_id": "PR_kwDOLRK30003",
+      "html_url": "https://github.com/larkspur/web/pull/3",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/3",
+      "number": 3,
+      "state": "closed",
+      "locked": false,
+      "title": "Login with Auth0 (nextjs-auth0)",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Universal Login redirect, access token passed to the API as a Bearer token.",
+      "labels": [
+        {
+          "id": 9175343705,
+          "node_id": "LA_kwDOLRK9175343705",
+          "name": "auth",
+          "color": "d31c01"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-05-19T10:00:00Z",
+      "updated_at": "2025-05-21T10:00:00Z",
+      "closed_at": "2025-05-21T10:00:00Z",
+      "merged_at": "2025-05-21T10:00:00Z",
+      "merge_commit_sha": "8a66d6f06ad642e2b5d9073aa7c23557bc83ec02",
+      "head": {
+        "label": "larkspur:pr-auth0-login",
+        "ref": "pr-auth0-login",
+        "sha": "fca496a607e916687519ac72479c7c2568a9f96a"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "0aba55b9e2c256f70b4531c74cb36d850a419aab"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/4",
+      "id": 1900300004,
+      "node_id": "PR_kwDOLRK30004",
+      "html_url": "https://github.com/larkspur/web/pull/4",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/4",
+      "number": 4,
+      "state": "closed",
+      "locked": false,
+      "title": "Search page with highlighted results",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Uses `GET /search` (Elasticsearch-backed) and renders ES `highlight` fragments. Debounced 250 ms.",
+      "labels": [
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        },
+        {
+          "id": 8035683751,
+          "node_id": "LA_kwDOLRK8035683751",
+          "name": "search",
+          "color": "52576d"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-05-28T10:00:00Z",
+      "updated_at": "2025-05-30T10:00:00Z",
+      "closed_at": "2025-05-30T10:00:00Z",
+      "merged_at": "2025-05-30T10:00:00Z",
+      "merge_commit_sha": "af5272c92addf0d7d1158dacb76bdad08c790db5",
+      "head": {
+        "label": "larkspur:pr-search-ui",
+        "ref": "pr-search-ui",
+        "sha": "f78b87a5e89927180789e2a084aba899dd1b3e0e"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "f0cb044f9b834838ee568c69dd17e40671b8f789"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/5",
+      "id": 1900300005,
+      "node_id": "PR_kwDOLRK30005",
+      "html_url": "https://github.com/larkspur/web/pull/5",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/5",
+      "number": 5,
+      "state": "closed",
+      "locked": false,
+      "title": "Call /v1 API paths",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Matches the API change for ADR-0007.",
+      "labels": [
+        {
+          "id": 7902841359,
+          "node_id": "LA_kwDOLRK7902841359",
+          "name": "api",
+          "color": "cd0185"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-06-19T10:00:00Z",
+      "updated_at": "2025-06-20T10:30:00Z",
+      "closed_at": "2025-06-20T10:30:00Z",
+      "merged_at": "2025-06-20T10:30:00Z",
+      "merge_commit_sha": "07ed8dd80bec61ae6689a1b16568faeacbc8da1e",
+      "head": {
+        "label": "larkspur:pr-v1-client",
+        "ref": "pr-v1-client",
+        "sha": "956566b41f452b847b0b5a6c8f4f549545a9944c"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "193924236402b8bf1e106e1db45256b34766e4c3"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/6",
+      "id": 1900300006,
+      "node_id": "PR_kwDOLRK30006",
+      "html_url": "https://github.com/larkspur/web/pull/6",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/6",
+      "number": 6,
+      "state": "closed",
+      "locked": false,
+      "title": "Report editor autosave",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Saves the report 2 s after the last edit. Sends `If-Match` with the report version to detect conflicts.",
+      "labels": [
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-06-23T10:00:00Z",
+      "updated_at": "2025-06-26T10:00:00Z",
+      "closed_at": "2025-06-26T10:00:00Z",
+      "merged_at": "2025-06-26T10:00:00Z",
+      "merge_commit_sha": "b542f91e2cc2eea9db264ef36574bf1ac895d87d",
+      "head": {
+        "label": "larkspur:pr-autosave",
+        "ref": "pr-autosave",
+        "sha": "baa6b8132a0777f6bc5831db2f85e0ce3ac8da42"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "515a9cd5b29ac41bee3d6963d59ed4c3c26fcbba"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 1
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/7",
+      "id": 1900300007,
+      "node_id": "PR_kwDOLRK30007",
+      "html_url": "https://github.com/larkspur/web/pull/7",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/7",
+      "number": 7,
+      "state": "closed",
+      "locked": false,
+      "title": "Offline-first: service worker, IndexedDB drafts and photo outbox (ADR-0008)",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Implements ADR-0008.\n\n- Workbox service worker precaches the app shell and caches `/v1` GETs (stale-while-revalidate)\n- Report drafts live in IndexedDB; edits are queued in an **outbox** and replayed in order\n- Photos are written to the outbox as Blobs and uploaded in the background, with retry\n- Background Sync where supported; otherwise sync on app open/focus (iOS)",
+      "labels": [
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        },
+        {
+          "id": 6014178784,
+          "node_id": "LA_kwDOLRK6014178784",
+          "name": "mobile",
+          "color": "22684c"
+        },
+        {
+          "id": 8625838130,
+          "node_id": "LA_kwDOLRK8625838130",
+          "name": "offline",
+          "color": "3e88eb"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-08-12T10:00:00Z",
+      "updated_at": "2025-08-20T10:00:00Z",
+      "closed_at": "2025-08-20T10:00:00Z",
+      "merged_at": "2025-08-20T10:00:00Z",
+      "merge_commit_sha": "245a89564f6772c58226788a46768b17ce9ada6f",
+      "head": {
+        "label": "larkspur:pr-offline-sw",
+        "ref": "pr-offline-sw",
+        "sha": "9c1d7075ad1de4f53911d0de582385872926a4e7"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "71285be32912ac3ae75c10aa5abad5e0e7c633d4"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 1,
+      "review_comments": 2
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/9",
+      "id": 1900300009,
+      "node_id": "PR_kwDOLRK30009",
+      "html_url": "https://github.com/larkspur/web/pull/9",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/9",
+      "number": 9,
+      "state": "closed",
+      "locked": false,
+      "title": "Compress photos client-side before queueing",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Fixes #8. Resize to 2048px, JPEG q0.8, in a Web Worker so the UI doesn't stall. Originals are not kept on device.",
+      "labels": [
+        {
+          "id": 6014178784,
+          "node_id": "LA_kwDOLRK6014178784",
+          "name": "mobile",
+          "color": "22684c"
+        },
+        {
+          "id": 8625838130,
+          "node_id": "LA_kwDOLRK8625838130",
+          "name": "offline",
+          "color": "3e88eb"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-09-08T10:00:00Z",
+      "updated_at": "2025-09-10T11:00:00Z",
+      "closed_at": "2025-09-10T11:00:00Z",
+      "merged_at": "2025-09-10T11:00:00Z",
+      "merge_commit_sha": "daf0bd068778c79e5759b42d0c533b6b985a749e",
+      "head": {
+        "label": "larkspur:pr-photo-compress",
+        "ref": "pr-photo-compress",
+        "sha": "50c6e42b0c1721bc78e9631b13a310b255f4cbe6"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "3c1d1840a8ccbb7eabeedb10abe9f440a9fdbeb4"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/11",
+      "id": 1900300011,
+      "node_id": "PR_kwDOLRK30011",
+      "html_url": "https://github.com/larkspur/web/pull/11",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/11",
+      "number": 11,
+      "state": "closed",
+      "locked": false,
+      "title": "Bump next from 15.0.3 to 15.0.4",
+      "user": {
+        "login": "dependabot[bot]",
+        "id": 49699333,
+        "node_id": "BOT_kgDO49699333",
+        "avatar_url": "https://avatars.githubusercontent.com/u/49699333?v=4",
+        "html_url": "https://github.com/apps/dependabot",
+        "type": "Bot",
+        "site_admin": false
+      },
+      "body": "Bumps [next](https://github.com/vercel/next.js) from 15.0.3 to 15.0.4.",
+      "labels": [
+        {
+          "id": 8926880397,
+          "node_id": "LA_kwDOLRK8926880397",
+          "name": "dependencies",
+          "color": "4a3da3"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2025-11-03T06:00:00Z",
+      "updated_at": "2025-11-03T10:00:00Z",
+      "closed_at": "2025-11-03T10:00:00Z",
+      "merged_at": "2025-11-03T10:00:00Z",
+      "merge_commit_sha": "a0de82506484b571721a46703100e69028a449a0",
+      "head": {
+        "label": "larkspur:dependabot/npm_and_yarn/next-15.0.4",
+        "ref": "dependabot/npm_and_yarn/next-15.0.4",
+        "sha": "5c5619f09789bf0613a8482f3128dbe26d29dcee"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "0c8500e5a8a04e3c7a237368dd7124393cfe9946"
+      },
+      "author_association": "NONE",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "dependabot[bot]",
+        "id": 49699333,
+        "node_id": "BOT_kgDO49699333",
+        "avatar_url": "https://avatars.githubusercontent.com/u/49699333?v=4",
+        "html_url": "https://github.com/apps/dependabot",
+        "type": "Bot",
+        "site_admin": false
+      },
+      "comments": 1,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/15",
+      "id": 1900300015,
+      "node_id": "PR_kwDOLRK30015",
+      "html_url": "https://github.com/larkspur/web/pull/15",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/15",
+      "number": 15,
+      "state": "closed",
+      "locked": false,
+      "title": "Add /print/reports/[id] for PDF rendering",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Closes #14. Print CSS with `@page` margins, photo grid (3 per row), page-break rules for findings. Token verified server-side, single use, 5-minute TTL.",
+      "labels": [
+        {
+          "id": 5250665868,
+          "node_id": "LA_kwDOLRK5250665868",
+          "name": "pdf",
+          "color": "8fb11f"
+        },
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-01-12T10:00:00Z",
+      "updated_at": "2026-01-15T10:00:00Z",
+      "closed_at": "2026-01-15T10:00:00Z",
+      "merged_at": "2026-01-15T10:00:00Z",
+      "merge_commit_sha": "54a4d4d94f2d98494b14d5832a28605a3245914d",
+      "head": {
+        "label": "larkspur:pr-print-route",
+        "ref": "pr-print-route",
+        "sha": "feadf97b2ad7a966ac96b2eea019ae08aeb8085e"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "3b74fd7774798e8a2d354e67417960bf2db6357c"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/16",
+      "id": 1900300016,
+      "node_id": "PR_kwDOLRK30016",
+      "html_url": "https://github.com/larkspur/web/pull/16",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/16",
+      "number": 16,
+      "state": "closed",
+      "locked": false,
+      "title": "Spike: reports list on TanStack Query",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Spike for #10. The reports list and report detail on TanStack Query\nwith the cache persisted to IndexedDB. Removes the `reports` slice and its thunks:\n-612 / +140 lines. Offline: cached lists render instantly in airplane mode.",
+      "labels": [
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        },
+        {
+          "id": 9021820042,
+          "node_id": "LA_kwDOLRK9021820042",
+          "name": "spike",
+          "color": "e2d6fd"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-01-26T10:00:00Z",
+      "updated_at": "2026-02-12T10:00:00Z",
+      "closed_at": "2026-02-12T10:00:00Z",
+      "merged_at": null,
+      "merge_commit_sha": null,
+      "head": {
+        "label": "larkspur:pr-tanstack-spike",
+        "ref": "pr-tanstack-spike",
+        "sha": "28ca86d71d41b1566d458c5ea7f29c16ee6bb9d5"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "f87e75f11d1cad58f5948cf8628fead3e2a84518"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": false,
+      "merged_by": null,
+      "comments": 1,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/17",
+      "id": 1900300017,
+      "node_id": "PR_kwDOLRK30017",
+      "html_url": "https://github.com/larkspur/web/pull/17",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/17",
+      "number": 17,
+      "state": "closed",
+      "locked": false,
+      "title": "TanStack Query for reports list and detail (ADR-0011)",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "First migration step from ADR-0011. `QueryClient` with an IndexedDB persister; `reports` slice removed.",
+      "labels": [
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-02-12T11:00:00Z",
+      "updated_at": "2026-02-17T10:00:00Z",
+      "closed_at": "2026-02-17T10:00:00Z",
+      "merged_at": "2026-02-17T10:00:00Z",
+      "merge_commit_sha": "9bde3c64ca5f654c1bb9a2a5bf25ac371fa788d7",
+      "head": {
+        "label": "larkspur:pr-tanstack-reports",
+        "ref": "pr-tanstack-reports",
+        "sha": "6fe73746132438ef87fea1e53d3ed1dd1f2f8950"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "a13754d25235353b90d638aa59071cae9c4438bf"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/18",
+      "id": 1900300018,
+      "node_id": "PR_kwDOLRK30018",
+      "html_url": "https://github.com/larkspur/web/pull/18",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/18",
+      "number": 18,
+      "state": "closed",
+      "locked": false,
+      "title": "Migrate remaining slices to TanStack Query/Zustand and remove Redux",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Completes ADR-0011.\n\n- clients, templates → TanStack Query\n- editor UI + undo history → Zustand store with a small history middleware\n- outbox status → Zustand, persisted separately (not in the query cache, per Maya's note)\n- `@reduxjs/toolkit` and `react-redux` removed: -2.3k lines, bundle -38 KB",
+      "labels": [
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-03-02T10:00:00Z",
+      "updated_at": "2026-03-06T10:00:00Z",
+      "closed_at": "2026-03-06T10:00:00Z",
+      "merged_at": "2026-03-06T10:00:00Z",
+      "merge_commit_sha": "68a56476215d8ebe1ae892d1dae2f934f497ef35",
+      "head": {
+        "label": "larkspur:pr-remove-redux",
+        "ref": "pr-remove-redux",
+        "sha": "3a1ab417e1b77ea304c85239f21c4348296fd3d2"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "8ef1b249bb72a1bc73476631ad13f6099dbf92ed"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 2
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/19",
+      "id": 1900300019,
+      "node_id": "PR_kwDOLRK30019",
+      "html_url": "https://github.com/larkspur/web/pull/19",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/19",
+      "number": 19,
+      "state": "closed",
+      "locked": false,
+      "title": "Search: render ts_headline highlights from the Postgres backend",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "The API now returns `highlights` from `ts_headline` (`<b>` tags) instead of ES fragments. Sanitize and render.",
+      "labels": [
+        {
+          "id": 8035683751,
+          "node_id": "LA_kwDOLRK8035683751",
+          "name": "search",
+          "color": "52576d"
+        },
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-03-24T10:00:00Z",
+      "updated_at": "2026-03-25T10:00:00Z",
+      "closed_at": "2026-03-25T10:00:00Z",
+      "merged_at": "2026-03-25T10:00:00Z",
+      "merge_commit_sha": "19ea5b7a94cf2651cb91a20e6e5e511ca37ef544",
+      "head": {
+        "label": "larkspur:pr-search-highlights",
+        "ref": "pr-search-highlights",
+        "sha": "9ba7d39f2ad53810cbe0224309cc7b4aeab08105"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "bbaffa8af2350ae8cc46cc3d7d0294df6cf24933"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/23",
+      "id": 1900300023,
+      "node_id": "PR_kwDOLRK30023",
+      "html_url": "https://github.com/larkspur/web/pull/23",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/23",
+      "number": 23,
+      "state": "closed",
+      "locked": false,
+      "title": "Switch login to WorkOS AuthKit",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Replaces nextjs-auth0 with WorkOS AuthKit. SSO users are routed to their IdP by email domain. Sessions in an httpOnly cookie.",
+      "labels": [
+        {
+          "id": 9175343705,
+          "node_id": "LA_kwDOLRK9175343705",
+          "name": "auth",
+          "color": "d31c01"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-06-03T10:00:00Z",
+      "updated_at": "2026-06-09T08:00:00Z",
+      "closed_at": "2026-06-09T08:00:00Z",
+      "merged_at": "2026-06-09T08:00:00Z",
+      "merge_commit_sha": "22cb1f71884eb0d07740d0ba11b7f5cd3b52f211",
+      "head": {
+        "label": "larkspur:pr-workos-login",
+        "ref": "pr-workos-login",
+        "sha": "5401fc29884d2d77aae34bda4acf68b56cf16f86"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "d25fd49ba491d26f34ba2edf326ef6cea043f8b7"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 0,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/26",
+      "id": 1900300026,
+      "node_id": "PR_kwDOLRK30026",
+      "html_url": "https://github.com/larkspur/web/pull/26",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/26",
+      "number": 26,
+      "state": "closed",
+      "locked": false,
+      "title": "Per-field last-writer-wins merge for offline edits",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Fixes #25. Outbox entries carry field paths and timestamps; the API merges per field. A banner shows when both inspectors changed the same field.",
+      "labels": [
+        {
+          "id": 8625838130,
+          "node_id": "LA_kwDOLRK8625838130",
+          "name": "offline",
+          "color": "3e88eb"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-07-01T10:00:00Z",
+      "updated_at": "2026-07-06T10:00:00Z",
+      "closed_at": "2026-07-06T10:00:00Z",
+      "merged_at": "2026-07-06T10:00:00Z",
+      "merge_commit_sha": "5141c0241e76ca02224f12ce5aedf35777c73337",
+      "head": {
+        "label": "larkspur:pr-field-merge",
+        "ref": "pr-field-merge",
+        "sha": "769240a877bb300e58594770fc0ce0a356d9f1e6"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "0dad2950ba01f0cafc4dc709420e6cc6d65815ec"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 1,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/27",
+      "id": 1900300027,
+      "node_id": "PR_kwDOLRK30027",
+      "html_url": "https://github.com/larkspur/web/pull/27",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/27",
+      "number": 27,
+      "state": "closed",
+      "locked": false,
+      "title": "Dark mode",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Follows the OS setting, with a toggle in settings. Report PDFs stay light.",
+      "labels": [
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-07-07T10:00:00Z",
+      "updated_at": "2026-07-10T10:00:00Z",
+      "closed_at": "2026-07-10T10:00:00Z",
+      "merged_at": "2026-07-10T10:00:00Z",
+      "merge_commit_sha": "389113f75d13530d1d703ec09c2a9f72d3c32fae",
+      "head": {
+        "label": "larkspur:pr-dark-mode",
+        "ref": "pr-dark-mode",
+        "sha": "27599577a4558b38e79d5cd5d71b65e251511dce"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "b207287670c9c2a7235d6670a0de20e71dc716a4"
+      },
+      "author_association": "MEMBER",
+      "draft": false,
+      "merged": true,
+      "merged_by": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "comments": 1,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/29",
+      "id": 1900300029,
+      "node_id": "PR_kwDOLRK30029",
+      "html_url": "https://github.com/larkspur/web/pull/29",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/29",
+      "number": 29,
+      "state": "open",
+      "locked": false,
+      "title": "Bump @tanstack/react-query from 5.62.0 to 5.66.0",
+      "user": {
+        "login": "dependabot[bot]",
+        "id": 49699333,
+        "node_id": "BOT_kgDO49699333",
+        "avatar_url": "https://avatars.githubusercontent.com/u/49699333?v=4",
+        "html_url": "https://github.com/apps/dependabot",
+        "type": "Bot",
+        "site_admin": false
+      },
+      "body": "Bumps [@tanstack/react-query](https://github.com/TanStack/query) from 5.62.0 to 5.66.0.",
+      "labels": [
+        {
+          "id": 8926880397,
+          "node_id": "LA_kwDOLRK8926880397",
+          "name": "dependencies",
+          "color": "4a3da3"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-09-07T06:00:00Z",
+      "updated_at": "2026-09-07T06:12:00Z",
+      "closed_at": null,
+      "merged_at": null,
+      "merge_commit_sha": null,
+      "head": {
+        "label": "larkspur:dependabot/npm_and_yarn/tanstack/react-query-5.66.0",
+        "ref": "dependabot/npm_and_yarn/tanstack/react-query-5.66.0",
+        "sha": "66be73e96914b16535f2b8e4ee4c2f442f41eaeb"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "8f72579622de73119d48ab8985351e447a822d61"
+      },
+      "author_association": "NONE",
+      "draft": false,
+      "merged": false,
+      "merged_by": null,
+      "comments": 1,
+      "review_comments": 0
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/30",
+      "id": 1900300030,
+      "node_id": "PR_kwDOLRK30030",
+      "html_url": "https://github.com/larkspur/web/pull/30",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/30",
+      "number": 30,
+      "state": "open",
+      "locked": false,
+      "title": "WIP: compare two inspections of the same property",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Early draft of a side-by-side view for re-inspections. Not ready.",
+      "labels": [
+        {
+          "id": 8423674012,
+          "node_id": "LA_kwDOLRK8423674012",
+          "name": "frontend",
+          "color": "cb4d42"
+        }
+      ],
+      "assignees": [],
+      "requested_reviewers": [],
+      "created_at": "2026-09-22T10:00:00Z",
+      "updated_at": "2026-09-22T10:00:00Z",
+      "closed_at": null,
+      "merged_at": null,
+      "merge_commit_sha": null,
+      "head": {
+        "label": "larkspur:pr-comparison-draft",
+        "ref": "pr-comparison-draft",
+        "sha": "9e9129872f46489d53c62937a2b694f77d2f9422"
+      },
+      "base": {
+        "label": "larkspur:main",
+        "ref": "main",
+        "sha": "1196d243b15d3b3e8a8b77d772067c56b07a5d17"
+      },
+      "author_association": "MEMBER",
+      "draft": true,
+      "merged": false,
+      "merged_by": null,
+      "comments": 0,
+      "review_comments": 0
+    }
+  ],
+  "pull_request_reviews": [
+    {
+      "id": 2403000001,
+      "node_id": "PRR_kwDOLRK2403000001",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/1#pullrequestreview-2403000001",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/1",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-04-03T09:00:00Z",
+      "commit_id": "9503f4a675dabba4369483bf264a9131f8ab71dd"
+    },
+    {
+      "id": 2403000002,
+      "node_id": "PRR_kwDOLRK2403000002",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approved. The loading/error boilerplate per thunk is a lot, but consistent.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/2#pullrequestreview-2403000002",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/2",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-05-08T09:00:00Z",
+      "commit_id": "40d82e1046f63fddeb4cda27df98d2fa70bb52a3"
+    },
+    {
+      "id": 2403000003,
+      "node_id": "PRR_kwDOLRK2403000003",
+      "user": {
+        "login": "jonah-blake",
+        "id": 91000004,
+        "node_id": "U_kgDO91000004",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000004?v=4",
+        "html_url": "https://github.com/jonah-blake",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/3#pullrequestreview-2403000003",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/3",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-05-21T09:00:00Z",
+      "commit_id": "fca496a607e916687519ac72479c7c2568a9f96a"
+    },
+    {
+      "id": 2403000004,
+      "node_id": "PRR_kwDOLRK2403000004",
+      "user": {
+        "login": "jonah-blake",
+        "id": 91000004,
+        "node_id": "U_kgDO91000004",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000004?v=4",
+        "html_url": "https://github.com/jonah-blake",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/4#pullrequestreview-2403000004",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/4",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-05-30T09:00:00Z",
+      "commit_id": "f78b87a5e89927180789e2a084aba899dd1b3e0e"
+    },
+    {
+      "id": 2403000005,
+      "node_id": "PRR_kwDOLRK2403000005",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/5#pullrequestreview-2403000005",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/5",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-06-20T10:00:00Z",
+      "commit_id": "956566b41f452b847b0b5a6c8f4f549545a9944c"
+    },
+    {
+      "id": 2403000006,
+      "node_id": "PRR_kwDOLRK2403000006",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "COMMENTED",
+      "html_url": "https://github.com/larkspur/web/pull/6#pullrequestreview-2403000006",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/6",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-06-24T10:00:00Z",
+      "commit_id": "baa6b8132a0777f6bc5831db2f85e0ce3ac8da42"
+    },
+    {
+      "id": 2403000007,
+      "node_id": "PRR_kwDOLRK2403000007",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Thanks for the banner. Approve.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/6#pullrequestreview-2403000007",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/6",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-06-25T15:00:00Z",
+      "commit_id": "baa6b8132a0777f6bc5831db2f85e0ce3ac8da42"
+    },
+    {
+      "id": 2403000008,
+      "node_id": "PRR_kwDOLRK2403000008",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "COMMENTED",
+      "html_url": "https://github.com/larkspur/web/pull/7#pullrequestreview-2403000008",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/7",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-08-13T11:00:00Z",
+      "commit_id": "9c1d7075ad1de4f53911d0de582385872926a4e7"
+    },
+    {
+      "id": 2403000009,
+      "node_id": "PRR_kwDOLRK2403000009",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "COMMENTED",
+      "html_url": "https://github.com/larkspur/web/pull/7#pullrequestreview-2403000009",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/7",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-08-14T10:00:00Z",
+      "commit_id": "9c1d7075ad1de4f53911d0de582385872926a4e7"
+    },
+    {
+      "id": 2403000010,
+      "node_id": "PRR_kwDOLRK2403000010",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approve. Tested in airplane mode on iPhone and Android: 120 photos queued, all uploaded after reconnect.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/7#pullrequestreview-2403000010",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/7",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-08-19T16:00:00Z",
+      "commit_id": "9c1d7075ad1de4f53911d0de582385872926a4e7"
+    },
+    {
+      "id": 2403000011,
+      "node_id": "PRR_kwDOLRK2403000011",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/9#pullrequestreview-2403000011",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/9",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-09-09T15:00:00Z",
+      "commit_id": "50c6e42b0c1721bc78e9631b13a310b255f4cbe6"
+    },
+    {
+      "id": 2403000012,
+      "node_id": "PRR_kwDOLRK2403000012",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/11#pullrequestreview-2403000012",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/11",
+      "author_association": "MEMBER",
+      "submitted_at": "2025-11-03T09:50:00Z",
+      "commit_id": "5c5619f09789bf0613a8482f3128dbe26d29dcee"
+    },
+    {
+      "id": 2403000013,
+      "node_id": "PRR_kwDOLRK2403000013",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/15#pullrequestreview-2403000013",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/15",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-01-14T16:00:00Z",
+      "commit_id": "feadf97b2ad7a966ac96b2eea019ae08aeb8085e"
+    },
+    {
+      "id": 2403000014,
+      "node_id": "PRR_kwDOLRK2403000014",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/17#pullrequestreview-2403000014",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/17",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-02-16T15:00:00Z",
+      "commit_id": "6fe73746132438ef87fea1e53d3ed1dd1f2f8950"
+    },
+    {
+      "id": 2403000015,
+      "node_id": "PRR_kwDOLRK2403000015",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "COMMENTED",
+      "html_url": "https://github.com/larkspur/web/pull/18#pullrequestreview-2403000015",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/18",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-03-03T10:00:00Z",
+      "commit_id": "3a1ab417e1b77ea304c85239f21c4348296fd3d2"
+    },
+    {
+      "id": 2403000016,
+      "node_id": "PRR_kwDOLRK2403000016",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "COMMENTED",
+      "html_url": "https://github.com/larkspur/web/pull/18#pullrequestreview-2403000016",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/18",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-03-03T14:00:00Z",
+      "commit_id": "3a1ab417e1b77ea304c85239f21c4348296fd3d2"
+    },
+    {
+      "id": 2403000017,
+      "node_id": "PRR_kwDOLRK2403000017",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approve. Goodbye Redux 👋",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/18#pullrequestreview-2403000017",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/18",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-03-05T16:00:00Z",
+      "commit_id": "3a1ab417e1b77ea304c85239f21c4348296fd3d2"
+    },
+    {
+      "id": 2403000018,
+      "node_id": "PRR_kwDOLRK2403000018",
+      "user": {
+        "login": "priya-natarajan",
+        "id": 91000006,
+        "node_id": "U_kgDO91000006",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000006?v=4",
+        "html_url": "https://github.com/priya-natarajan",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/19#pullrequestreview-2403000018",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/19",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-03-24T16:00:00Z",
+      "commit_id": "9ba7d39f2ad53810cbe0224309cc7b4aeab08105"
+    },
+    {
+      "id": 2403000019,
+      "node_id": "PRR_kwDOLRK2403000019",
+      "user": {
+        "login": "ravi-kapoor",
+        "id": 91000009,
+        "node_id": "U_kgDO91000009",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000009?v=4",
+        "html_url": "https://github.com/ravi-kapoor",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Approve. Cookie is httpOnly, Secure, SameSite=Lax; logout revokes the WorkOS session.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/23#pullrequestreview-2403000019",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/23",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-06-08T15:00:00Z",
+      "commit_id": "5401fc29884d2d77aae34bda4acf68b56cf16f86"
+    },
+    {
+      "id": 2403000020,
+      "node_id": "PRR_kwDOLRK2403000020",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/26#pullrequestreview-2403000020",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/26",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-07-03T15:00:00Z",
+      "commit_id": "769240a877bb300e58594770fc0ce0a356d9f1e6"
+    },
+    {
+      "id": 2403000021,
+      "node_id": "PRR_kwDOLRK2403000021",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Looks great. Crawl-space inspectors will thank you.",
+      "state": "APPROVED",
+      "html_url": "https://github.com/larkspur/web/pull/27#pullrequestreview-2403000021",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/27",
+      "author_association": "MEMBER",
+      "submitted_at": "2026-07-09T15:00:00Z",
+      "commit_id": "27599577a4558b38e79d5cd5d71b65e251511dce"
+    }
+  ],
+  "issue_comments": [
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000001",
+      "html_url": "https://github.com/larkspur/web/pull/7#issuecomment-3003000001",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/7",
+      "id": 3003000001,
+      "node_id": "IC_kwDOLRK3003000001",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-08-15T09:00:00Z",
+      "updated_at": "2025-08-15T09:00:00Z",
+      "author_association": "MEMBER",
+      "body": "API side: `PUT /v1/photos/{client_id}` is idempotent now, so retries are safe.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000002",
+      "html_url": "https://github.com/larkspur/web/issues/8#issuecomment-3003000002",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/8",
+      "id": 3003000002,
+      "node_id": "IC_kwDOLRK3003000002",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-09-01T13:00:00Z",
+      "updated_at": "2025-09-01T13:00:00Z",
+      "author_association": "MEMBER",
+      "body": "`navigator.storage.persist()` is ignored for non-installed PWAs on iOS. We should prompt users to 'Add to Home Screen' and compress photos before queueing.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000003",
+      "html_url": "https://github.com/larkspur/web/issues/8#issuecomment-3003000003",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/8",
+      "id": 3003000003,
+      "node_id": "IC_kwDOLRK3003000003",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-09-02T09:00:00Z",
+      "updated_at": "2025-09-02T09:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Compressing to 2048px JPEG q0.8 brings photos to ~600 KB. Doing it in #9. ADR-0008 already lists this as a known risk.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000004",
+      "html_url": "https://github.com/larkspur/web/issues/8#issuecomment-3003000004",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/8",
+      "id": 3003000004,
+      "node_id": "IC_kwDOLRK3003000004",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-09-10T12:00:00Z",
+      "updated_at": "2025-09-10T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Shipped, plus an install prompt after the first inspection.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000005",
+      "html_url": "https://github.com/larkspur/web/issues/10#issuecomment-3003000005",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/10",
+      "id": 3003000005,
+      "node_id": "IC_kwDOLRK3003000005",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-10-21T10:00:00Z",
+      "updated_at": "2025-10-21T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "I picked Redux in ADR-0006 because of the editor's nested state and undo. That still matters, but it's maybe 10% of the store now. I'm open to it; let's do a spike on the reports list.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000006",
+      "html_url": "https://github.com/larkspur/web/issues/10#issuecomment-3003000006",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/10",
+      "id": 3003000006,
+      "node_id": "IC_kwDOLRK3003000006",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-10-22T10:00:00Z",
+      "updated_at": "2025-10-22T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Fine by me if it's a frontend-only change. Write a new ADR that supersedes ADR-0006 rather than editing it.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000007",
+      "html_url": "https://github.com/larkspur/web/pull/11#issuecomment-3003000007",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/11",
+      "id": 3003000007,
+      "node_id": "IC_kwDOLRK3003000007",
+      "user": {
+        "login": "github-actions[bot]",
+        "id": 41898282,
+        "node_id": "BOT_kgDO41898282",
+        "avatar_url": "https://avatars.githubusercontent.com/u/41898282?v=4",
+        "html_url": "https://github.com/apps/github-actions",
+        "type": "Bot",
+        "site_admin": false
+      },
+      "created_at": "2025-11-03T06:10:00Z",
+      "updated_at": "2025-11-03T06:10:00Z",
+      "author_association": "NONE",
+      "body": "✅ Lint, typecheck and 318 tests passed.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000008",
+      "html_url": "https://github.com/larkspur/web/issues/12#issuecomment-3003000008",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/12",
+      "id": 3003000008,
+      "node_id": "IC_kwDOLRK3003000008",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-11-21T10:00:00Z",
+      "updated_at": "2025-11-21T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Swapping moment for date-fns and lazy-loading the preview gets us to 640 KB.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000009",
+      "html_url": "https://github.com/larkspur/web/issues/12#issuecomment-3003000009",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/12",
+      "id": 3003000009,
+      "node_id": "IC_kwDOLRK3003000009",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-11-28T10:00:00Z",
+      "updated_at": "2025-11-28T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Done, TTI 3.4 s.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000010",
+      "html_url": "https://github.com/larkspur/web/issues/13#issuecomment-3003000010",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/13",
+      "id": 3003000010,
+      "node_id": "IC_kwDOLRK3003000010",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2025-12-08T14:00:00Z",
+      "updated_at": "2025-12-08T14:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Foreground sync on focus is our workaround (ADR-0008). Leaving open.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000011",
+      "html_url": "https://github.com/larkspur/web/issues/14#issuecomment-3003000011",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/14",
+      "id": 3003000011,
+      "node_id": "IC_kwDOLRK3003000011",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-01-08T13:00:00Z",
+      "updated_at": "2026-01-08T13:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Yes. I'll reuse the report view components with print CSS, CSS grid for photos.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000012",
+      "html_url": "https://github.com/larkspur/web/issues/14#issuecomment-3003000012",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/14",
+      "id": 3003000012,
+      "node_id": "IC_kwDOLRK3003000012",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-01-15T12:00:00Z",
+      "updated_at": "2026-01-15T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Works with the worker on staging. Thanks!",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000013",
+      "html_url": "https://github.com/larkspur/web/pull/16#issuecomment-3003000013",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/16",
+      "id": 3003000013,
+      "node_id": "IC_kwDOLRK3003000013",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-01-28T10:00:00Z",
+      "updated_at": "2026-01-28T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Convincing. Write the ADR and we'll do it properly.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000014",
+      "html_url": "https://github.com/larkspur/web/issues/10#issuecomment-3003000014",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/10",
+      "id": 3003000014,
+      "node_id": "IC_kwDOLRK3003000014",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-02-10T12:00:00Z",
+      "updated_at": "2026-02-10T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "ADR-0011 merged. Migration tracked in #17 and #18.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000015",
+      "html_url": "https://github.com/larkspur/web/issues/20#issuecomment-3003000015",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/20",
+      "id": 3003000015,
+      "node_id": "IC_kwDOLRK3003000015",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-04-02T10:00:00Z",
+      "updated_at": "2026-04-02T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Fixed.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000016",
+      "html_url": "https://github.com/larkspur/web/issues/21#issuecomment-3003000016",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/21",
+      "id": 3003000016,
+      "node_id": "IC_kwDOLRK3003000016",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-04-21T10:00:00Z",
+      "updated_at": "2026-04-21T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Background upload is the one real gap (no Background Sync on iOS). Since photo compression shipped, we've had zero lost-photo tickets in six months. A React Native app is ~4 months for two of us plus ongoing app store releases.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000017",
+      "html_url": "https://github.com/larkspur/web/issues/21#issuecomment-3003000017",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/21",
+      "id": 3003000017,
+      "node_id": "IC_kwDOLRK3003000017",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-04-21T14:00:00Z",
+      "updated_at": "2026-04-21T14:00:00Z",
+      "author_association": "MEMBER",
+      "body": "We could add a 'keep app open while syncing' indicator and push to finish uploads. That covers most of their complaint.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000018",
+      "html_url": "https://github.com/larkspur/web/issues/21#issuecomment-3003000018",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/21",
+      "id": 3003000018,
+      "node_id": "IC_kwDOLRK3003000018",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-04-22T10:00:00Z",
+      "updated_at": "2026-04-22T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "The ADR-0008 revisit triggers were MDM distribution or real photo loss. Neither applies. I'd stay PWA, but it's a product call.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000019",
+      "html_url": "https://github.com/larkspur/web/issues/21#issuecomment-3003000019",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/21",
+      "id": 3003000019,
+      "node_id": "IC_kwDOLRK3003000019",
+      "user": {
+        "login": "ines-duarte",
+        "id": 91000002,
+        "node_id": "U_kgDO91000002",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000002?v=4",
+        "html_url": "https://github.com/ines-duarte",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-04-28T11:55:00Z",
+      "updated_at": "2026-04-28T11:55:00Z",
+      "author_association": "MEMBER",
+      "body": "Decision: **no native app this year**. We stay with the PWA per ADR-0008, ship Sam's sync indicator, and I'll talk to Harbor & Pine. We revisit when we reach 50 enterprise seats on one customer or someone requires MDM. Closing as not planned.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000020",
+      "html_url": "https://github.com/larkspur/web/issues/22#issuecomment-3003000020",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/22",
+      "id": 3003000020,
+      "node_id": "IC_kwDOLRK3003000020",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-05-06T10:00:00Z",
+      "updated_at": "2026-05-06T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "I'll take the focus management, Lena the labels and contrast?",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000021",
+      "html_url": "https://github.com/larkspur/web/issues/22#issuecomment-3003000021",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/22",
+      "id": 3003000021,
+      "node_id": "IC_kwDOLRK3003000021",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-05-19T10:00:00Z",
+      "updated_at": "2026-05-19T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "All fixed, axe reports 0 violations on the editor.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000022",
+      "html_url": "https://github.com/larkspur/web/issues/24#issuecomment-3003000022",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/24",
+      "id": 3003000022,
+      "node_id": "IC_kwDOLRK3003000022",
+      "user": {
+        "login": "ravi-kapoor",
+        "id": 91000009,
+        "node_id": "U_kgDO91000009",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000009?v=4",
+        "html_url": "https://github.com/ravi-kapoor",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-06-10T10:00:00Z",
+      "updated_at": "2026-06-10T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Their domain wasn't verified in WorkOS, so AuthKit fell back to password login, which then redirected to SSO. Verified the domain.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000023",
+      "html_url": "https://github.com/larkspur/web/issues/24#issuecomment-3003000023",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/24",
+      "id": 3003000023,
+      "node_id": "IC_kwDOLRK3003000023",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-06-10T15:00:00Z",
+      "updated_at": "2026-06-10T15:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Confirmed fixed with their admin.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000024",
+      "html_url": "https://github.com/larkspur/web/issues/25#issuecomment-3003000024",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/25",
+      "id": 3003000024,
+      "node_id": "IC_kwDOLRK3003000024",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-06-15T14:00:00Z",
+      "updated_at": "2026-06-15T14:00:00Z",
+      "author_association": "MEMBER",
+      "body": "CRDTs (Yjs) would solve it properly but it's a big change to the editor and the API. Field-level last-writer-wins would cover 95% of cases, since the two people edit different sections.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000025",
+      "html_url": "https://github.com/larkspur/web/issues/25#issuecomment-3003000025",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/25",
+      "id": 3003000025,
+      "node_id": "IC_kwDOLRK3003000025",
+      "user": {
+        "login": "maya-chen",
+        "id": 91000001,
+        "node_id": "U_kgDO91000001",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000001?v=4",
+        "html_url": "https://github.com/maya-chen",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-06-16T10:00:00Z",
+      "updated_at": "2026-06-16T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Go with per-field last-writer-wins plus a conflict banner when the same field was edited by both. Revisit CRDTs only if this keeps coming up.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000026",
+      "html_url": "https://github.com/larkspur/web/pull/26#issuecomment-3003000026",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/26",
+      "id": 3003000026,
+      "node_id": "IC_kwDOLRK3003000026",
+      "user": {
+        "login": "tomas-rivera",
+        "id": 91000003,
+        "node_id": "U_kgDO91000003",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000003?v=4",
+        "html_url": "https://github.com/tomas-rivera",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-07-02T10:00:00Z",
+      "updated_at": "2026-07-02T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "API merge endpoint is in larkspur/api, deployed to staging.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000027",
+      "html_url": "https://github.com/larkspur/web/issues/25#issuecomment-3003000027",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/25",
+      "id": 3003000027,
+      "node_id": "IC_kwDOLRK3003000027",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-07-06T12:00:00Z",
+      "updated_at": "2026-07-06T12:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Shipped in #26.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000028",
+      "html_url": "https://github.com/larkspur/web/pull/27#issuecomment-3003000028",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/27",
+      "id": 3003000028,
+      "node_id": "IC_kwDOLRK3003000028",
+      "user": {
+        "login": "kofi-mensah",
+        "id": 91000008,
+        "node_id": "U_kgDO91000008",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000008?v=4",
+        "html_url": "https://github.com/kofi-mensah",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-07-08T09:00:00Z",
+      "updated_at": "2026-07-08T09:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Finally 🌙",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000029",
+      "html_url": "https://github.com/larkspur/web/issues/28#issuecomment-3003000029",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/28",
+      "id": 3003000029,
+      "node_id": "IC_kwDOLRK3003000029",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "created_at": "2026-08-05T10:00:00Z",
+      "updated_at": "2026-08-05T10:00:00Z",
+      "author_association": "MEMBER",
+      "body": "Fixed: apply orientation before resizing with `createImageBitmap(..., {imageOrientation: 'from-image'})`.",
+      "reactions": {
+        "total_count": 0
+      }
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/issues/comments/3003000030",
+      "html_url": "https://github.com/larkspur/web/pull/29#issuecomment-3003000030",
+      "issue_url": "https://api.github.com/repos/larkspur/web/issues/29",
+      "id": 3003000030,
+      "node_id": "IC_kwDOLRK3003000030",
+      "user": {
+        "login": "github-actions[bot]",
+        "id": 41898282,
+        "node_id": "BOT_kgDO41898282",
+        "avatar_url": "https://avatars.githubusercontent.com/u/41898282?v=4",
+        "html_url": "https://github.com/apps/github-actions",
+        "type": "Bot",
+        "site_admin": false
+      },
+      "created_at": "2026-09-07T06:12:00Z",
+      "updated_at": "2026-09-07T06:12:00Z",
+      "author_association": "NONE",
+      "body": "✅ Lint, typecheck and 402 tests passed.",
+      "reactions": {
+        "total_count": 0
+      }
+    }
+  ],
+  "review_comments": [
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/comments/1703000001",
+      "pull_request_review_id": 2403000006,
+      "id": 1703000001,
+      "node_id": "PRRC_kwDOLRK1703000001",
+      "diff_hunk": "@@ -37,6 +37,7 @@",
+      "path": "src/editor/useAutosave.ts",
+      "commit_id": "baa6b8132a0777f6bc5831db2f85e0ce3ac8da42",
+      "original_commit_id": "baa6b8132a0777f6bc5831db2f85e0ce3ac8da42",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "On a 412 we throw away local edits. In the field that means losing a finding someone just typed. Can we keep them and show a conflict banner instead?",
+      "created_at": "2025-06-24T10:00:00Z",
+      "updated_at": "2025-06-24T10:00:00Z",
+      "html_url": "https://github.com/larkspur/web/pull/6#discussion_r1703000001",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/6",
+      "author_association": "MEMBER",
+      "in_reply_to_id": null,
+      "start_line": null,
+      "original_start_line": null,
+      "line": 40,
+      "original_line": 40,
+      "side": "RIGHT"
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/comments/1703000002",
+      "pull_request_review_id": 2403000008,
+      "id": 1703000002,
+      "node_id": "PRRC_kwDOLRK1703000002",
+      "diff_hunk": "@@ -74,6 +74,7 @@",
+      "path": "src/offline/outbox.ts",
+      "commit_id": "9c1d7075ad1de4f53911d0de582385872926a4e7",
+      "original_commit_id": "9c1d7075ad1de4f53911d0de582385872926a4e7",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "If the tab is killed between `upload()` resolving and `delete(entry)`, we re-upload the photo on next open. Can uploads be idempotent?",
+      "created_at": "2025-08-13T11:00:00Z",
+      "updated_at": "2025-08-13T11:00:00Z",
+      "html_url": "https://github.com/larkspur/web/pull/7#discussion_r1703000002",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/7",
+      "author_association": "MEMBER",
+      "in_reply_to_id": null,
+      "start_line": null,
+      "original_start_line": null,
+      "line": 77,
+      "original_line": 77,
+      "side": "RIGHT"
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/comments/1703000003",
+      "pull_request_review_id": 2403000009,
+      "id": 1703000003,
+      "node_id": "PRRC_kwDOLRK1703000003",
+      "diff_hunk": "@@ -74,6 +74,7 @@",
+      "path": "src/offline/outbox.ts",
+      "commit_id": "9c1d7075ad1de4f53911d0de582385872926a4e7",
+      "original_commit_id": "9c1d7075ad1de4f53911d0de582385872926a4e7",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Each outbox entry gets a client-generated id that the API dedupes on. Priya is proposing UUIDv7 for exactly this case.",
+      "created_at": "2025-08-14T10:00:00Z",
+      "updated_at": "2025-08-14T10:00:00Z",
+      "html_url": "https://github.com/larkspur/web/pull/7#discussion_r1703000003",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/7",
+      "author_association": "MEMBER",
+      "in_reply_to_id": 1703000002,
+      "start_line": null,
+      "original_start_line": null,
+      "line": 77,
+      "original_line": 77,
+      "side": "RIGHT"
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/comments/1703000004",
+      "pull_request_review_id": 2403000015,
+      "id": 1703000004,
+      "node_id": "PRRC_kwDOLRK1703000004",
+      "diff_hunk": "@@ -12,6 +12,7 @@",
+      "path": "src/editor/store.ts",
+      "commit_id": "3a1ab417e1b77ea304c85239f21c4348296fd3d2",
+      "original_commit_id": "3a1ab417e1b77ea304c85239f21c4348296fd3d2",
+      "user": {
+        "login": "sam-whitfield",
+        "id": 91000005,
+        "node_id": "U_kgDO91000005",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000005?v=4",
+        "html_url": "https://github.com/sam-whitfield",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Undo history capped at 50 steps? Redux version had 100.",
+      "created_at": "2026-03-03T10:00:00Z",
+      "updated_at": "2026-03-03T10:00:00Z",
+      "html_url": "https://github.com/larkspur/web/pull/18#discussion_r1703000004",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/18",
+      "author_association": "MEMBER",
+      "in_reply_to_id": null,
+      "start_line": null,
+      "original_start_line": null,
+      "line": 15,
+      "original_line": 15,
+      "side": "RIGHT"
+    },
+    {
+      "url": "https://api.github.com/repos/larkspur/web/pulls/comments/1703000005",
+      "pull_request_review_id": 2403000016,
+      "id": 1703000005,
+      "node_id": "PRRC_kwDOLRK1703000005",
+      "diff_hunk": "@@ -12,6 +12,7 @@",
+      "path": "src/editor/store.ts",
+      "commit_id": "3a1ab417e1b77ea304c85239f21c4348296fd3d2",
+      "original_commit_id": "3a1ab417e1b77ea304c85239f21c4348296fd3d2",
+      "user": {
+        "login": "lena-park",
+        "id": 91000007,
+        "node_id": "U_kgDO91000007",
+        "avatar_url": "https://avatars.githubusercontent.com/u/91000007?v=4",
+        "html_url": "https://github.com/lena-park",
+        "type": "User",
+        "site_admin": false
+      },
+      "body": "Bumped to 100.",
+      "created_at": "2026-03-03T14:00:00Z",
+      "updated_at": "2026-03-03T14:00:00Z",
+      "html_url": "https://github.com/larkspur/web/pull/18#discussion_r1703000005",
+      "pull_request_url": "https://api.github.com/repos/larkspur/web/pulls/18",
+      "author_association": "MEMBER",
+      "in_reply_to_id": 1703000004,
+      "start_line": null,
+      "original_start_line": null,
+      "line": 15,
+      "original_line": 15,
+      "side": "RIGHT"
+    }
+  ],
+  "markdown_files": [
+    {
+      "path": "README.md",
+      "sha": "76b1fb00b2f7127023efa4020812d519ed08d619",
+      "content": "# larkspur/web\n\nThe Larkspur web app and offline-first PWA used by inspectors in the field.\n\n- Next.js (App Router), TypeScript\n- Server state: TanStack Query, persisted to IndexedDB; client state: Zustand\n  ([ADR-0011](https://github.com/larkspur/handbook/blob/main/docs/adr/0011-tanstack-query-for-server-state.md))\n- Offline: service worker + IndexedDB drafts + durable photo outbox\n  ([ADR-0008](https://github.com/larkspur/handbook/blob/main/docs/adr/0008-offline-first-pwa.md))\n- Auth: WorkOS AuthKit\n- `/print/reports/[id]` is the print layout the API renders to PDF with Playwright\n\n```bash\npnpm install\npnpm dev\n```\n"
+    }
+  ]
+}

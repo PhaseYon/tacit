@@ -26,6 +26,8 @@ class Settings(BaseSettings):
 
     web_origin: str = "http://localhost:3000"
     api_public_url: str = "http://localhost:8000"
+    # The MCP protected resource; OAuth access tokens must carry this audience.
+    mcp_resource_url: str = "http://localhost:8000/mcp"
 
     # GitHub App (see infra/github/README.md). Empty means the connector is disabled.
     github_app_id: int | None = None
@@ -37,6 +39,24 @@ class Settings(BaseSettings):
     github_api_url: str = "https://api.github.com"
     # "redis" shares installation tokens + ETag cache across workers; "memory" for tests.
     github_cache: str = "redis"
+
+    # Embeddings: "fastembed" (local, free, default), "openai", or "fake" (tests).
+    embedding_provider: str = "fastembed"
+    embedding_model: str = "BAAI/bge-small-en-v1.5"
+    openai_api_key: SecretStr = SecretStr("")
+
+    # LLMs (graph extraction, agent). Graph is OFF unless explicitly enabled.
+    llm_provider: str = "anthropic"
+    llm_model: str = "claude-haiku-5-5"
+    llm_small_model: str = "claude-haiku-5-5"
+    anthropic_api_key: SecretStr = SecretStr("")
+    llm_replay_dir: str = str(REPO_ROOT / "apps/api/tests/fixtures/llm")
+
+    graph_enabled: bool = False
+    graph_max_usd_per_day: float = 5.0
+    neo4j_uri: str = "bolt://localhost:7687"
+    neo4j_user: str = "neo4j"
+    neo4j_password: SecretStr = SecretStr("tacit-dev-password")
 
     @property
     def github_enabled(self) -> bool:

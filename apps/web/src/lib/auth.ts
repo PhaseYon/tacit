@@ -1,3 +1,4 @@
+import { mcp } from "@better-auth/mcp";
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 import { jwt, organization } from "better-auth/plugins";
@@ -6,6 +7,8 @@ import { Pool } from "pg";
 import { sendMail } from "./mailer";
 
 const baseURL = process.env.BETTER_AUTH_URL ?? "http://localhost:3000";
+// The MCP server (FastAPI) is the OAuth protected resource; tokens are bound to it.
+const mcpResource = process.env.MCP_RESOURCE_URL ?? "http://localhost:8000/mcp";
 
 // GitHub sign-in/linking uses the Tacit GitHub App's OAuth credentials, so a linked
 // account is an OAuth-verified GitHub identity (used for repo permission sync).
@@ -60,6 +63,20 @@ export const auth = betterAuth({
         expirationTime: "15m",
         definePayload: ({ user }) => ({ email: user.email, name: user.name }),
       },
+    }),
+    // OAuth 2.1 authorization server for MCP clients (Claude, Cursor). Access tokens
+    // are JWTs with aud = the MCP resource, so they can't be used against the REST
+    // API (aud = tacit-api), and web-session tokens can't be used against MCP.
+    mcp({
+      resource: mcpResource,
+      loginPage: "/sign-in",
+      consentPage: "/consent",
+      scopes: ["openid", "profile", "email", "offline_access"],
+      // Most MCP clients still register dynamically (RFC 7591); public clients use PKCE.
+      allowDynamicClientRegistration: true,
+      allowUnauthenticatedClientRegistration: true,
+      clientRegistrationDefaultApplicationType: "infer",
+      accessTokenExpiresIn: 60 * 15,
     }),
     nextCookies(), // must be last
   ],

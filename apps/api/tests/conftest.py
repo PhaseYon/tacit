@@ -20,7 +20,13 @@ from httpx import ASGITransport, AsyncClient
 SUPERUSER_URL = os.environ.get(
     "TEST_SUPERUSER_URL", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
-TEST_DB = "tacit_test"
+# One test database per checkout, so parallel runs (e.g. git worktrees) don't drop each
+# other's database mid-run. Override with TEST_DB_NAME.
+TEST_DB = os.environ.get(
+    "TEST_DB_NAME",
+    "tacit_test_"
+    + __import__("hashlib").sha1(str(Path(__file__).resolve()).encode()).hexdigest()[:8],
+)
 API_DIR = Path(__file__).resolve().parents[1]
 
 ISSUER = "http://test-issuer"
@@ -31,6 +37,8 @@ os.environ["API_DATABASE_URL"] = f"postgresql+asyncpg://tacit_api:api@localhost:
 os.environ["WORKER_DATABASE_URL"] = (
     f"postgresql+asyncpg://tacit_worker:worker@localhost:5432/{TEST_DB}"
 )
+# Deterministic hashing embedder: no model download, same vectors everywhere.
+os.environ["EMBEDDING_PROVIDER"] = "fake"
 os.environ["AUTH_JWT_ISSUER"] = ISSUER
 os.environ["AUTH_JWT_AUDIENCE"] = AUDIENCE
 

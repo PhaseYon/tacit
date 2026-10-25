@@ -27,3 +27,33 @@ export async function connectGitHub(
   }
   redirect(url);
 }
+
+export type GraphSettings = {
+  enabled: boolean;
+  include_private: boolean;
+  monthly_budget_usd: number;
+};
+
+/** Admin-only on the API side; RLS still scopes it to this workspace. */
+export async function saveGraphSettings(
+  workspaceId: string,
+  _prev: ConnectState,
+  form: FormData,
+): Promise<ConnectState> {
+  const body: GraphSettings = {
+    enabled: form.get("enabled") === "on",
+    include_private: form.get("include_private") === "on",
+    monthly_budget_usd: Number(form.get("monthly_budget_usd") ?? 5),
+  };
+  try {
+    await apiFetch(`/workspaces/${workspaceId}/graph/settings`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+  } catch (e) {
+    if (e instanceof ApiError && e.status === 403) return { error: "Only workspace admins can change this." };
+    return { error: "Could not save settings." };
+  }
+  return {};
+}

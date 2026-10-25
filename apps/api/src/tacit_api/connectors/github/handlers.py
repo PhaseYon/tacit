@@ -57,7 +57,24 @@ async def process_delivery(delivery_id: str) -> str:
         await _finish(delivery_id, "failed", error=repr(exc)[:2000])
         raise
     await _finish(delivery_id, outcome)
+    if outcome == "done" and row.event in CONTENT_EVENTS:
+        _index_soon(workspace_id)
     return outcome
+
+
+CONTENT_EVENTS = {
+    "issues",
+    "pull_request",
+    "issue_comment",
+    "pull_request_review",
+    "pull_request_review_comment",
+}
+
+
+def _index_soon(workspace_id: str) -> None:
+    from ...search.tasks import index_workspace_task
+
+    index_workspace_task.delay(workspace_id)
 
 
 async def _finish(delivery_id: str, status: str, error: str | None = None) -> None:

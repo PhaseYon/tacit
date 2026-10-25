@@ -1,4 +1,4 @@
-"""Celery app. Run with: uv run celery -A tacit_api.worker worker -B -Q realtime,backfill
+"""Celery app. Run with: uv run celery -A tacit_api.worker worker -B -Q realtime,backfill,index,graph
 
 Tasks are thin sync wrappers around async handlers (see `run_async`). Every task is
 safe to re-run: writes are upserts, and late acks mean a crashed worker's task is
@@ -25,7 +25,11 @@ celery_app.conf.update(
     accept_content=["json"],
     timezone="UTC",
     broker_connection_retry_on_startup=True,
-    include=["tacit_api.connectors.github.tasks"],
+    include=[
+        "tacit_api.connectors.github.tasks",
+        "tacit_api.search.tasks",
+        "tacit_api.graph.tasks",
+    ],
 )
 
 
