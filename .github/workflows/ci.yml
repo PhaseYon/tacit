@@ -18,6 +18,13 @@ jobs:
         ports: ["5432:5432"]
         options: >-
           --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
+      neo4j:
+        image: neo4j:5.26
+        env:
+          NEO4J_AUTH: neo4j/tacit-dev-password
+        ports: ["7687:7687"]
+        options: >-
+          --health-cmd "cypher-shell -u neo4j -p tacit-dev-password 'RETURN 1'" --health-interval 10s --health-timeout 10s --health-retries 15
     steps:
       - uses: actions/checkout@v4
       - name: Create database roles

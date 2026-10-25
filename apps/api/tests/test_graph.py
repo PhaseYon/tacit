@@ -312,3 +312,18 @@ def test_llm_calls_outside_a_cost_context_are_refused(provider):
 def test_settings_default_graph_off():
     assert get_settings().graph_enabled is False
     assert Decimal("0") == Decimal(0)
+
+
+async def test_graph_settings_api(client, make_token, seed):
+    auth = {"Authorization": f"Bearer {make_token(seed.alice)}"}
+    r = await client.get(f"/workspaces/{seed.acme}/graph/settings", headers=auth)
+    assert r.status_code == 200 and "spent_this_month_usd" in r.json()
+    body = {"enabled": True, "include_private": False, "monthly_budget_usd": 3}
+    r = await client.put(f"/workspaces/{seed.acme}/graph/settings", json=body, headers=auth)
+    assert r.status_code == 200 and r.json()["monthly_budget_usd"] == 3
+    bob = {"Authorization": f"Bearer {make_token(seed.bob)}"}
+    r = await client.put(f"/workspaces/{seed.acme}/graph/settings", json=body, headers=bob)
+    assert r.status_code == 403
+    # restore for other tests
+    body.update(include_private=True, monthly_budget_usd=5)
+    await client.put(f"/workspaces/{seed.acme}/graph/settings", json=body, headers=auth)

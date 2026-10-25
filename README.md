@@ -7,7 +7,8 @@ can ask *"why did we do X, who decided, and where's the evidence?"* from the web
 Claude and Cursor over MCP.
 
 > Status: early development. Auth, workspaces, the GitHub connector, hybrid search with
-> citations and the MCP server work. The graph layer (Graphiti) is designed and next.
+> citations, the MCP server and the knowledge graph (Graphiti, opt-in) work. Slack/Notion
+> connectors and the public benchmark are next.
 
 ## Architecture (so far)
 
@@ -45,6 +46,22 @@ key, no per-document cost, reproducible. Set `EMBEDDING_PROVIDER=openai` (plus
 `OPENAI_API_KEY`) to use `text-embedding-3-small` at 384 dims instead. Ranking weights
 and re-ranking are deliberately untuned until the benchmark (build step 7) measures them.
 
+## Knowledge graph (opt-in)
+
+Merged PRs with their reviews, discussed issues and docs become Graphiti episodes on
+Neo4j: people, components, technologies and decisions, with facts that know when they
+became true and when they were replaced. Answers can say what the *current* decision is
+and what it superseded.
+
+- **Never leaks:** one graph group per repo. A search only covers repos you can read
+  right now (from Postgres), never calls Graphiti with an empty group list, and drops any
+  fact Postgres can't tie to a visible source, which is also where its citation comes from.
+- **Costs money, so it's off by default.** It needs `GRAPH_ENABLED=true`, an LLM key
+  (`claude-haiku-5-5` by default), and a per-workspace opt-in by an admin. Private repos
+  need a second opt-in, because their text goes to the LLM provider. Every call is
+  recorded in `llm_usage`, and a monthly budget per workspace is a hard stop.
+- Run `docker compose --profile graph up -d neo4j`. See `docs/design/graph-layer.md`.
+
 ## Use it from Claude or Cursor (MCP)
 
 Tacit is a remote MCP server at `http://localhost:8000/mcp` with OAuth 2.1. The web app is
@@ -60,8 +77,9 @@ claude mcp add --transport http tacit http://localhost:8000/mcp
 For Claude Desktop or Cursor, add a remote MCP server with that URL. The client opens a
 browser to sign in and approve access.
 
-Tools: `list_workspaces`, `search` (hybrid, cited) and `get_document` (a source plus its
-review/comment thread).
+Tools: `list_workspaces`, `search` (hybrid, cited), `get_document` (a source plus its
+review/comment thread) and `search_facts` (time-aware graph facts with citations, when
+the graph is enabled).
 
 ## Local development
 

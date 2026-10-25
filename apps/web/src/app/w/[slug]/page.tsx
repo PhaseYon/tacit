@@ -5,6 +5,7 @@ import { Suspense } from "react";
 
 import { AppHeader } from "@/components/app-header";
 import { GitHubSection } from "@/components/github-section";
+import { GraphSection } from "@/components/graph-section";
 import { InviteForm } from "@/components/invite-form";
 import { PageSkeleton } from "@/components/page-skeleton";
 import { Badge } from "@/components/ui/badge";
@@ -92,6 +93,8 @@ async function WorkspacePageContent({
             error: typeof query.github_error === "string" ? query.github_error : undefined,
           }}
         />
+
+        <GraphSection workspaceId={workspace.id} canManage={canInvite} />
 
         {canInvite && (
           <Card>
