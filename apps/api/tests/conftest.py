@@ -20,8 +20,10 @@ from httpx import ASGITransport, AsyncClient
 SUPERUSER_URL = os.environ.get(
     "TEST_SUPERUSER_URL", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
-# Override to run several checkouts in parallel against one Postgres.
-TEST_DB = os.environ.get("TACIT_TEST_DB", "tacit_test")
+TEST_DB = os.environ.get(
+    "TEST_DB_NAME",
+    "tacit_test_" + __import__("hashlib").sha1(str(Path(__file__).resolve()).encode()).hexdigest()[:8],
+)
 API_DIR = Path(__file__).resolve().parents[1]
 
 ISSUER = "http://test-issuer"
