@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     github_app_client_secret: SecretStr = SecretStr("")
     github_app_private_key_path: Path | None = None
     github_webhook_secret: SecretStr = SecretStr("")
+    github_api_url: str = "https://api.github.com"
+    # "redis" shares installation tokens + ETag cache across workers; "memory" for tests.
+    github_cache: str = "redis"
 
     @property
     def github_enabled(self) -> bool:

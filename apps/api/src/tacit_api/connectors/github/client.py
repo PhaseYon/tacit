@@ -9,7 +9,7 @@
 from functools import lru_cache
 
 from githubkit import AppAuthStrategy, GitHub
-from githubkit.cache import AsyncRedisCacheStrategy
+from githubkit.cache import AsyncRedisCacheStrategy, MemCacheStrategy
 from githubkit.exception import PrimaryRateLimitExceeded, SecondaryRateLimitExceeded
 from githubkit.retry import RetryChainDecision, RetryRateLimit, RetryServerError
 from githubkit.webhooks import verify as _verify
@@ -44,10 +44,15 @@ def _app_auth() -> AppAuthStrategy:
 
 
 def _client_kwargs() -> dict:
+    s = get_settings()
+    use_redis = s.github_cache == "redis"
     return {
-        "http_cache": True,
-        "cache_strategy": AsyncRedisCacheStrategy(
-            Redis.from_url(get_settings().redis_url), prefix="githubkit:"
+        "base_url": s.github_api_url,
+        "http_cache": use_redis,
+        "cache_strategy": (
+            AsyncRedisCacheStrategy(Redis.from_url(s.redis_url), prefix="githubkit:")
+            if use_redis
+            else MemCacheStrategy()
         ),
         "auto_retry": RetryChainDecision(
             RetryRateLimit(max_retry=1), RetryServerError(max_retry=3)
@@ -64,11 +69,6 @@ def app_client() -> GitHub:
 def installation_client(installation_id: int) -> GitHub:
     """Authenticated as one installation: repo data for that customer."""
     return GitHub(_app_auth().as_installation(installation_id), **_client_kwargs())
-
-
-def user_client_from_code(code: str) -> GitHub:
-    """One-time OAuth web-flow client for the installing user (install verification)."""
-    return GitHub(_app_auth().as_oauth_app().as_web_user(code), timeout=30.0)
 
 
 def verify_signature(body: bytes, signature_256: str | None) -> bool:
