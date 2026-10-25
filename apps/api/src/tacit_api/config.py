@@ -8,7 +8,10 @@ REPO_ROOT = Path(__file__).resolve().parents[4]
 
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=REPO_ROOT / ".env", extra="ignore")
+    # env_ignore_empty: `GITHUB_APP_ID=` in .env means "not set", not "".
+    model_config = SettingsConfigDict(
+        env_file=REPO_ROOT / ".env", extra="ignore", env_ignore_empty=True
+    )
 
     api_database_url: str = "postgresql+asyncpg://tacit_api:api@localhost:5432/tacit"
     worker_database_url: str = "postgresql+asyncpg://tacit_worker:worker@localhost:5432/tacit"
