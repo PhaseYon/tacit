@@ -45,6 +45,19 @@ class Settings(BaseSettings):
     embedding_model: str = "BAAI/bge-small-en-v1.5"
     openai_api_key: SecretStr = SecretStr("")
 
+    # LLMs (graph extraction, agent). Graph is OFF unless explicitly enabled.
+    llm_provider: str = "anthropic"
+    llm_model: str = "claude-haiku-5-5"
+    llm_small_model: str = "claude-haiku-5-5"
+    anthropic_api_key: SecretStr = SecretStr("")
+    llm_replay_dir: str = str(REPO_ROOT / "apps/api/tests/fixtures/llm")
+
+    graph_enabled: bool = False
+    graph_max_usd_per_day: float = 5.0
+    neo4j_uri: str = "bolt://localhost:7687"
+    neo4j_user: str = "neo4j"
+    neo4j_password: SecretStr = SecretStr("tacit-dev-password")
+
     @property
     def github_enabled(self) -> bool:
         return bool(self.github_app_id and self.github_app_private_key_path)
