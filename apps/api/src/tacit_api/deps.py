@@ -19,7 +19,9 @@ async def current_principal(
 ) -> Principal:
     if creds is None:
         raise HTTPException(
-            status.HTTP_401_UNAUTHORIZED, "Missing bearer token", headers={"WWW-Authenticate": "Bearer"}
+            status.HTTP_401_UNAUTHORIZED,
+            "Missing bearer token",
+            headers={"WWW-Authenticate": "Bearer"},
         )
     return await verify_token(creds.credentials)
 

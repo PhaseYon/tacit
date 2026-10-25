@@ -67,9 +67,7 @@ async def me(principal: CurrentPrincipal, db: UserDB) -> MeOut:
         id=principal.user_id,
         email=principal.email,
         name=principal.name,
-        workspaces=[
-            WorkspaceOut(id=w.id, name=w.name, slug=w.slug, role=role) for w, role in rows
-        ],
+        workspaces=[WorkspaceOut(id=w.id, name=w.name, slug=w.slug, role=role) for w, role in rows],
     )
 
 

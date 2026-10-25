@@ -19,7 +19,14 @@ branch_labels: str | Sequence[str] | None = None
 depends_on: str | Sequence[str] | None = None
 
 AUTH_TABLES = [
-    "user", "session", "account", "verification", "organization", "member", "invitation", "jwks",
+    "user",
+    "session",
+    "account",
+    "verification",
+    "organization",
+    "member",
+    "invitation",
+    "jwks",
 ]
 RLS_TABLES = ["user", "organization", "member", "invitation"]
 

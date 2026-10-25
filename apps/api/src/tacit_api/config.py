@@ -10,9 +10,7 @@ class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=REPO_ROOT / ".env", extra="ignore")
 
     api_database_url: str = "postgresql+asyncpg://tacit_api:api@localhost:5432/tacit"
-    migrator_database_url: str = (
-        "postgresql+psycopg://tacit_migrator:migrator@localhost:5432/tacit"
-    )
+    migrator_database_url: str = "postgresql+psycopg://tacit_migrator:migrator@localhost:5432/tacit"
 
     auth_jwks_url: str = "http://localhost:3000/api/auth/jwks"
     auth_jwt_issuer: str = "http://localhost:3000"

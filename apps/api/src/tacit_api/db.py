@@ -9,7 +9,12 @@ from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 
 from sqlalchemy import text
-from sqlalchemy.ext.asyncio import AsyncEngine, AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.ext.asyncio import (
+    AsyncEngine,
+    AsyncSession,
+    async_sessionmaker,
+    create_async_engine,
+)
 
 from .config import get_settings
 
@@ -36,13 +41,18 @@ async def set_rls_context(
     session: AsyncSession, *, user_id: str, workspace_id: str | None = None
 ) -> None:
     await session.execute(
-        text("SELECT set_config('app.user_id', :uid, true), set_config('app.workspace_id', :wid, true)"),
+        text(
+            "SELECT set_config('app.user_id', :uid, true),"
+            " set_config('app.workspace_id', :wid, true)"
+        ),
         {"uid": user_id, "wid": workspace_id or ""},
     )
 
 
 @asynccontextmanager
-async def rls_session(user_id: str, workspace_id: str | None = None) -> AsyncIterator[AsyncSession]:
+async def rls_session(
+    user_id: str, workspace_id: str | None = None
+) -> AsyncIterator[AsyncSession]:
     """A transaction scoped to one user (and optionally one workspace)."""
     get_engine()
     assert _sessionmaker is not None
