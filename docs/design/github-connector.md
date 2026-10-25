@@ -203,7 +203,7 @@ webhook_delivery                                     NO RLS; worker-only, no tac
   It must be restrictive: permissive policies are OR'ed together, so a permissive one
   would *widen* access. `app.can_read_container` (SECURITY DEFINER) returns true if the
   container is active and either public, or has a `container_access` row for
-  `app.current_user_id()` and its `acl_synced_at` is under 24 hours old. This way the
+  `app.current_user_id()` and its `acl_synced_at` is under 6 hours old. This way the
   web app, the agent and MCP all get the same filter, and a bug in app code can't leak rows.
 - **Linked identities:** add a column-level grant `GRANT SELECT ("userId","providerId","accountId") ON account TO tacit_worker`.
   This follows the same pattern as the `user` grant in 0001, and never exposes token columns.
