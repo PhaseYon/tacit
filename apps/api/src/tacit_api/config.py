@@ -26,6 +26,8 @@ class Settings(BaseSettings):
 
     web_origin: str = "http://localhost:3000"
     api_public_url: str = "http://localhost:8000"
+    # The MCP protected resource; OAuth access tokens must carry this audience.
+    mcp_resource_url: str = "http://localhost:8000/mcp"
 
     # GitHub App (see infra/github/README.md). Empty means the connector is disabled.
     github_app_id: int | None = None
