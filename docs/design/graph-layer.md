@@ -8,9 +8,8 @@ became true and when they stopped being true. Users must only ever see facts fro
 sources they can read. Every fact must link back to a source URL. Spend must be capped
 per workspace.
 
-Non-goals: Slack and Notion (step 6), the agent and MCP tools themselves (step 5; §8 only
-fixes the contract), communities (`build_communities`), and any LLM work on documents the
-step-2 gate excludes.
+Non-goals: Slack/Notion (step 6), the agent and MCP tools (step 5; §8 fixes the
+contract), communities, and LLM work on documents the step-2 gate excludes.
 
 ---
 
@@ -38,8 +37,7 @@ Sources: [PyPI graphiti-core 0.31.2](https://pypi.org/project/graphiti-core/0.31
 | Embedder | `EmbedderClient` with `create` / `create_batch`. The dimension comes from the `EMBEDDING_DIM` env var, read at import time (default 1024). Built in: OpenAI, Azure, Gemini, Voyage. No sentence-transformers embedder ships (that extra only powers `BGERerankerClient`). |
 | Cross-encoder | Defaults to `OpenAIRerankerClient` when none is passed. `BGERerankerClient` loads `BAAI/bge-reranker-v2-m3` locally. |
 | `gliner2` extra | `GLiNER2Client` runs entity recognition locally (205–340M params, CPU) and passes everything else (edges, dedup, summaries) to a wrapped LLM client. Experimental, and model routing is fixed when it's created. |
-| Telemetry | Depends on `posthog`; turn it off with `GRAPHITI_TELEMETRY_ENABLED=false`. |
-| Concurrency | `max_coroutines` (or `SEMAPHORE_LIMIT`, default 10) limits each gather, not the total. |
+| Telemetry, concurrency | `posthog` telemetry, off via `GRAPHITI_TELEMETRY_ENABLED=false`. `max_coroutines` / `SEMAPHORE_LIMIT` (default 10) limits each gather, not the total. |
 
 ## 1. Graph backend
 
@@ -94,7 +92,7 @@ and bge-small is weaker on those than `text-embedding-3-*`. Weaker similarity co
 two places: more dedup candidates fall through to the LLM (cost), and more facts are
 missed in search (quality). Both are measurable. The benchmark compares bge-small with
 OpenAI-384, and a dogfood metric tracks the "LLM dedup calls per episode" ratio.
-Changing the embedder means rebuilding the graph (§7.5), so record `embedding_model` on
+Changing the embedder means rebuilding the graph (§7.4), so record `embedding_model` on
 `graph_episode`.
 
 **Cross-encoder: none.** Pass a `NoRerank` client that raises if called (this stops
@@ -174,8 +172,7 @@ the user's context.
   (scoped to the workspace).
 - Wrapper helpers for deletion refuse `None` or empty group lists (`clear_data(None)`
   wipes everything).
-- Neo4j isn't published outside the compose network in prod, and the password comes from
-  env.
+- In prod Neo4j stays inside the compose network; the password comes from env.
 
 ### 3.5 Removing and hiding data
 
@@ -332,8 +329,8 @@ graph_process(group):  Redis lock "graph:{group}" (Graphiti needs sequential epi
 
 - Queue `graph`, concurrency 2 (env). Parallel across containers, serial within one.
   Graphiti `max_coroutines=4`.
-- **Rate limits:** the provider SDK retries 429/5xx with backoff (`max_retries=3`). On a
-  persistent 429, the task re-queues with a countdown instead of holding the lock.
+- **Rate limits:** the SDK retries 429/5xx (`max_retries=3`). A persistent 429 re-queues
+  the task with a countdown instead of holding the lock.
 - **Feature flag:** `GRAPH_ENABLED` defaults to false. It's forced off when the selected
   provider has no API key or Neo4j isn't configured. A workspace also needs
   `workspace_graph_settings.enabled = true`. The UI shows the estimated backfill cost from
@@ -351,9 +348,8 @@ Per row:
 4. PG: set `episode_uuid`, `input_hash`, `status='done'`, write `llm_usage`, and replace
    `graph_episode_document`.
 
-A re-run after any crash converges. An orphaned episode is invisible in the meantime,
-because post-check 2 needs a `done` PG row. An hourly sweep removes Neo4j episodes in a
-group that have no matching `graph_episode`.
+Re-runs converge after any crash. Orphans are invisible meanwhile (post-check 2 needs a
+`done` row), and an hourly sweep removes Neo4j episodes with no `graph_episode`.
 
 **Edits** use remove-then-re-add. Caveat (§0): `remove_episode` doesn't restore facts
 that the removed episode had invalidated. That's rare for merged PRs and ADRs. The fix
@@ -377,17 +373,13 @@ runs under the budget check like everything else.
   memory) and raises `BudgetExceeded` otherwise. Graphiti only persists in
   `_process_episode_data` after extraction, so an abort mid-extraction writes nothing.
   Plan step 5 verifies this with a test.
-- A global safety net, `GRAPH_MAX_USD_PER_DAY` (env), works the same way across all
-  workspaces.
+- Global safety net: `GRAPH_MAX_USD_PER_DAY` (env), same mechanism across workspaces.
 - Reports: `graph_cost_stats` view (per workspace and repo: episodes, $ total,
   $/episode, calls per episode, tokens per `prompt_name`). These numbers go into the
   benchmark write-up.
 
-### 7.5 Embedder changes
-
-`embedding_model` is part of `input_hash`, so changing the embedder marks every bundle
-for re-extraction. That's deliberate: Graphiti vectors from different models must never
-mix. Run `graph_rebuild_container` per repo.
+**Embedder changes:** `embedding_model` is in `input_hash`, so switching marks every
+bundle dirty; vectors from different models must never mix. Rebuild per repo.
 
 ## 8. Retrieval for the step-5 agent and MCP
 
@@ -411,9 +403,8 @@ session):
   (superseded facts with dates), who decided (`DECIDED` facts plus `approved_by` from
   Postgres), and evidence (quoted chunks). Every claim carries a URL. A fact without a
   citation can't exist (post-check 2).
-- **Coverage gap:** the graph only covers gated bundles. Open PRs, short issues and
-  everything below the gate exist only in the chunk index. That's one reason both indexes
-  stay for now.
+- **Coverage gap:** open PRs, short issues and everything below the gate exist only in
+  the chunk index, one reason both indexes stay for now.
 - **Benchmark (step 7) decides what survives.** Arms: (a) vector-only chunks,
   (b) hybrid chunks, (c) graph facts only, (d) graph + chunks, each with tokens, $ and
   p50/p95 latency. If (c) ≈ (d), drop the chunk index for the graph-covered kinds. If
@@ -490,5 +481,4 @@ Each step is one PR-sized commit with tests.
    small repos (< 200 episodes), or manual only?
 6. **Approval-only changes** don't re-extract (§7.1). Is it acceptable for "who
    approved" to come only from Postgres metadata and not from the graph?
-7. **Neo4j Community vs Enterprise/Aura** for deployment (RBAC, backups). Docker Compose
-   only needs Community. Decide at the deploy step.
+7. **Neo4j Community vs Enterprise/Aura** (RBAC, backups): decide at the deploy step.
