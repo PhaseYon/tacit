@@ -2,6 +2,10 @@
 
 **Your team's memory, wired into every AI tool.**
 
+> **Heads up:** Tacit is moving to a local-first design (`uvx tacit`, local MCP, team-hosted
+> Neo4j). See [docs/design/local-first.md](docs/design/local-first.md). The code and docs
+> below describe the current hosted version, which will be tagged `v0-hosted`.
+
 Tacit syncs a team's Slack, GitHub and Notion into a permission-aware knowledge graph, so you
 can ask *"why did we do X, who decided, and where's the evidence?"* from the web app, or from
 Claude and Cursor over MCP.
