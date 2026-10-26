@@ -48,6 +48,13 @@ class Settings(BaseSettings):
     # Backfill horizon: older history is skipped to bound API time on large teams.
     slack_backfill_days: int = 365
 
+    # Notion public integration (see docs/design/notion-connector.md). Empty = disabled.
+    notion_client_id: str = ""
+    notion_client_secret: SecretStr = SecretStr("")
+    # From Notion's one-time webhook verification request; signs every event.
+    notion_webhook_verification_token: SecretStr = SecretStr("")
+    notion_api_url: str = "https://api.notion.com"
+
     # Embeddings: "fastembed" (local, free, default), "openai", or "fake" (tests).
     embedding_provider: str = "fastembed"
     embedding_model: str = "BAAI/bge-small-en-v1.5"
@@ -73,6 +80,10 @@ class Settings(BaseSettings):
     @property
     def slack_enabled(self) -> bool:
         return bool(self.slack_client_id and self.slack_client_secret.get_secret_value())
+
+    @property
+    def notion_enabled(self) -> bool:
+        return bool(self.notion_client_id and self.notion_client_secret.get_secret_value())
 
 
 @lru_cache

@@ -28,6 +28,7 @@ celery_app.conf.update(
     include=[
         "tacit_api.connectors.github.tasks",
         "tacit_api.connectors.slack.tasks",
+        "tacit_api.connectors.notion.tasks",
         "tacit_api.search.tasks",
         "tacit_api.graph.tasks",
     ],
