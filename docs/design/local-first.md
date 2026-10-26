@@ -4,7 +4,8 @@ Status: draft for review · Owner: Ahmed Fezan · Date: 2026-10-26
 
 Tacit becomes one package each teammate installs (`uvx tacit`). Sync, extraction and the
 MCP server run on laptops. The only shared piece is the team's own Neo4j, which the team
-hosts, not us. We host nothing.
+hosts, not us. We host no team data. The only things we run are a public website and a
+demo database with fictional data (§14).
 
 This replaces the hosted architecture on `main` (Next.js, Better Auth, FastAPI, Celery,
 Redis, Postgres). That version is tagged `v0-hosted` and stays in git history as the
@@ -373,7 +374,7 @@ Not built now. Recorded so the local design doesn't block it.
 | `infra/postgres`, Mailpit, Redis in `docker-compose.yml` | Not used |
 | `graph/access.py` (Postgres post-check) | No per-user filtering |
 | `agent/` (LangGraph Ask), `langgraph` dependency | No answer-writing; the AI client answers |
-| Root pnpm workspace and scripts | No Node app left |
+| Root pnpm scripts for the API, worker and webhooks | Workspace kept only for `site/` (§14) |
 
 ### Keep, reworked
 
@@ -408,8 +409,67 @@ Not built now. Recorded so the local design doesn't block it.
 6. Slack and Notion sync.
 7. People linking, `tacit log`.
 8. Demo load and benchmark re-run; publish results.
+9. Website (§14): Next.js site with live stats, benchmark numbers and the live demo search.
 
-## 14. Open questions
+## 14. Website
+
+A public site that pitches Tacit, shows real numbers and gets people to install it. It's
+built last, so every number on it is measured on the new stack.
+
+### 14.1 Stack
+
+- Next.js in `site/` (replaces `apps/web`), deployed on Vercel's free tier (fine for a
+  non-commercial open-source project).
+- Pages are static by default. Live stats use ISR (re-built in the background, hourly).
+  Only the demo search is dynamic.
+
+### 14.2 Page
+
+1. **Hero:** "Your team's memory, wired into every AI tool," plus the install box:
+   `uvx tacit init` with a copy button, "Needs Python 3.13 + uv", and a GitHub link.
+   There's no binary to download; the button copies the install command. A secondary
+   link points to the Neo4j `docker-compose.yml` for VPS self-hosting.
+2. **Live demo:** search box over the fictional startup (§14.4).
+3. **Recording:** Claude Desktop answering "why did we switch to Redis?" with citations.
+4. **How it works:** a simplified version of the §2 "after" diagram.
+5. **Numbers:** benchmark table and chart from the §10 re-run, linking to the reproducible
+   results in the repo. Cost per ingested item, query latency, and setup time measured
+   from a clean machine.
+6. **Trust model:** what's logged (§7), the shared-password model, sync scope.
+7. **Quickstart** and links to docs and GitHub.
+
+### 14.3 Data
+
+| Data | Source | Rendering |
+|---|---|---|
+| Installs | PyPI download stats API | ISR, hourly |
+| Stars, contributors, latest release | GitHub API | ISR, hourly |
+| Benchmark results | JSON in this repo | Static, at build |
+| Demo search | Demo Neo4j | Dynamic (server route) |
+
+We don't show usage across teams ("queries run"). Team databases are private, and
+collecting usage would mean telemetry from `tacit` to us, which conflicts with "we see
+no team data".
+
+### 14.4 Live demo search
+
+```
+visitor types question ─▶ Next.js route handler (server, holds demo DB password)
+                            ├─ rate limit per IP
+                            ├─ input length cap
+                            └─ fixed search query ─▶ demo Neo4j (Aura Free, fictional data)
+                         ◀─ facts + citations
+```
+
+- The demo Neo4j holds only the generated startup from `demo/`, loaded with
+  `tacit demo load`.
+- The route runs the same fixed search as `tacit search`. Visitors can't send Cypher, and
+  there's no LLM in the path, so it costs nothing per query.
+- The password lives in a Vercel environment variable and never reaches the browser.
+- A daily GitHub Action pings the route so Aura Free doesn't pause after 3 idle days.
+- If the demo DB is down, the box shows recorded example results instead of an error.
+
+## 15. Open questions
 
 1. **Cheap mode.** Every item costs extraction LLM calls. Should there be a mode that
    stores items as searchable episodes with embeddings and full-text but no extraction,
