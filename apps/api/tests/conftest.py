@@ -17,6 +17,7 @@ from alembic.config import Config
 from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 from httpx import ASGITransport, AsyncClient
 
+from .notion_mock import notion_api  # noqa: F401  (fixture: fake Notion API)
 from .slack_mock import slack_api  # noqa: F401  (fixture: fake Slack Web API)
 
 SUPERUSER_URL = os.environ.get(

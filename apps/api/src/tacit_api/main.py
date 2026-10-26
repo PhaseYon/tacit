@@ -9,6 +9,7 @@ from sqlalchemy import select
 from .agent.routes import router as ask_router
 from .config import get_settings
 from .connectors.github.routes import router as github_router
+from .connectors.notion.routes import router as notion_router
 from .connectors.slack.routes import router as slack_router
 from .db import dispose_engine
 from .deps import CurrentPrincipal, CurrentWorkspace, UserDB
@@ -29,6 +30,7 @@ async def lifespan(_: FastAPI):
 app = FastAPI(title="Tacit API", version="0.1.0", lifespan=lifespan)
 app.include_router(github_router)
 app.include_router(slack_router)
+app.include_router(notion_router)
 app.include_router(search_router)
 app.include_router(graph_router)
 app.include_router(ask_router)
