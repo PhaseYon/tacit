@@ -1,0 +1,56 @@
+{
+  "_metadata": { "major_version": 2, "minor_version": 1 },
+  "display_information": {
+    "name": "Tacit (dev)",
+    "description": "Your team's memory: read-only sync of the channels you invite it to.",
+    "background_color": "#1f2937"
+  },
+  "features": {
+    "bot_user": { "display_name": "Tacit", "always_online": false }
+  },
+  "oauth_config": {
+    "redirect_urls": [
+      "https://REPLACE-WITH-TUNNEL/slack/oauth/callback",
+      "https://REPLACE-WITH-WEB-TUNNEL/api/auth/callback/slack"
+    ],
+    "scopes": {
+      "bot": [
+        "channels:history",
+        "groups:history",
+        "channels:read",
+        "groups:read",
+        "users:read",
+        "team:read"
+      ],
+      "user": ["openid", "profile", "email"]
+    }
+  },
+  "settings": {
+    "event_subscriptions": {
+      "request_url": "https://REPLACE-WITH-TUNNEL/webhooks/slack",
+      "bot_events": [
+        "message.channels",
+        "message.groups",
+        "member_joined_channel",
+        "member_left_channel",
+        "channel_rename",
+        "channel_archive",
+        "channel_unarchive",
+        "channel_deleted",
+        "channel_left",
+        "group_rename",
+        "group_archive",
+        "group_unarchive",
+        "group_deleted",
+        "group_left",
+        "team_join",
+        "user_change",
+        "app_uninstalled",
+        "tokens_revoked"
+      ]
+    },
+    "org_deploy_enabled": false,
+    "socket_mode_enabled": false,
+    "token_rotation_enabled": false
+  }
+}

@@ -6,9 +6,9 @@ Tacit syncs a team's Slack, GitHub and Notion into a permission-aware knowledge 
 can ask *"why did we do X, who decided, and where's the evidence?"* from the web app, or from
 Claude and Cursor over MCP.
 
-> Status: early development. Auth, workspaces, the GitHub connector, hybrid search with
-> citations, the MCP server and the knowledge graph (Graphiti, opt-in) work. Slack/Notion
-> connectors and the public benchmark are next.
+> Status: early development. Auth, workspaces, the GitHub and Slack connectors, hybrid
+> search with citations, the MCP server and the knowledge graph (Graphiti, opt-in) work.
+> The Notion connector and the public benchmark are next.
 
 ## Architecture (so far)
 
@@ -30,8 +30,10 @@ Browser ──► Next.js (apps/web) ── Better Auth ──► Postgres (auth
   Better Auth, `tacit_api` by FastAPI and MCP (read-only on synced content), and
   `tacit_worker` by Celery jobs (scoped to one workspace per transaction).
 - **Source permissions are enforced in Postgres**: a restrictive RLS policy shows a
-  synced document only if it's public or your linked GitHub account can access the repo,
-  based on access data less than 6 hours old. Otherwise access is denied.
+  synced document only if it's public or your linked GitHub / Slack account can access
+  the repo / channel, based on access data less than 6 hours old. Otherwise access is
+  denied. Slack public channels count as private here: they're public only inside the
+  Slack team, so they need a linked Slack account too.
 
 ## Search
 
@@ -105,6 +107,7 @@ Emails (verification, invites) land in Mailpit at http://localhost:8025.
 
 To sync GitHub, create the dev GitHub App with `pnpm github:create-app` and run
 `pnpm dev:worker` and `pnpm dev:webhooks`. See [infra/github/README.md](infra/github/README.md).
+For Slack, create the app from its manifest: [infra/slack/README.md](infra/slack/README.md).
 
 ```bash
 pnpm test         # API tests (uses a throwaway tacit_test database)
@@ -118,9 +121,11 @@ pnpm lint && pnpm typecheck
 | `apps/web` | Next.js 16, Better Auth, shadcn/ui |
 | `apps/api` | FastAPI, SQLAlchemy (async), Alembic migrations, Celery workers |
 | `apps/api/src/tacit_api/connectors/github` | GitHub connector (githubkit) |
+| `apps/api/src/tacit_api/connectors/slack` | Slack connector (slack_sdk) |
 | `docs/design` | Design docs |
 | `infra/postgres` | Role setup (`pnpm db:roles` re-applies it) |
 | `infra/github` | GitHub App manifest and setup guide |
+| `infra/slack` | Slack app manifest and setup guide |
 | `docker-compose.yml` | Local infrastructure |
 
 ## License
