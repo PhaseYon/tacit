@@ -7,6 +7,7 @@ import { AppHeader } from "@/components/app-header";
 import { GitHubSection } from "@/components/github-section";
 import { GraphSection } from "@/components/graph-section";
 import { InviteForm } from "@/components/invite-form";
+import { NotionSection } from "@/components/notion-section";
 import { PageSkeleton } from "@/components/page-skeleton";
 import { SlackSection } from "@/components/slack-section";
 import { Badge } from "@/components/ui/badge";
@@ -102,6 +103,15 @@ async function WorkspacePageContent({
           flash={{
             connected: query.slack === "connected",
             error: typeof query.slack_error === "string" ? query.slack_error : undefined,
+          }}
+        />
+
+        <NotionSection
+          workspaceId={workspace.id}
+          slug={slug}
+          flash={{
+            connected: query.notion === "connected",
+            error: typeof query.notion_error === "string" ? query.notion_error : undefined,
           }}
         />
 

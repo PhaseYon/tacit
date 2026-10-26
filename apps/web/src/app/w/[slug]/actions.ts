@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { ApiError, apiFetch } from "@/lib/api";
@@ -48,6 +49,63 @@ export async function connectSlack(
     return { error: "Could not start the Slack connection." };
   }
   redirect(url);
+}
+
+/** Any member may connect their own Notion: synced pages are visible only to them. */
+export async function connectNotion(
+  workspaceId: string,
+  slug: string,
+  _prev: ConnectState,
+): Promise<ConnectState> {
+  let url: string;
+  try {
+    ({ url } = await apiFetch<{ url: string }>(`/workspaces/${workspaceId}/notion/connect`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ return_to: `/w/${slug}` }),
+    }));
+  } catch (e) {
+    if (e instanceof ApiError && e.status === 503) return { error: "Notion isn't configured on this server." };
+    return { error: "Could not start the Notion connection." };
+  }
+  redirect(url);
+}
+
+/** Widening needs an admin who owns the connection; the API enforces it. */
+export async function setNotionTreeVisibility(
+  workspaceId: string,
+  slug: string,
+  treeId: string,
+  visible: boolean,
+  _prev: ConnectState,
+): Promise<ConnectState> {
+  try {
+    await apiFetch(`/workspaces/${workspaceId}/notion/trees/${treeId}/visibility`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ workspace_visible: visible }),
+    });
+  } catch (e) {
+    if (e instanceof ApiError && e.status === 403) return { error: "Not allowed." };
+    return { error: "Could not change visibility." };
+  }
+  revalidatePath(`/w/${slug}`);
+  return {};
+}
+
+export async function disconnectNotion(
+  workspaceId: string,
+  slug: string,
+  connectionId: string,
+  _prev: ConnectState,
+): Promise<ConnectState> {
+  try {
+    await apiFetch(`/workspaces/${workspaceId}/notion/connections/${connectionId}`, { method: "DELETE" });
+  } catch {
+    return { error: "Could not disconnect." };
+  }
+  revalidatePath(`/w/${slug}`);
+  return {};
 }
 
 export type GraphSettings = {
