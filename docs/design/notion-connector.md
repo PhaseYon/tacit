@@ -100,7 +100,8 @@ notion_tree              RLS: workspace (one per container = one page tree)
   title, workspace_visible, marked_by_user_id, marked_at, UNIQUE (connection_id, root_id)
 notion_page              RLS: workspace, worker-only (bookkeeping, not content)
   connection_id, page_id (pk together), workspace_id, object ('page'|'data_source'),
-  database_id, parent_type, parent_id, container_id, last_edited_time, fetched_at, seen_run
+  database_id, title, url, parent_type, parent_id, container_id, last_edited_time (the
+  version we last fetched), fetched_at, seen_run
 notion_sync_cursor       RLS: workspace, worker-only
   connection_id pk, workspace_id, mode, next_cursor, run_id, run_started_at,
   run_max_edited, watermark, last_full_at, updated_at
@@ -175,7 +176,7 @@ if it's equal **and** we fetched more than 2 minutes after that minute. Otherwis
 the block tree (`GET /v1/blocks/{id}/children`, all pages, recursing into `has_children`
 up to depth 8, never into child pages), normalize and upsert. The cursor (`next_cursor`,
 `run_id`, max edited time) is saved after each page.
-- **Incremental** (every 2 h, and after each webhook burst): stops at the first result
+- **Incremental** (every 2 h, and on database / data source events): stops at the first result
   older than `watermark − 10 min`.
 - **Full** (on connect, then daily): scans everything. At the end, pages not seen in this
   run are checked with `GET /v1/pages/{id}`: 404, trashed, or no access → tombstone,

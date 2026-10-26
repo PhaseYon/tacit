@@ -6,9 +6,9 @@ Tacit syncs a team's Slack, GitHub and Notion into a permission-aware knowledge 
 can ask *"why did we do X, who decided, and where's the evidence?"* from the web app, or from
 Claude and Cursor over MCP.
 
-> Status: early development. Auth, workspaces, the GitHub and Slack connectors, hybrid
-> search with citations, the MCP server and the knowledge graph (Graphiti, opt-in) work.
-> The Notion connector and the public benchmark are next.
+> Status: early development. Auth, workspaces, the GitHub, Slack and Notion connectors,
+> hybrid search with citations, the MCP server and the knowledge graph (Graphiti, opt-in)
+> work. The public benchmark is next.
 
 ## Architecture (so far)
 
@@ -34,6 +34,9 @@ Browser ──► Next.js (apps/web) ── Better Auth ──► Postgres (auth
   the repo / channel, based on access data less than 6 hours old. Otherwise access is
   denied. Slack public channels count as private here: they're public only inside the
   Slack team, so they need a linked Slack account too.
+- **Notion has no readable per-page permissions**, so a Notion connection is personal:
+  pages you connect are visible only to you, until a workspace admin who connected them
+  shares a page tree with the workspace. See `docs/design/notion-connector.md`.
 
 ## Search
 
@@ -108,6 +111,7 @@ Emails (verification, invites) land in Mailpit at http://localhost:8025.
 To sync GitHub, create the dev GitHub App with `pnpm github:create-app` and run
 `pnpm dev:worker` and `pnpm dev:webhooks`. See [infra/github/README.md](infra/github/README.md).
 For Slack, create the app from its manifest: [infra/slack/README.md](infra/slack/README.md).
+For Notion, create a public integration: [docs/design/notion-connector.md](docs/design/notion-connector.md) §9.
 
 ```bash
 pnpm test         # API tests (uses a throwaway tacit_test database)
@@ -122,6 +126,7 @@ pnpm lint && pnpm typecheck
 | `apps/api` | FastAPI, SQLAlchemy (async), Alembic migrations, Celery workers |
 | `apps/api/src/tacit_api/connectors/github` | GitHub connector (githubkit) |
 | `apps/api/src/tacit_api/connectors/slack` | Slack connector (slack_sdk) |
+| `apps/api/src/tacit_api/connectors/notion` | Notion connector (notion-client) |
 | `docs/design` | Design docs |
 | `infra/postgres` | Role setup (`pnpm db:roles` re-applies it) |
 | `infra/github` | GitHub App manifest and setup guide |
