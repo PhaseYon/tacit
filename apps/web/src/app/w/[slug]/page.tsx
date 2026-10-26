@@ -8,6 +8,7 @@ import { GitHubSection } from "@/components/github-section";
 import { GraphSection } from "@/components/graph-section";
 import { InviteForm } from "@/components/invite-form";
 import { PageSkeleton } from "@/components/page-skeleton";
+import { SlackSection } from "@/components/slack-section";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import {
@@ -91,6 +92,16 @@ async function WorkspacePageContent({
             connected: query.github === "connected",
             requested: query.github === "requested",
             error: typeof query.github_error === "string" ? query.github_error : undefined,
+          }}
+        />
+
+        <SlackSection
+          workspaceId={workspace.id}
+          slug={slug}
+          canManage={canInvite}
+          flash={{
+            connected: query.slack === "connected",
+            error: typeof query.slack_error === "string" ? query.slack_error : undefined,
           }}
         />
 
