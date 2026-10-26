@@ -284,9 +284,11 @@ LLM ─▶ search(query="why redis?", limit=10)
 | `get_document(url_or_id)` | Full stored text of a cited item from its episodes, with its link. |
 | `status()` | Graph name, last sync time per source, item counts. Helps the LLM say how fresh its answer is. |
 
-No `ask` tool: in MCP the client is already the LLM, so it calls `search` and answers
-itself. `tacit ask "..."` stays as a CLI command (LangGraph retrieve → answer → validate
-citations) for terminal use.
+No `ask` tool and no answer-writing anywhere in Tacit. In MCP the client is already the
+LLM, so it calls `search` and writes the answer itself. In the terminal,
+`tacit search` returns the same facts and citations deterministically: same graph and
+same query give the same output, with no LLM in the read path. Tacit uses an LLM only
+for extraction during sync.
 
 Config for clients is printed by `tacit mcp install --client claude|cursor|claude-code`:
 
@@ -318,8 +320,7 @@ tacit auth github|slack|notion
 tacit scope add|ls|rm
 tacit sync [--watch 15m] [--max-usd 2]
 tacit people ls|link
-tacit search "why redis?"
-tacit ask "why did we pick redis?"
+tacit search "why redis?"  [--json] [--as-of 2026-03-01]   deterministic, no LLM
 tacit log [--who] [--since] [--grep]
 tacit mcp                  run the MCP server (stdio)
 tacit mcp install --client claude|cursor|claude-code
@@ -371,6 +372,7 @@ Not built now. Recorded so the local design doesn't block it.
 | Postgres: `db.py`, Alembic migrations 0001–0008, `migrations/rls.py`, `search/{indexer,hybrid,routes,tasks}.py` | Graphiti search in Neo4j |
 | `infra/postgres`, Mailpit, Redis in `docker-compose.yml` | Not used |
 | `graph/access.py` (Postgres post-check) | No per-user filtering |
+| `agent/` (LangGraph Ask), `langgraph` dependency | No answer-writing; the AI client answers |
 | Root pnpm workspace and scripts | No Node app left |
 
 ### Keep, reworked
@@ -379,7 +381,7 @@ Not built now. Recorded so the local design doesn't block it.
 |---|---|
 | `connectors/{github,slack,notion}/{client,normalize,backfill}.py` | User tokens; return items instead of writing to Postgres |
 | `graph/{adapters,costs,ontology,bundles,pipeline}.py` | Write to Neo4j metadata instead of Postgres tables; single group |
-| `llm/*`, `agent/ask.py` | Unchanged; ask retrieves from Graphiti |
+| `llm/*` | Unchanged; used only by Graphiti extraction |
 | `search/{embeddings,chunking}.py` | Embedder kept; chunking reused to split long pages |
 | `demo/`, `benchmark/` | Load into Neo4j; new arms |
 | Tests | Rewritten against a Docker Neo4j; fake LLM and API mocks kept |
@@ -404,7 +406,7 @@ Not built now. Recorded so the local design doesn't block it.
 5. Local MCP (`search`, `get_document`, `status`) and `mcp install`. Try it in Claude
    Desktop and Cursor.
 6. Slack and Notion sync.
-7. People linking, `tacit ask`, `tacit log`.
+7. People linking, `tacit log`.
 8. Demo load and benchmark re-run; publish results.
 
 ## 14. Open questions
