@@ -301,14 +301,21 @@ async def test_pages_never_reach_other_members_unless_admin_owner_marks_them(
     trees = {t["title"]: t for t in status["trees"] if t["connection_id"] == alice_cid}
     handbook = trees["Engineering handbook"]["id"]
     assert trees["Acquisition plan"]["can_read"] and trees["Acquisition plan"]["documents"] == 1
+    # Bob doesn't even learn the trees exist: titles are page content.
     bob_view = (await client.get(f"/workspaces/{seed.acme}/notion", headers=bob)).json()
-    bob_trees = {t["title"]: t for t in bob_view["trees"] if t["connection_id"] == alice_cid}
-    assert not bob_trees["Acquisition plan"]["can_read"]
-    assert bob_trees["Acquisition plan"]["documents"] == 0  # RLS applies to the count
+    assert not [t for t in bob_view["trees"] if t["connection_id"] == alice_cid]
+    async with rls_session(seed.bob, seed.acme) as s:
+        names = set(
+            (
+                await s.execute(text("SELECT name FROM source_container WHERE source = 'notion'"))
+            ).scalars()
+        )
+    assert not {"Acquisition plan", "Engineering handbook"} & names
 
-    # Bob (member, not owner) can't widen it; Alice (owner AND admin) can.
+    # Bob (member, not owner) can't widen it (he can't even find it); Alice (owner AND
+    # admin) can.
     url = f"/workspaces/{seed.acme}/notion/trees/{handbook}/visibility"
-    assert (await client.put(url, json={"workspace_visible": True}, headers=bob)).status_code == 403
+    assert (await client.put(url, json={"workspace_visible": True}, headers=bob)).status_code == 404
     r = await client.put(url, json={"workspace_visible": True}, headers=alice)
     assert r.status_code == 200
     bob_hits = await search(seed.bob, seed.acme, "Quokkacorp")
@@ -351,15 +358,16 @@ async def test_admin_cannot_publish_a_members_pages(seed: Seed, notion_api, clie
     trees = (await client.get(f"/workspaces/{seed.acme}/notion", headers=bob)).json()["trees"]
     tree = next(t["id"] for t in trees if t["connection_id"] == bob_cid)
     url = f"/workspaces/{seed.acme}/notion/trees/{tree}/visibility"
-    # Admin but not the owner: can't widen. Owner but not admin: can't widen either.
+    # Admin but not the owner: can't widen (the tree is invisible to her: 404). Owner but
+    # not admin: can't widen either.
     assert (
         await client.put(url, json={"workspace_visible": True}, headers=alice)
-    ).status_code == 403
+    ).status_code == 404
     assert (await client.put(url, json={"workspace_visible": True}, headers=bob)).status_code == 403
     assert bob_url not in await search(seed.alice, seed.acme, "Wombatix")
-    # Narrowing is always allowed for the owner or an admin.
+    # Narrowing is always allowed for the owner.
     assert (
-        await client.put(url, json={"workspace_visible": False}, headers=alice)
+        await client.put(url, json={"workspace_visible": False}, headers=bob)
     ).status_code == 200
 
 

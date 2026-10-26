@@ -45,13 +45,19 @@ def notion_rows(seed: Seed) -> Seed:
             )
         conn.execute(
             "INSERT INTO source_container (id, workspace_id, source, external_id, name,"
-            " visibility) VALUES (%s, %s, 'notion', %s, 'Roadmap', 'private')",
+            " visibility, acl_synced_at) VALUES (%s, %s, 'notion', %s, 'Roadmap', 'private',"
+            " now())",
             (CONT_ACME, seed.acme, f"{CONN_ACME}:root"),
         )
         conn.execute(
             "INSERT INTO notion_tree (container_id, workspace_id, connection_id, root_id,"
             " root_type, title) VALUES (%s, %s, %s, 'root', 'page', 'Roadmap')",
             (CONT_ACME, seed.acme, CONN_ACME),
+        )
+        conn.execute(
+            "INSERT INTO container_access (container_id, user_id, workspace_id, permission)"
+            " VALUES (%s, %s, %s, 'owner')",
+            (CONT_ACME, seed.alice, seed.acme),
         )
     return seed
 
@@ -68,6 +74,21 @@ async def test_api_reads_connection_metadata_in_own_workspace_only(notion_rows):
         bots = set((await sess.execute(text("SELECT bot_id FROM notion_connection"))).scalars())
         trees = set((await sess.execute(text("SELECT title FROM notion_tree"))).scalars())
     assert "bot-rls-1" in bots and "bot-rls-2" not in bots and "Roadmap" in trees
+    # Bob is in Acme but has no access row: the tree's title (page content) is hidden,
+    # in notion_tree and in source_container alike. Connection metadata is not.
+    async with rls_session(s.bob, s.acme) as sess:
+        assert (await sess.execute(text("SELECT 1 FROM notion_tree"))).all() == []
+        names = set(
+            (
+                await sess.execute(
+                    text("SELECT name FROM source_container WHERE id = :c"), {"c": CONT_ACME}
+                )
+            ).scalars()
+        )
+        assert names == set()
+        assert "bot-rls-1" in set(
+            (await sess.execute(text("SELECT bot_id FROM notion_connection"))).scalars()
+        )
     async with rls_session(s.carol, s.acme) as sess:  # forged workspace
         assert (await sess.execute(text("SELECT 1 FROM notion_connection"))).all() == []
         assert (await sess.execute(text("SELECT 1 FROM notion_tree"))).all() == []

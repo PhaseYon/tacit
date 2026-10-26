@@ -130,13 +130,15 @@ SECURITY DEFINER helpers: `app.notion_connections_for(notion_ws)` (webhook routi
 
 ## 5. Access sync (no API calls)
 
-`sync_connection_acl` rewrites `container_access` for all of a connection's trees in one
+`write_acl` rewrites `container_access` for all of a connection's trees in one
 transaction: the owner (if still a workspace member), plus every workspace member for
 trees marked `workspace_visible`, then sets `acl_synced_at`. It runs after every sync run,
 on every toggle (immediately, from the API route), and hourly from beat, which keeps it
 inside the 6-hour staleness cutoff. If it stops running, access goes stale and fails
 closed. Disconnect or revoked token → containers deactivated, access deleted, documents
-tombstoned in one transaction, tokens wiped.
+tombstoned in one transaction, tokens wiped. A tree's title is its root page's title, which
+is content, so RESTRICTIVE policies hide `notion_tree` rows and Notion `source_container`
+rows from anyone who can't read them: other members don't learn a private tree exists.
 
 ## 6. What we ingest
 

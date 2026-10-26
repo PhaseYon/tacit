@@ -137,9 +137,27 @@ def upgrade() -> None:
         op.execute(f'GRANT SELECT, INSERT, UPDATE, DELETE ON "{t}" TO tacit_worker')
     op.execute(f"GRANT SELECT ({CONNECTION_API_COLUMNS}) ON notion_connection TO tacit_api")
     op.execute("GRANT SELECT ON notion_tree TO tacit_api")
+    # A tree's title and URL are its root page's title: content. Other members must not
+    # even see that a private tree exists. RESTRICTIVE, so it only narrows. (Slack
+    # channel names stay workspace-visible, as before: they're Slack-wide metadata.)
+    op.execute(
+        """
+        CREATE POLICY notion_tree_readable ON notion_tree
+        AS RESTRICTIVE FOR SELECT TO tacit_api
+        USING (app.can_read_container(container_id))
+        """
+    )
+    op.execute(
+        """
+        CREATE POLICY source_container_notion_readable ON source_container
+        AS RESTRICTIVE FOR SELECT TO tacit_api
+        USING (source <> 'notion' OR app.can_read_container(id))
+        """
+    )
 
 
 def downgrade() -> None:
+    op.execute("DROP POLICY IF EXISTS source_container_notion_readable ON source_container")
     for t in reversed(WORKSPACE_TABLES):
         op.execute(f'DROP TABLE "{t}" CASCADE')
     op.execute("DROP FUNCTION app.list_notion_connections()")
