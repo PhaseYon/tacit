@@ -509,11 +509,18 @@ def mcp_main(ctx: typer.Context) -> None:
 @mcp_app.command("install")
 def mcp_install(
     client: Annotated[str, typer.Option(help="claude | cursor | claude-code")] = "claude",
+    write: Annotated[
+        bool, typer.Option("--write", help="Merge it into the client's config file")
+    ] = False,
 ) -> None:
     """Print (or apply) the config that makes your AI client launch Tacit."""
     from .mcp import install
 
-    typer.echo(install(client))
+    try:
+        typer.echo(install(client, write=write))
+    except ValueError as exc:
+        typer.secho(str(exc), fg="red", err=True)
+        raise typer.Exit(1) from exc
 
 
 def main() -> None:  # pragma: no cover
