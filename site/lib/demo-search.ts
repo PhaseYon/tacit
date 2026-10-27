@@ -28,7 +28,7 @@ ORDER BY score DESC
 LIMIT $limit
 `;
 
-const LIMIT = 8;
+const LIMIT = 3;
 const MAX_TERMS = 16;
 const QUERY_TIMEOUT_MS = 5_000;
 
@@ -137,11 +137,13 @@ export async function demoSearch(query: string): Promise<DemoResponse> {
         tx.run(SEARCH_CYPHER, {
           q: terms.join(" "),
           fetch: neo4j.int(LIMIT * 6),
-          limit: neo4j.int(LIMIT),
+          // Over-fetch, then drop same-title duplicates (an ADR and the PR that added it
+          // share a title) so the three slots show three different things.
+          limit: neo4j.int(LIMIT * 4),
         }),
       { timeout: QUERY_TIMEOUT_MS },
     );
-    const results: DemoResult[] = res.records.map((r) => ({
+    const all: DemoResult[] = res.records.map((r) => ({
       title: String(r.get("title") ?? "Untitled"),
       url: String(r.get("url") ?? ""),
       source: String(r.get("source") ?? ""),
@@ -150,6 +152,12 @@ export async function demoSearch(query: string): Promise<DemoResponse> {
       date: r.get("date") ? String(r.get("date")).slice(0, 10) : null,
       snippet: makeSnippet(String(r.get("text") ?? ""), terms),
     }));
+    // "ADR-0010: …" as a doc and as the PR that added it count as one item.
+    const key = (title: string) => title.match(/^ADR-\d+/)?.[0] ?? title;
+    const seen = new Set<string>();
+    const results = all
+      .filter((r) => !seen.has(key(r.title)) && seen.add(key(r.title)))
+      .slice(0, LIMIT);
     return { mode: "live", query, search: "keyword", results, tookMs: Date.now() - started };
   } catch (err) {
     console.error("demo-search: live query failed, serving examples:", (err as Error).message);

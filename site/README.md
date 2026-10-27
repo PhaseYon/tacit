@@ -1,6 +1,6 @@
 # Tacit website
 
-The public one-page site for Tacit: pitch, live demo search, how it works, benchmark
+The public one-page site for Tacit: pitch, hands-on example, how it works, benchmark
 numbers, trust model and quickstart. Spec: [`docs/design/local-first.md` §14](../docs/design/local-first.md#14-website).
 
 Next.js 16 (App Router, Cache Components), TypeScript, Tailwind v4. Its own pnpm project
@@ -66,13 +66,14 @@ only and never invents numbers:
 If `../benchmark` isn't there (a deploy that only uploads `site/`), the committed
 `data/benchmark.json` is used as is, so commit it after re-running the script.
 
-## Demo search
+## Hands-on example
 
-`POST /api/demo-search` with `{"q": "..."}` (or `GET ?q=...`, used by the keep-alive).
+`POST /api/demo-search` with `{"id": "elasticsearch"}` (or `GET ?id=...`, used by the
+keep-alive). Only the preset questions in `lib/demo-questions.ts` are accepted; visitors
+can't send their own text.
 
-- Runs one fixed, parameterized Cypher query. Visitors never send Cypher; their text is
-  reduced to plain lowercase words (no Lucene operators, quotes, wildcards or fields),
-  minus common stop words, before it's passed as a parameter.
+- Runs one fixed, parameterized keyword query on each preset's key terms and returns the
+  top 3 distinct results (an ADR and the PR that added it count as one).
 - Searches the same chunk index as the CLI: full-text index `tacit_chunk_text` on
   `:TacitChunk(text, title)`, joined to `:TacitDoc` via `HAS_CHUNK`, best chunk per doc.
   Returns title, url, source, kind, repo, date and a snippet around the first match.
@@ -107,15 +108,14 @@ route served example results, since that means Neo4j wasn't reached.
    outside the root directory" on (the default), so the build can read `../benchmark`.
 2. Framework preset: Next.js. Install and build commands are the defaults
    (`pnpm install`, `pnpm build`).
-3. Add the environment variables above (at least the three `DEMO_NEO4J_*` ones for a
-   live demo).
+3. Add the environment variables above (at least the three `DEMO_NEO4J_*` ones, or the
+   example falls back to recorded results).
 4. Deploy, then set `DEMO_SITE_URL` in GitHub for the keep-alive.
 
 Nothing here is Vercel-specific: `pnpm build && pnpm start` runs anywhere Node 20+ runs.
 
 ## TODO
 
-- Replace the recording placeholder (`components/recording.tsx`) with a Claude Desktop
-  screen recording, self-hosted in `public/` with captions.
-- Re-run the benchmark on the new stack; the numbers section picks it up automatically.
+- The numbers section reads `benchmark/results` and `benchmark/extraction`; re-run those
+  and rebuild to update it.
 - Add `deploy/neo4j/docker-compose.yml` to the repo (the hero links to it).

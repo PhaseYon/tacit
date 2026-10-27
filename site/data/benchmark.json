@@ -104,5 +104,193 @@
         "status": "pending"
       }
     ]
+  },
+  "extraction": {
+    "file": "benchmark/extraction/2026-10-27-smoke.json",
+    "kind": "extraction-smoke",
+    "date": "2026-10-27",
+    "note": "Single-item smoke test, not a benchmark.",
+    "provider": "anthropic",
+    "model": "claude-haiku-5-5",
+    "item": {
+      "title": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+      "url": "https://github.com/larkspur/handbook/blob/main/docs/adr/0012-postgres-full-text-search.md",
+      "chars": 1959
+    },
+    "seconds": 20,
+    "cost_usd": 0.007,
+    "entities": [
+      {
+        "name": "ADR-0005",
+        "types": [
+          "Decision"
+        ]
+      },
+      {
+        "name": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "types": [
+          "Decision"
+        ]
+      },
+      {
+        "name": "Elastic Cloud",
+        "types": [
+          "Technology"
+        ]
+      },
+      {
+        "name": "Elasticsearch",
+        "types": [
+          "Technology"
+        ]
+      },
+      {
+        "name": "Meilisearch",
+        "types": [
+          "Technology"
+        ]
+      },
+      {
+        "name": "Postgres",
+        "types": [
+          "Technology"
+        ]
+      },
+      {
+        "name": "Postgres full-text search",
+        "types": [
+          "Technology"
+        ]
+      },
+      {
+        "name": "Typesense",
+        "types": [
+          "Technology"
+        ]
+      },
+      {
+        "name": "larkspur/handbook",
+        "types": [
+          "Component"
+        ]
+      },
+      {
+        "name": "maya-chen",
+        "types": [
+          "Person"
+        ]
+      },
+      {
+        "name": "pg_trgm",
+        "types": [
+          "Technology"
+        ]
+      },
+      {
+        "name": "priya-natarajan",
+        "types": [
+          "Person"
+        ]
+      },
+      {
+        "name": "tomas-rivera",
+        "types": [
+          "Person"
+        ]
+      }
+    ],
+    "facts": [
+      {
+        "relation": "AFFECTS",
+        "source": "ADR-0005",
+        "target": "Elasticsearch",
+        "fact": "ADR-0005 chose Elasticsearch for report search, expecting 10M+ reports and heavy relevance tuning.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "AFFECTS",
+        "source": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "target": "pg_trgm",
+        "fact": "ADR-0012 anticipates adding pg_trgm if inspectors complain about weaker fuzzy address matching, which was done in ADR-0015.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "AFFECTS",
+        "source": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "target": "Meilisearch",
+        "fact": "ADR-0012 considered Meilisearch as an alternative and rejected it because it would add a second datastore to sync.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "AFFECTS",
+        "source": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "target": "Typesense",
+        "fact": "ADR-0012 considered Typesense as an alternative and rejected it because it would add a second datastore to sync.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "AFFECTS",
+        "source": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "target": "Elasticsearch",
+        "fact": "ADR-0012 decides to remove Elasticsearch after a shadow-read period.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "AFFECTS",
+        "source": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "target": "Postgres full-text search",
+        "fact": "ADR-0012 decides to serve report search from Postgres full-text search on the primary database, using a generated tsvector column with weights, a GIN index, and ts_rank_cd ordering.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "AFFECTS",
+        "source": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "target": "Postgres",
+        "fact": "ADR-0012 decides to serve report search from the primary Postgres database.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "DECIDED",
+        "source": "maya-chen",
+        "target": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "fact": "maya-chen is a decider of ADR-0012, which replaces Elasticsearch with Postgres full-text search.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "DECIDED",
+        "source": "priya-natarajan",
+        "target": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "fact": "priya-natarajan proposed the decision in ADR-0012 to replace Elasticsearch with Postgres full-text search.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "DECIDED",
+        "source": "tomas-rivera",
+        "target": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "fact": "tomas-rivera is a decider of ADR-0012, which replaces Elasticsearch with Postgres full-text search.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "RELATES_TO",
+        "source": "Elasticsearch",
+        "target": "Elastic Cloud",
+        "fact": "Elasticsearch is hosted on Elastic Cloud, which costs about $1,380/month after the cluster was scaled for reindexing.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "RELATES_TO",
+        "source": "larkspur/handbook",
+        "target": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "fact": "The larkspur/handbook repository contains the document ADR-0012 at docs/adr/0012-postgres-full-text-search.md.",
+        "valid_at": "2026-03-17"
+      },
+      {
+        "relation": "SUPERSEDES",
+        "source": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+        "target": "ADR-0005",
+        "fact": "ADR-0012 supersedes ADR-0005, which had chosen Elasticsearch for report search.",
+        "valid_at": "2026-03-17"
+      }
+    ]
   }
 }
