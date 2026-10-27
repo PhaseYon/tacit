@@ -26,7 +26,7 @@ jobs:
             exit 0
           fi
           body=$(curl -fsS --retry 3 --retry-delay 10 --max-time 30 \
-            "${SITE%/}/api/demo-search?q=elasticsearch")
+            "${SITE%/}/api/demo-search?id=elasticsearch")
           mode=$(echo "$body" | jq -r '.mode')
           reason=$(echo "$body" | jq -r '.reason // empty')
           echo "mode=$mode reason=$reason results=$(echo "$body" | jq '.results | length')"

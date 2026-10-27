@@ -1,7 +1,8 @@
 import { NextResponse, type NextRequest } from "next/server";
 
+import { questionFor } from "@/lib/demo-questions";
 import { demoSearch } from "@/lib/demo-search";
-import { MAX_QUERY_CHARS, type DemoError } from "@/lib/demo-types";
+import type { DemoError } from "@/lib/demo-types";
 import { clientIp, take } from "@/lib/rate-limit";
 
 // Runs on the Node.js runtime (the default; the `runtime` segment option is not allowed
@@ -9,7 +10,7 @@ import { clientIp, take } from "@/lib/rate-limit";
 
 const NO_STORE = { "Cache-Control": "no-store" };
 
-async function handle(req: NextRequest, raw: unknown) {
+async function handle(req: NextRequest, id: unknown) {
   const limit = take(clientIp(req.headers));
   if (!limit.ok) {
     return NextResponse.json<DemoError>(
@@ -17,39 +18,32 @@ async function handle(req: NextRequest, raw: unknown) {
       { status: 429, headers: { ...NO_STORE, "Retry-After": String(limit.retryAfter) } },
     );
   }
-  if (typeof raw !== "string" || raw.trim() === "") {
+  const question = questionFor(id);
+  if (!question) {
     return NextResponse.json<DemoError>(
-      { error: "Send a question as `q`." },
+      { error: "Pick one of the example questions." },
       { status: 400, headers: NO_STORE },
     );
   }
-  const q = raw.trim();
-  if (q.length > MAX_QUERY_CHARS) {
-    return NextResponse.json<DemoError>(
-      { error: `Keep it under ${MAX_QUERY_CHARS} characters.` },
-      { status: 413, headers: NO_STORE },
-    );
-  }
-  const body = await demoSearch(q);
-  return NextResponse.json(body, { headers: NO_STORE });
+  const body = await demoSearch(question.terms);
+  return NextResponse.json({ ...body, query: question.question }, { headers: NO_STORE });
 }
 
 export async function POST(req: NextRequest) {
-  // Reject big bodies before parsing them.
   const len = Number(req.headers.get("content-length") ?? 0);
-  if (len > 4_096) {
+  if (len > 1_024) {
     return NextResponse.json<DemoError>({ error: "Request too large." }, { status: 413 });
   }
-  let q: unknown;
+  let id: unknown;
   try {
-    q = ((await req.json()) as { q?: unknown })?.q;
+    id = ((await req.json()) as { id?: unknown })?.id;
   } catch {
-    q = undefined;
+    id = undefined;
   }
-  return handle(req, q);
+  return handle(req, id);
 }
 
-// GET ?q=… is what the daily keep-alive workflow calls, so Aura Free never sits idle.
+// GET ?id=… is what the daily keep-alive workflow calls, so Aura Free never sits idle.
 export async function GET(req: NextRequest) {
-  return handle(req, req.nextUrl.searchParams.get("q"));
+  return handle(req, req.nextUrl.searchParams.get("id"));
 }

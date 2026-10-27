@@ -1,19 +1,17 @@
 import { Suspense } from "react";
 
-import examples from "@/data/demo-examples.json";
 import { CodeLine } from "@/components/copy-button";
 import { DemoSearch } from "@/components/demo-search";
 import { HowItWorks } from "@/components/how-it-works";
 import { LiveStats, LiveStatsFallback } from "@/components/live-stats";
 import { Numbers } from "@/components/numbers";
 import { Quickstart } from "@/components/quickstart";
-import { Recording } from "@/components/recording";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { TrustModel } from "@/components/trust-model";
 import { DEMO_README, DESIGN_DOC, INSTALL_CMD, NEO4J_COMPOSE, REPO_URL } from "@/lib/site";
 
 const NAV = [
-  { href: "#demo", label: "Demo" },
+  { href: "#demo", label: "Example" },
   { href: "#how", label: "How it works" },
   { href: "#numbers", label: "Numbers" },
   { href: "#trust", label: "Trust" },
@@ -145,28 +143,19 @@ export default function Home() {
 
         <Section
           id="demo"
-          eyebrow="Live demo"
-          title="Ask a fictional startup's history"
+          eyebrow="Hands-on example"
+          title="See what Tacit finds"
           intro={
             <>
-              The demo graph holds the generated engineering history of{" "}
+              Ask the history of{" "}
               <a className={link} href={DEMO_README}>
                 Larkspur Labs
               </a>
-              : 3 repos, ADRs, incidents, and four decisions that were later reversed.
+              , a made-up startup with three repos and a few decisions they later reversed.
             </>
           }
         >
-          <DemoSearch suggestions={examples.examples.map((e) => e.query)} />
-        </Section>
-
-        <Section
-          id="recording"
-          eyebrow="In Claude"
-          title="Claude answers, Tacit brings the evidence"
-          intro="No answer-writing inside Tacit: your AI client calls the local search tool and writes the answer itself, citing the PRs, issues and docs it found."
-        >
-          <Recording />
+          <DemoSearch />
         </Section>
 
         <Section
@@ -188,9 +177,8 @@ export default function Home() {
 
         <Section
           id="numbers"
-          eyebrow="Numbers"
-          title="Measured, reproducible, not oversold"
-          intro="Retrieval quality on 52 “why / who / when / what changed” questions about the demo company."
+          eyebrow="The numbers"
+          title="Fast, free to search, and it finds the evidence"
         >
           <Numbers />
         </Section>
