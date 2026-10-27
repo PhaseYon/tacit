@@ -2,136 +2,118 @@
 
 **Your team's memory, wired into every AI tool.**
 
-Tacit syncs a team's Slack, GitHub and Notion into a permission-aware knowledge graph, so you
-can ask *"why did we do X, who decided, and where's the evidence?"* from the web app, or from
-Claude and Cursor over MCP.
+Tacit syncs your team's GitHub, Slack and Notion into a time-aware knowledge graph that
+your team owns, and serves it to Claude, Cursor and Claude Code through a local MCP
+server. Ask *"why did we do X, who decided, and where's the evidence?"* and get an answer
+with links to the exact PRs, threads and pages.
 
-> Status: early development. Auth, workspaces, the GitHub, Slack and Notion connectors,
-> hybrid search with citations, the MCP server and the knowledge graph (Graphiti, opt-in)
-> work. The public benchmark is next.
-
-## Architecture (so far)
+- **Local-first.** Each teammate runs `tacit` on their own machine: sync, indexing and
+  the MCP server all run locally. The only shared piece is your team's Neo4j (Aura Free
+  or your own server). We host nothing and never see your data.
+- **Free by default.** Search uses local embeddings and full-text, with no API keys.
+  LLM extraction of people, decisions and time-aware facts is optional, uses your own
+  key, and has a hard budget per run.
+- **Deterministic reads.** `search` never calls an LLM. Your AI client writes the
+  answer; Tacit returns the evidence.
+- **Every access logged.** Every read and write goes through one function that logs it
+  first, and refuses to run if it can't. `tacit log` answers "who looked at what".
 
 ```
-Browser ──► Next.js (apps/web) ── Better Auth ──► Postgres (auth tables, as tacit_auth)
-                │  short-lived JWT (EdDSA)
-                ▼
-            FastAPI (apps/api) ── verifies JWT via /api/auth/jwks
-                │  SET LOCAL app.user_id / app.workspace_id
-                ▼
-            Postgres with row-level security (as tacit_api)
+ Each teammate's machine                                  Your team's Neo4j
+┌──────────────────────────────────────────────┐         ┌─────────────────────────────┐
+│ Claude / Cursor ──stdio──▶ tacit mcp         │         │ docs + chunks (search)      │
+│                            (search, get_doc) │         │ graph facts (optional)      │
+│ tacit sync ──▶ GitHub / Slack / Notion       │──Bolt──▶│ scope, cursors, write lease │
+│   (your own tokens, only what's in scope)    │         │ access log                  │
+└──────────────────────────────────────────────┘         └─────────────────────────────┘
 ```
 
-- **Workspaces** are Better Auth organizations (members, roles, email invites).
-- **Isolation is enforced twice**: every query filters by workspace in code, and Postgres
-  RLS blocks anything a filter misses. The API's database role can't read sessions, OAuth
-  tokens or signing keys at all.
-- **Four DB roles**: `tacit_migrator` owns tables (Alembic), `tacit_auth` is used by
-  Better Auth, `tacit_api` by FastAPI and MCP (read-only on synced content), and
-  `tacit_worker` by Celery jobs (scoped to one workspace per transaction).
-- **Source permissions are enforced in Postgres**: a restrictive RLS policy shows a
-  synced document only if it's public or your linked GitHub / Slack account can access
-  the repo / channel, based on access data less than 6 hours old. Otherwise access is
-  denied. Slack public channels count as private here: they're public only inside the
-  Slack team, so they need a linked Slack account too.
-- **Notion has no readable per-page permissions**, so a Notion connection is personal:
-  pages you connect are visible only to you, until a workspace admin who connected them
-  shares a page tree with the workspace. See `docs/design/notion-connector.md`.
+## Quickstart
 
-## Search
+```bash
+uv tool install git+https://github.com/PhaseYon/tacit
+tacit init                                # your team's Neo4j URI + password, your email
+tacit auth github && tacit scope add github:acme/api
+tacit sync
+tacit mcp install --client claude         # or cursor / claude-code
+```
 
-Synced documents are split into ~400-token chunks and indexed two ways: embeddings
-(pgvector, HNSW) and Postgres full-text (tsvector). A query runs both and fuses them with
-Reciprocal Rank Fusion. Each result is the best chunk per document, with a highlighted
-snippet and a link to the exact PR, issue, comment or doc. Documents are only re-embedded
-when their content hash changes.
+Full walkthrough, including Slack, Notion and graph facts: [docs/quickstart.md](docs/quickstart.md).
 
-Embeddings default to a **local** model (fastembed `bge-small-en-v1.5`, 384 dims): no API
-key, no per-document cost, reproducible. Set `EMBEDDING_PROVIDER=openai` (plus
-`OPENAI_API_KEY`) to use `text-embedding-3-small` at 384 dims instead. Ranking weights
-and re-ranking are deliberately untuned until the benchmark (build step 7) measures them.
+## Trust model
 
-## Knowledge graph (opt-in)
+Tacit is built for small, high-trust teams:
 
-Merged PRs with their reviews, discussed issues and docs become Graphiti episodes on
-Neo4j: people, components, technologies and decisions, with facts that know when they
-became true and when they were replaced. Answers can say what the *current* decision is
-and what it superseded.
+- **One password per team graph.** Whoever has it can read everything in the graph.
+  Handing it out carefully is the team's job.
+- **Scope is the permission boundary.** Only the repos, channels and pages you add are
+  synced. Private Slack channels need an explicit `--private`; DMs are never synced.
+- **Access log.** Every query is logged with who, what and when, and kept 90 days by
+  default. Known gap: someone with the password can query Neo4j directly and bypass the
+  log. Teams that need more than this need a hosted gateway (design doc §11), which is
+  not built.
 
-- **Never leaks:** one graph group per repo. A search only covers repos you can read
-  right now (from Postgres), never calls Graphiti with an empty group list, and drops any
-  fact Postgres can't tie to a visible source, which is also where its citation comes from.
-- **Costs money, so it's off by default.** It needs `GRAPH_ENABLED=true`, an LLM key
-  (`claude-haiku-5-5` by default), and a per-workspace opt-in by an admin. Private repos
-  need a second opt-in, because their text goes to the LLM provider. Every call is
-  recorded in `llm_usage`, and a monthly budget per workspace is a hard stop.
-- Run `docker compose --profile graph up -d neo4j`. See `docs/design/graph-layer.md`.
+## Commands
+
+| Command | What it does |
+|---|---|
+| `tacit init` | Connect to the team graph and prepare it (safe to re-run) |
+| `tacit auth github\|slack\|notion\|anthropic\|openai` | Store a token (keychain, or a 0600 file) |
+| `tacit scope add\|ls\|rm` | What the graph syncs |
+| `tacit sync [--extract] [--max-usd N] [--watch MIN]` | Pull new and changed items |
+| `tacit search "…" [--as-of DATE] [--json]` | Hybrid search with citations, no LLM |
+| `tacit get <url>` | Full stored text of a cited item |
+| `tacit log [--who] [--since] [--grep]` | Who read or wrote what |
+| `tacit forget <url>` | Remove one item and its graph facts |
+| `tacit mcp` / `tacit mcp install` | Local MCP server / client config |
+| `tacit doctor` | Check config, secrets, database and tokens |
+
+## How it works
+
+- **Sync** polls each source with the user's own token, skips anything whose content
+  hash hasn't changed, and writes under a single write lease so two laptops never
+  ingest the same thing twice. Cursors live in the graph, so whoever syncs next picks
+  up where the last person stopped.
+- **Search** fuses vector search (local bge-small embeddings) and full-text search over
+  chunks with reciprocal rank fusion. With extraction on, it adds
+  [Graphiti](https://github.com/getzep/graphiti) facts that know when they became true
+  and when they were superseded.
+- Details and trade-offs: [docs/design/local-first.md](docs/design/local-first.md).
 
 ## Benchmark
 
-On the fictional Larkspur dataset (52 "why" questions, local embeddings, $0), **hybrid
-search beats vector-only RAG** (recall@10 0.865 vs 0.750, MRR 0.545 vs 0.386). Keyword-only
-scored highest (0.904), probably because the questions reuse the corpus's wording. The
-graph arm hasn't run yet. Numbers, caveats and how to reproduce:
-[benchmark/README.md](benchmark/README.md).
+52 "why" questions over the fictional Larkspur Labs company ([demo/](demo/)), local
+bge-small embeddings, k = 10, cost $0, extraction off. Reproduce with
+`uv run python benchmark/bench.py --neo4j-uri bolt://localhost:7688 --wipe`; three runs
+gave identical retrieval numbers.
 
-## Use it from Claude or Cursor (MCP)
+| arm | recall@5 | recall@10 | MRR |
+|---|---|---|---|
+| vector-only | 0.846 | 0.942 | 0.711 |
+| keyword-only | 0.885 | 0.962 | 0.707 |
+| hybrid (RRF) | 0.885 | 0.962 | 0.704 |
+| graph facts | not run (needs an LLM key) | | |
 
-Tacit is a remote MCP server at `http://localhost:8000/mcp` with OAuth 2.1. The web app is
-the authorization server (dynamic client registration, PKCE, consent screen), and tokens
-are bound to the MCP resource. Every tool call runs with your permissions, so the
-assistant sees exactly what you can see.
+Caveats, in full in [benchmark/README.md](benchmark/README.md):
+- **Hybrid is no better than keyword-only here.** The same author wrote the questions and
+  the corpus, so they share wording; a held-out, paraphrased question set is still needed.
+- **Not comparable one-to-one with v0** (hybrid recall@10 0.865 on Postgres): v0 indexed
+  every comment as its own document, while the new stack bundles a PR or issue with its
+  discussion, so a top-10 hit is easier.
+- The graph-facts layer is unmeasured, so there's no claim yet that it helps.
 
-```bash
-# Claude Code
-claude mcp add --transport http tacit http://localhost:8000/mcp
-```
-
-For Claude Desktop or Cursor, add a remote MCP server with that URL. The client opens a
-browser to sign in and approve access.
-
-Tools: `list_workspaces`, `search` (hybrid, cited), `get_document` (a source plus its
-review/comment thread) and `search_facts` (time-aware graph facts with citations, when
-the graph is enabled).
-
-## Local development
-
-Needs Docker, [uv](https://docs.astral.sh/uv/), Node 22+ and pnpm.
+## Development
 
 ```bash
-pnpm bootstrap    # .env + dependencies
-pnpm infra:up     # Postgres (pgvector), Redis, Mailpit
-pnpm db:migrate   # create tables, grants, RLS policies
-pnpm dev:api      # http://localhost:8000  (in one terminal)
-pnpm dev:web      # http://localhost:3000  (in another)
+uv sync
+docker compose --profile test up -d --wait neo4j-test   # throwaway Neo4j on :7688
+uv run pytest -q
+uv run ruff check . && uv run ruff format --check .
 ```
 
-Emails (verification, invites) land in Mailpit at http://localhost:8025.
-
-To sync GitHub, create the dev GitHub App with `pnpm github:create-app` and run
-`pnpm dev:worker` and `pnpm dev:webhooks`. See [infra/github/README.md](infra/github/README.md).
-For Slack, create the app from its manifest: [infra/slack/README.md](infra/slack/README.md).
-For Notion, create a public integration: [docs/design/notion-connector.md](docs/design/notion-connector.md) §9.
-
-```bash
-pnpm test         # API tests (uses a throwaway tacit_test database)
-pnpm lint && pnpm typecheck
-```
-
-## Repo layout
-
-| Path | What |
-|---|---|
-| `apps/web` | Next.js 16, Better Auth, shadcn/ui |
-| `apps/api` | FastAPI, SQLAlchemy (async), Alembic migrations, Celery workers |
-| `apps/api/src/tacit_api/connectors/github` | GitHub connector (githubkit) |
-| `apps/api/src/tacit_api/connectors/slack` | Slack connector (slack_sdk) |
-| `apps/api/src/tacit_api/connectors/notion` | Notion connector (notion-client) |
-| `docs/design` | Design docs |
-| `infra/postgres` | Role setup (`pnpm db:roles` re-applies it) |
-| `infra/github` | GitHub App manifest and setup guide |
-| `infra/slack` | Slack app manifest and setup guide |
-| `docker-compose.yml` | Local infrastructure |
+`docker compose up -d neo4j` starts a persistent local Neo4j on :7687 for trying Tacit
+solo. The previous hosted architecture (Next.js, FastAPI, Celery, Postgres RLS, OAuth
+MCP) is preserved at tag [`v0-hosted`](https://github.com/PhaseYon/tacit/tree/v0-hosted).
 
 ## License
 

@@ -1,0 +1,37 @@
+# Pings the website's demo search once a day so the demo Neo4j (Aura Free) never sits idle
+# for 3 days and pauses. See docs/design/local-first.md §14.4 and site/README.md.
+#
+# Set the repository variable DEMO_SITE_URL (e.g. https://tacit.example.com). Until it's
+# set, the job does nothing.
+name: demo keep-alive
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Query the demo search
+        env:
+          SITE: ${{ vars.DEMO_SITE_URL }}
+        run: |
+          if [ -z "$SITE" ]; then
+            echo "DEMO_SITE_URL is not set; skipping."
+            exit 0
+          fi
+          body=$(curl -fsS --retry 3 --retry-delay 10 --max-time 30 \
+            "${SITE%/}/api/demo-search?q=elasticsearch")
+          mode=$(echo "$body" | jq -r '.mode')
+          reason=$(echo "$body" | jq -r '.reason // empty')
+          echo "mode=$mode reason=$reason results=$(echo "$body" | jq '.results | length')"
+          if [ "$mode" != "live" ]; then
+            # Example results mean the query never reached Neo4j, so it didn't keep it awake.
+            echo "::error::Demo search served example results ($reason); the demo database was not reached."
+            exit 1
+          fi

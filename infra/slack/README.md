@@ -1,22 +1,41 @@
-# Slack app setup (dev)
+# Slack app setup
 
-One Slack app does both jobs: the **bot** reads the channels you invite it to, and
-**Sign in with Slack** (OpenID Connect) links each person's Slack account, which is what
-permission sync uses. Design: [docs/design/slack-connector.md](../../docs/design/slack-connector.md).
+Tacit reads Slack with **each person's own user token** (`xoxp-`), so it can only ever
+see what that person can already see in Slack. There is no bot, no webhook and no
+events subscription. `tacit sync` polls the channels in the graph's scope.
 
-1. Use a **sandbox Slack workspace** (never a real team's Slack on a dev instance).
-2. Slack needs public HTTPS URLs for events and OAuth redirects. Start tunnels:
-   `cloudflared tunnel --url http://localhost:8000` (API) and
-   `cloudflared tunnel --url http://localhost:3000` (web).
-3. At <https://api.slack.com/apps> choose **Create New App → From a manifest**, paste
-   [`app-manifest.json`](app-manifest.json) and replace the `REPLACE-WITH-…` hosts with
-   your tunnels.
-4. From **Basic Information** copy into `.env`: `SLACK_CLIENT_ID`, `SLACK_CLIENT_SECRET`,
-   `SLACK_SIGNING_SECRET`. Set `API_PUBLIC_URL` to the API tunnel and `BETTER_AUTH_URL`
-   to the web tunnel, then restart `pnpm dev:api`, `pnpm dev:web` and `pnpm dev:worker`.
-5. In Tacit: open the workspace page → **Link your Slack account** → **Connect Slack**.
-   Then, in Slack, `/invite @Tacit` in each channel you want synced.
+The app is one your team creates for its own workspace. Slack applies tighter history
+limits to apps distributed outside the Marketplace; an app built for your own workspace
+avoids them.
 
-Scopes are read-only, and there are no DM scopes. Tacit syncs only channels it was
-invited to. Messages in a channel are visible in Tacit only to workspace members whose
-linked Slack account can read that channel in Slack.
+## Once per team (one person)
+
+1. Go to <https://api.slack.com/apps> → **Create New App** → **From a manifest**, pick
+   your workspace and paste [`app-manifest.json`](app-manifest.json).
+2. That's it. Share the app's page (or its **Install App** link) with your teammates.
+
+## Each person
+
+1. On the app's page, open **Install App** → **Install to Workspace** and approve. You
+   are granting the app access as yourself.
+2. Copy the **User OAuth Token** (starts with `xoxp-`).
+3. Run `tacit auth slack` and paste it. It is stored in your OS keychain.
+4. Add channels: `tacit scope add slack:#eng`, then `tacit sync`.
+
+## Scopes
+
+All user scopes, all read-only:
+
+| Scope | Why |
+|---|---|
+| `channels:history`, `groups:history` | Read messages and threads in public channels and in private channels you're a member of |
+| `channels:read`, `groups:read` | Find a channel by name for `tacit scope add` |
+| `users:read` | Show `@handle` instead of raw user ids in transcripts |
+| `users:read.email` | *Optional.* Lets Tacit link your Slack, GitHub and Notion accounts by email. Remove it from the manifest if you'd rather not. |
+
+There are no DM scopes (`im:*`, `mpim:*`): DMs and group DMs are never syncable.
+Private channels need `tacit scope add --private` because everyone with the graph's
+password will be able to read what's synced from them.
+
+If your token can't read a channel in scope (you're not in a private channel, say), your
+`tacit sync` skips it and a teammate who can read it picks it up.

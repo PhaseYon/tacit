@@ -6,53 +6,20 @@ on:
   pull_request:
 
 jobs:
-  api:
+  tacit:
     runs-on: ubuntu-latest
     services:
-      postgres:
-        image: pgvector/pgvector:pg17
-        env:
-          POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: tacit
-        ports: ["5432:5432"]
-        options: >-
-          --health-cmd "pg_isready -U postgres" --health-interval 5s --health-timeout 5s --health-retries 10
       neo4j:
         image: neo4j:5.26
         env:
-          NEO4J_AUTH: neo4j/tacit-dev-password
-        ports: ["7687:7687"]
+          NEO4J_AUTH: neo4j/tacit-test-password
+        ports: ["7688:7687"]
         options: >-
-          --health-cmd "cypher-shell -u neo4j -p tacit-dev-password 'RETURN 1'" --health-interval 10s --health-timeout 10s --health-retries 15
+          --health-cmd "cypher-shell -u neo4j -p tacit-test-password 'RETURN 1'" --health-interval 10s --health-timeout 10s --health-retries 15
     steps:
       - uses: actions/checkout@v4
-      - name: Create database roles
-        env:
-          PGPASSWORD: postgres
-        run: |
-          docker run --rm --network host -v "$PWD/infra/postgres/init:/init:ro" \
-            -e PGHOST=localhost -e PGPASSWORD=postgres \
-            -e POSTGRES_USER=postgres -e POSTGRES_DB=tacit \
-            -e TACIT_MIGRATOR_PASSWORD=migrator -e TACIT_AUTH_PASSWORD=auth -e TACIT_API_PASSWORD=api -e TACIT_WORKER_PASSWORD=worker \
-            pgvector/pgvector:pg17 bash /init/01-roles.sh
       - uses: astral-sh/setup-uv@v6
-      - working-directory: apps/api
-        run: |
-          uv sync --locked
-          uv run ruff check .
-          uv run ruff format --check .
-          uv run pytest -q
-
-  web:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm --filter web lint
-      - run: pnpm --filter web exec next typegen && pnpm --filter web exec tsc --noEmit
+      - run: uv sync --locked
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest -q
