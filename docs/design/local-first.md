@@ -70,7 +70,7 @@ webhooks, and tamper-proof audit logs (§7 covers what we do log).
 │   1. write (:Access {who, op, tool, params, at})     │
 │   2. run query                                       │
 │                                                      │
-│  secrets in OS keychain (DB password, tokens)        │
+│  secrets: env → OS keychain → 0600 file              │
 └──────────────────────────┬───────────────────────────┘
                            │ URL + password (1 per team)
                            ▼
@@ -303,15 +303,31 @@ Local fastembed (bge-small, 384 dimensions) through the existing Graphiti embedd
 adapter, so search needs no API key. Everyone on a team must use the same embedder;
 `:TacitMeta` stores the model name and dimension, and `tacit` refuses to mix them.
 
-### 8.3 What we lose: the Postgres keyword arm
+### 8.3 Two layers: chunk index (always) and graph facts (optional)
 
-In the published benchmark (`benchmark/results/2026-10-25-fastembed.md`),
-Postgres keyword-only search beat our hybrid (recall@10 0.904 vs 0.865). Graphiti's
-search has its own BM25 arm over Neo4j full-text indexes, but on different text (facts
-and episode content, not chunks). We re-run the benchmark on the new stack (§10) and
-publish the result whichever way it goes. If episode keyword search turns out clearly
-worse, the fix is a full-text index on episode content inside Neo4j, not bringing
-Postgres back.
+Decided during the build (2026-10-26). Graphiti's search only covers what its LLM
+extraction produced (facts and entities). It has no vector search over raw text, and its
+episode search is keyword-only. Relying on it alone would mean Tacit finds nothing until
+someone adds an LLM key, and the benchmark couldn't run without paying for extraction.
+
+So there are two layers, both in the team's Neo4j:
+
+| Layer | What | Cost | When |
+|---|---|---|---|
+| **Chunk index** | `:TacitChunk` nodes: ~400-token chunks with a local bge-small embedding (vector index `tacit_chunk_embedding`) and a full-text index (`tacit_chunk_text`). Fused with RRF. | Free | Every sync |
+| **Graph facts** | Graphiti episodes, entities and time-aware facts | LLM calls | Only with extraction on (`[llm] extract = true` or `tacit sync --extract`) |
+
+`search` fuses both: chunk passages plus current/superseded facts, each with citations.
+This is not a duplicate of Graphiti's index; it indexes different text (raw passages vs
+extracted facts). The v0 benchmark (chunk hybrid recall@10 0.865, keyword 0.904) is the
+evidence it earns its place, and §10 re-measures it with and without the fact layer.
+This also answers the old "cheap mode" question: extraction-off *is* cheap mode.
+
+**Sync runs in two phases.** Phase 1 fetches, hash-skips and indexes chunks. Phase 2
+extracts docs whose current text hasn't been extracted yet (`extracted_hash !=
+content_hash`), oldest first, from the stored text, so turning extraction on later
+needs no re-fetch. The whole run holds the write lease; a second laptop that finds it
+held exits and retries next run.
 
 ## 9. CLI
 
@@ -329,7 +345,11 @@ tacit doctor               check DB reachability, pause state, tokens, schema
 ```
 
 Built with Typer. Config (graph URL, identity, embedder) in
-`~/.config/tacit/config.toml`; secrets in the keychain only.
+`~/.config/tacit/config.toml`. Secrets come from env vars first, then the OS keychain;
+headless Linux and WSL often have no keychain, so the fallback is a 0600
+`secrets.toml` next to the config (the same trade-off the GitHub CLI makes).
+`tacit doctor` shows which store is in use. Also: `tacit get <url>` and
+`tacit forget <url>` (delete one item and its episode).
 
 ## 10. Benchmark and demo
 
@@ -471,10 +491,7 @@ visitor types question ─▶ Next.js route handler (server, holds demo DB passw
 
 ## 15. Open questions
 
-1. **Cheap mode.** Every item costs extraction LLM calls. Should there be a mode that
-   stores items as searchable episodes with embeddings and full-text but no extraction,
-   and only extracts selected sources? It would cut cost a lot, at the price of fewer
-   graph facts.
+1. ~~Cheap mode.~~ Resolved: extraction is optional and off by default (§8.3).
 2. **Slack token handling.** Pasting a user token is the simplest flow. A local OAuth
    loopback flow is nicer, but Slack's redirect-URL rules for localhost need checking.
 3. **Notion token.** One shared integration token versus per-user OAuth. Shared is
