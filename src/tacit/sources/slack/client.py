@@ -1,9 +1,9 @@
 """The only module that imports slack_sdk. Swap the library here if needed.
 
-- Web API: slack_sdk's AsyncWebClient (aiohttp). Every non-ok response raises SlackError.
-- Rate limits: the SDK's own Retry-After handler, capped so a worker never sleeps more
-  than MAX_INLINE_WAIT seconds. Longer waits raise, and the Celery task retries later.
-- Signatures: slack_sdk's SignatureVerifier (v0 HMAC-SHA256, 5-minute timestamp window).
+- Web API: slack_sdk's AsyncWebClient (aiohttp), authenticated with the syncing user's
+  own user token (xoxp-). Every non-ok response raises SlackError.
+- Rate limits: the SDK's own Retry-After handler. `tacit sync` is a CLI run, so it can
+  afford to wait inline, but caps a single wait at MAX_INLINE_WAIT seconds.
 """
 
 from collections.abc import Awaitable, Callable
@@ -18,28 +18,22 @@ from slack_sdk.http_retry.builtin_async_handlers import (
 from slack_sdk.http_retry.request import HttpRequest
 from slack_sdk.http_retry.response import HttpResponse
 from slack_sdk.http_retry.state import RetryState
-from slack_sdk.signature import SignatureVerifier
 from slack_sdk.web.async_client import AsyncWebClient
-
-from ...config import get_settings
 
 SlackClient = AsyncWebClient
 SlackError = SlackApiError
-MAX_INLINE_WAIT = 60
+MAX_INLINE_WAIT = 120
 PAGE_SIZE = 200  # Slack's recommended maximum for cursor pagination
 
-BOT_SCOPES = [
+# User-token scopes (infra/slack/app-manifest.json). Read-only, no DM scopes.
+USER_SCOPES = [
     "channels:history",
     "groups:history",
     "channels:read",
     "groups:read",
     "users:read",
-    "team:read",
 ]
-
-
-class SlackNotConfigured(RuntimeError):
-    pass
+OPTIONAL_USER_SCOPES = ["users:read.email"]  # lets identity linking match people by email
 
 
 def _retry_after(headers: dict[str, Any]) -> int | None:
@@ -54,7 +48,7 @@ def _retry_after(headers: dict[str, Any]) -> int | None:
 
 
 class CappedRateLimitRetryHandler(AsyncRateLimitErrorRetryHandler):
-    """Honour Retry-After in-process only for short waits."""
+    """Honour Retry-After in-process, but only for waits up to MAX_INLINE_WAIT."""
 
     async def _can_retry_async(
         self,
@@ -73,33 +67,17 @@ class CappedRateLimitRetryHandler(AsyncRateLimitErrorRetryHandler):
         return wait is not None and wait <= MAX_INLINE_WAIT
 
 
-def _client(token: str | None) -> AsyncWebClient:
+def make_client(token: str, base_url: str) -> AsyncWebClient:
     return AsyncWebClient(
         token=token,
-        base_url=get_settings().slack_api_url,
+        base_url=base_url,
         timeout=30,
         retry_handlers=[
             AsyncConnectionErrorRetryHandler(max_retry_count=2),
-            CappedRateLimitRetryHandler(max_retry_count=2),
+            CappedRateLimitRetryHandler(max_retry_count=5),
             AsyncServerErrorRetryHandler(max_retry_count=2),
         ],
     )
-
-
-def bot_client(token: str) -> AsyncWebClient:
-    return _client(token)
-
-
-def oauth_client() -> AsyncWebClient:
-    """Unauthenticated client for oauth.v2.access (client id + secret go in the call)."""
-    return _client(None)
-
-
-def rate_limit_wait(exc: BaseException) -> int | None:
-    """Seconds to wait if `exc` is a Slack 429 the SDK didn't retry in-process."""
-    if isinstance(exc, SlackApiError) and getattr(exc.response, "status_code", None) == 429:
-        return _retry_after(dict(exc.response.headers or {})) or 60
-    return None
 
 
 def error_code(exc: BaseException) -> str | None:
@@ -128,13 +106,3 @@ async def get_all(method: Callable[..., Awaitable[Any]], key: str, **params: Any
         items.extend(page)
         if not cursor:
             return items
-
-
-def verify_signature(body: bytes, timestamp: str | None, signature: str | None) -> bool:
-    secret = get_settings().slack_signing_secret.get_secret_value()
-    if not secret or not timestamp or not signature:
-        return False
-    try:
-        return SignatureVerifier(secret).is_valid(body, timestamp, signature)
-    except ValueError:  # non-numeric timestamp
-        return False
