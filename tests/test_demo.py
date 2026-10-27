@@ -30,3 +30,12 @@ async def test_demo_loads_through_the_real_github_source(store: Store):
     assert doc and doc["title"] == "Bootstrap FastAPI service" and "@tomas-rivera" in doc["text"]
     scope = await st.scope_list(store)
     assert all(e.options.get("demo") for e in scope)
+
+
+async def test_demo_docs_are_dated_by_their_own_history(store: Store):
+    await demo.load(store)
+    adr = await d.get_doc(
+        store,
+        "https://github.com/larkspur/handbook/blob/main/docs/adr/0012-postgres-full-text-search.md",
+    )
+    assert adr and adr["reference_time"].to_native().date().isoformat() == "2026-03-17"

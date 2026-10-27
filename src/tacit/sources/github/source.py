@@ -266,6 +266,10 @@ class GitHubSource:
         full = repo["full_name"]
         async with self._sem:
             blob = await api.get_json(self.gh, f"/repos/{full}/git/blobs/{blob_sha}")
+            # When this file last changed, not when the branch did: a doc's date becomes
+            # the reference time of its facts, so "ADR-0005 chose X" must not be dated
+            # to whatever unrelated commit landed last.
+            at = await self._last_changed(full, repo["default_branch"], path) or at
         content = base64.b64decode(blob.get("content") or "").decode("utf-8", errors="replace")
         doc = normalize_markdown_file(
             repo=repo, path=path, content=content, blob_sha=blob_sha, commit_sha=None
@@ -285,6 +289,17 @@ class GitHubSource:
             metadata=meta,
             extract=True,
         )
+
+    async def _last_changed(self, full: str, branch: str, path: str) -> datetime | None:
+        try:
+            commits = await api.get_json(
+                self.gh, f"/repos/{full}/commits", {"path": path, "sha": branch, "per_page": 1}
+            )
+        except RequestFailed:
+            return None
+        if not commits:
+            return None
+        return parse_ts(((commits[0].get("commit") or {}).get("committer") or {}).get("date"))
 
     async def _all(self, url: str) -> list[Any]:
         return await api.get_all(self.gh, url, {"per_page": PER_PAGE})

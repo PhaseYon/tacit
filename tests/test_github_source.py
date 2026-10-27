@@ -179,7 +179,16 @@ async def test_docs_pass_skips_unchanged_tree_and_blobs(gh, src):
     assert list(items) == ["github:42:docs/adr/0001-redis.md"]
     assert "TTLs are 5 minutes" in items["github:42:docs/adr/0001-redis.md"].text
     assert gh.count("/git/blobs/") == 1 and gh.count("/git/trees/") == 1
+    assert gh.count("/commits") == 1  # one date lookup per changed doc only
     assert json.loads(pages[-1].cursor)["docs_tree"] == gh.tree_sha
+
+
+async def test_doc_date_is_the_files_last_commit_not_the_branch(gh, src):
+    gh.file_dates["docs/adr/0001-redis.md"] = "2025-04-22T10:00:00Z"
+    items = _items(await _pages(src, None))
+    assert items["github:42:docs/adr/0001-redis.md"].reference_time == datetime(
+        2025, 4, 22, 10, tzinfo=UTC
+    )
 
 
 async def test_fetch_without_access_raises(gh, src):
