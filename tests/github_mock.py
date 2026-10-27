@@ -51,6 +51,7 @@ class FakeGitHub:
     reviews: dict[int, list[dict]] = field(default_factory=dict)
     inline: dict[int, list[dict]] = field(default_factory=dict)
     files: dict[str, str] = field(default_factory=dict)  # path -> content on main
+    file_dates: dict[str, str] = field(default_factory=dict)  # path -> last commit time
     page_size: int = 2
     denied: bool = False
     calls: list[str] = field(default_factory=list)
@@ -192,6 +193,12 @@ class FakeGitHub:
                     },
                 },
             )
+        if rest == "/commits":
+            path = query.get("path", "")
+            if path not in self.files:
+                return httpx.Response(200, json=[])
+            date = self.file_dates.get(path, _ts(4))
+            return httpx.Response(200, json=[{"commit": {"committer": {"date": date}}}])
         if rest == f"/git/trees/{self.tree_sha}":
             tree = [{"path": p, "type": "blob", "sha": _sha(c)} for p, c in self.files.items()]
             return httpx.Response(200, json={"sha": self.tree_sha, "tree": tree})

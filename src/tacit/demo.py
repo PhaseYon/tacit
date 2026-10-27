@@ -53,6 +53,17 @@ def _sha(text: str) -> str:
     return hashlib.sha1(text.encode()).hexdigest()
 
 
+_DATE = re.compile(r"\b(20\d\d-\d\d-\d\d)\b")
+
+
+def _file_date(content: str) -> str | None:
+    """The generated demo has no git history, so stand in for "last commit that touched
+    this file" with the latest date in the doc's header (ADR "Date:", "Superseded by …
+    (date)", "Last updated …"). Real repos use the GitHub commits API instead."""
+    dates = _DATE.findall("\n".join(content.splitlines()[:12]))
+    return f"{max(dates)}T09:00:00Z" if dates else None
+
+
 def _number(url: str) -> int:
     return int(url.rstrip("/").rsplit("/", 1)[-1])
 
@@ -103,6 +114,12 @@ class DemoGitHubAPI:
             )
             commit = {"tree": {"sha": tree_sha}, "committer": {"date": last}}
             return httpx.Response(200, json={"commit": {"sha": tree_sha, "commit": commit}})
+        if rest == "/commits":
+            path = query.get("path", "")
+            if path not in files:
+                return httpx.Response(200, json=[])
+            date = _file_date(files[path]) or repo["created_at"]
+            return httpx.Response(200, json=[{"commit": {"committer": {"date": date}}}])
         if rest == f"/git/trees/{tree_sha}":
             tree = [{"path": p, "type": "blob", "sha": _sha(c)} for p, c in files.items()]
             return httpx.Response(200, json={"sha": tree_sha, "tree": tree})

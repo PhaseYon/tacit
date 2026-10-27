@@ -1,27 +1,32 @@
+# ruff: noqa: E402  (env + logging setup must run before graphiti is imported)
 """The single place a Graphiti instance is built, and the extraction step of sync."""
 
+import logging
 import os
 from datetime import UTC, datetime
 from decimal import Decimal
 
 os.environ.setdefault("GRAPHITI_TELEMETRY_ENABLED", "false")
+# Graphiti's own Neo4j driver logs "property does not exist" notices on a fresh graph;
+# they're harmless and drown the CLI output. Our Store turns them off at the driver.
+logging.getLogger("neo4j.notifications").setLevel(logging.ERROR)
 
-from graphiti_core import Graphiti  # noqa: E402
-from graphiti_core.driver.neo4j_driver import Neo4jDriver  # noqa: E402
+from graphiti_core import Graphiti
+from graphiti_core.driver.neo4j_driver import Neo4jDriver
 
-from .. import secrets  # noqa: E402
-from ..config import Config, get_config  # noqa: E402
-from ..index.embeddings import get_embedder  # noqa: E402
-from ..llm import LLMProvider  # noqa: E402
-from ..sources.base import Item  # noqa: E402
+from .. import secrets
+from ..config import Config, get_config
+from ..index.embeddings import get_embedder
+from ..llm import LLMProvider
+from ..sources.base import Item
 from ..store import (
-    Store,  # noqa: E402
-    people,  # noqa: E402
+    Store,
+    people,
 )
-from ..store import docs as d  # noqa: E402
-from .adapters import NoRerank, TacitEmbedder, TacitGraphitiLLMClient  # noqa: E402
-from .costs import BudgetExceeded, CostContext, current_cost  # noqa: E402
-from .ontology import (  # noqa: E402
+from ..store import docs as d
+from .adapters import NoRerank, TacitEmbedder, TacitGraphitiLLMClient
+from .costs import BudgetExceeded, CostContext, current_cost
+from .ontology import (
     EDGE_TYPE_MAP,
     EDGE_TYPES,
     ENTITY_TYPES,
