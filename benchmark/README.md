@@ -48,7 +48,8 @@ k = 10, local `bge-small-en-v1.5`, cost $0. Latency is milliseconds on one lapto
 | **local-first** (2026-10-27) | vector-only | 0.846 | 0.942 | 0.837 | 0.711 | ~27-33 | ~40-54 |
 | | keyword-only (Neo4j full-text) | 0.885 | 0.962 | 0.840 | 0.707 | ~12-17 | ~14-20 |
 | | **hybrid (RRF)** | 0.885 | 0.962 | 0.849 | 0.704 | ~33-36 | ~43-49 |
-| | graph facts (Graphiti) | not run: needs an LLM key for extraction | | | | | |
+| | graph facts only (Graphiti) | 0.788 | 0.846 | 0.700 | 0.515 | ~121 | ~188 |
+| | **hybrid + graph facts** | 0.885 | 0.962 | **0.889** | 0.605 | ~165 | ~235 |
 | v0 hosted (2026-10-25) | vector-only (pgvector) | 0.615 | 0.750 | 0.631 | 0.386 | ~40 | ~60 |
 | | keyword-only (Postgres FTS) | 0.788 | 0.904 | 0.704 | 0.576 | ~53 | ~75 |
 | | hybrid (RRF of both) | 0.731 | 0.865 | 0.713 | 0.545 | ~60 | ~78 |
@@ -58,7 +59,44 @@ Latency ranges are from three full runs. Retrieval numbers were **identical in a
 (fresh database each time; fingerprints vector `656bf6e5d057ee8e`, keyword
 `c89d74026efa928e`, hybrid `f7f6658cc3f86772`), and each run's second pass matched too.
 
-Full output: [`results/2026-10-27-local-first.md`](results/2026-10-27-local-first.md)
+### Graph facts (2026-10-27)
+
+The whole demo was extracted with Claude Haiku 5.5 (`benchmark/extract_demo.py`):
+124 items → **746 facts (83 marked superseded) and 213 entities**, 2,117 LLM calls,
+**$1.37**, 48 minutes, no failures. Then `bench.py --use-existing` scored two more arms:
+
+- **graph facts only:** documents ranked by the top Graphiti facts that cite them;
+- **hybrid + graph facts:** RRF of the chunk ranking and the facts ranking, i.e. both
+  layers `tacit search` returns, fused at the document level.
+
+What it shows:
+
+| | vector-only RAG | hybrid | hybrid + graph |
+|---|---|---|---|
+| recall@10 | 0.942 | 0.962 | 0.962 |
+| gold coverage (share of each question's evidence found) | 0.837 | 0.849 | **0.889** |
+| strict recall@10 | 0.808 | 0.808 | **0.846** |
+| MRR (rank of the first right document) | **0.711** | 0.704 | 0.605 |
+| "who" questions: gold coverage (n=10) | 0.900 | 0.950 | **1.000** |
+| "what changed": recall@10 (n=10) | 0.900 | 0.900 | **1.000** |
+
+- **Adding the graph finds more of the evidence** (coverage +6% relative to vector-only,
+  +5% to hybrid), most on who / when / what-changed questions.
+- **It ranks the first right document lower** (MRR 0.71 → 0.61): fact-cited documents get
+  fused in above some good chunk hits. 10 questions ranked better, 16 worse.
+- **The graph alone is worse than plain RAG** (recall@10 0.846). It helps as an addition,
+  not a replacement.
+- Latency rises to ~165 ms p50 because the fact search runs too (Graphiti's own hybrid
+  search over facts).
+- **Not tuned.** A better fusion (e.g. weighting chunks above facts) might keep the
+  coverage gain without the rank loss, but tuning it on these 52 questions would overfit;
+  it needs the held-out set first.
+- **Replay:** the first recording couldn't be replayed because Graphiti's prompt text
+  varied between processes (label order from a set). Fixed in the adapter (prompts are
+  now canonical); a new recording is needed for a $0 replay of this graph.
+
+Full output: [`results/2026-10-27-local-first-graph.md`](results/2026-10-27-local-first-graph.md),
+and [`results/2026-10-27-local-first.md`](results/2026-10-27-local-first.md)
 (per-question ranks, by question type, coverage table) and `.json`. v0:
 [`results/2026-10-25-fastembed.md`](results/2026-10-25-fastembed.md).
 
@@ -124,6 +162,7 @@ Full output: [`results/2026-10-27-local-first.md`](results/2026-10-27-local-firs
 
 1. Write a held-out set of questions phrased the way users actually ask (paraphrased, not
    copied from the documents) before tuning anything (fusion weights, analyzer).
-2. Run the graph-facts arm with an API key and record the measured $/item.
+2. Re-record the extraction with canonical prompts, so the graph can be rebuilt for $0
+   (`extract_demo.py --replay`).
 3. Consider per-comment anchors inside bundled documents, so citations can point at the
    exact comment again (and strict recall can reach 1.0).

@@ -83,16 +83,16 @@ Tacit is built for small, high-trust teams:
 ## Benchmark
 
 52 "why" questions over the fictional Larkspur Labs company ([demo/](demo/)), local
-bge-small embeddings, k = 10, cost $0, extraction off. Reproduce with
-`uv run python benchmark/bench.py --neo4j-uri bolt://localhost:7688 --wipe`; three runs
-gave identical retrieval numbers.
+bge-small embeddings, k = 10. Retrieval costs $0; building the graph (124 items → 746
+facts, 213 entities) cost $1.37 with Claude Haiku 5.5. Repeated runs give identical
+retrieval numbers.
 
-| arm | recall@5 | recall@10 | MRR |
+| arm | recall@10 | evidence found | MRR |
 |---|---|---|---|
-| vector-only | 0.846 | 0.942 | 0.711 |
-| keyword-only | 0.885 | 0.962 | 0.707 |
-| hybrid (RRF) | 0.885 | 0.962 | 0.704 |
-| graph facts | not run (needs an LLM key) | | |
+| vector-only RAG | 0.942 | 0.837 | **0.711** |
+| hybrid (RRF) | 0.962 | 0.849 | 0.704 |
+| graph facts only | 0.846 | 0.700 | 0.515 |
+| **hybrid + graph facts** | **0.962** | **0.889** | 0.605 |
 
 Caveats, in full in [benchmark/README.md](benchmark/README.md):
 - **Hybrid is no better than keyword-only here.** The same author wrote the questions and
@@ -100,11 +100,10 @@ Caveats, in full in [benchmark/README.md](benchmark/README.md):
 - **Not comparable one-to-one with v0** (hybrid recall@10 0.865 on Postgres): v0 indexed
   every comment as its own document, while the new stack bundles a PR or issue with its
   discussion, so a top-10 hit is easier.
-- The graph-facts layer's effect on retrieval is unmeasured, so there's no claim that it
-  helps. A real single-item extraction (Claude Haiku 5.5 on one decision record: 13 facts
-  incl. who decided and what it superseded, 20 s, $0.007) is recorded in
-  [benchmark/extraction/](benchmark/extraction/); reproduce with
-  `benchmark/extraction_smoke.py`.
+- **The graph finds more evidence but ranks it lower.** Adding facts raises the share of
+  supporting evidence found (84% → 89% vs vector-only; 90% → 100% on "who decided"
+  questions) but pushes the first right document down (MRR 0.71 → 0.61). The graph alone
+  is worse than plain RAG. Fusion is untuned on purpose.
 
 ## Development
 

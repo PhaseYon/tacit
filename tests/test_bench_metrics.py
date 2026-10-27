@@ -56,3 +56,20 @@ def test_fingerprint_changes_only_with_rankings():
     c = [bench.QuestionResult("q1", "why", False, 2, 1.0, 2, 5.0, [ADR, PR])]
     assert bench.fingerprint(a) == bench.fingerprint(b)  # latency doesn't count
     assert bench.fingerprint(a) != bench.fingerprint(c)
+
+
+def test_cited_urls_keeps_fact_order_and_dedupes():
+    facts = [
+        {"citations": [{"url": "a"}, {"url": "b"}]},
+        {"citations": [{"url": "b"}]},
+        {"citations": []},
+        {"citations": [{"url": "c"}]},
+    ]
+    assert bench.cited_urls(facts) == ["a", "b", "c"]
+
+
+def test_rrf_rewards_documents_both_lists_agree_on():
+    fused = bench.rrf(["x", "a", "b"], ["a", "y"])
+    assert fused[0] == "a"  # in both lists
+    assert set(fused) == {"x", "a", "b", "y"}
+    assert bench.rrf(["p", "q"], []) == ["p", "q"]

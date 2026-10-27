@@ -1,6 +1,7 @@
 """Adapters that let Graphiti use Tacit's LLM provider and local embeddings."""
 
 import asyncio
+import re
 from typing import Any
 
 from graphiti_core.cross_encoder.client import CrossEncoderClient
@@ -13,6 +14,23 @@ from pydantic import BaseModel
 from ..index.embeddings import Embedder
 from ..llm import ChatMessage, LLMProvider
 from .costs import BudgetExceeded, current_cost, current_prompt
+
+# Graphiti renders each node's labels from a set, so their order changes with Python's
+# per-process hash seed ("['Entity', 'Technology']" vs "['Technology', 'Entity']").
+# Sorting them makes every prompt byte-identical across runs: required for record/replay
+# and for prompt caching, and harmless to the model.
+_ENTITY_TYPES = re.compile(r"""(["']entity_types["']:\s*\[)([^\]]*)(\])""")
+_QUOTED = re.compile(r"""(["'])(.*?)\1""")
+
+
+def canonical_prompt(text: str) -> str:
+    def sort_list(m: re.Match) -> str:
+        items = [q.group(0) for q in _QUOTED.finditer(m.group(2))]
+        if not items:
+            return m.group(0)
+        return m.group(1) + ", ".join(sorted(items, key=lambda x: x[1:-1])) + m.group(3)
+
+    return _ENTITY_TYPES.sub(sort_list, text)
 
 
 class TacitGraphitiLLMClient(LLMClient):
@@ -47,7 +65,7 @@ class TacitGraphitiLLMClient(LLMClient):
         ctx.check()
         tier = "small" if model_size == ModelSize.small else "default"
         data, usage = await self.provider.complete_structured(
-            [ChatMessage(role=m.role, content=m.content) for m in messages],  # type: ignore[arg-type]
+            [ChatMessage(role=m.role, content=canonical_prompt(m.content)) for m in messages],  # type: ignore[arg-type]
             response_model,
             tier=tier,
             max_tokens=min(max_tokens, 16000),

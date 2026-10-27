@@ -43,6 +43,9 @@ DEMO_DATA = REPO / "demo" / "data" / "github"
 RESULTS = REPO / "benchmark" / "results"
 EMBED_MODEL = "BAAI/bge-small-en-v1.5"
 ARMS = {"vector": ("semantic",), "keyword": ("keyword",), "hybrid": None}
+# Graph arms need an extracted graph (benchmark/extract_demo.py, then --use-existing).
+GRAPH_ARMS = ("facts", "hybrid+facts")
+RRF_K = 60
 GRAPH_NOTE = (
     "not run: the graph-facts arm needs Graphiti extraction, which needs an LLM API key"
     " (no key was available for this run). No claim is made about the fact layer."
@@ -181,20 +184,49 @@ def configure_env(args: argparse.Namespace) -> None:
     os.environ["TACIT_IDENTITY__EMAIL"] = "bench@example.com"
 
 
+def latest_extraction() -> dict | None:
+    """Summary of the extraction run that built the graph (benchmark/extraction/*-demo-*)."""
+    files = sorted((REPO / "benchmark" / "extraction").glob("*-demo-*.json"))
+    return json.loads(files[-1].read_text()) if files else None
+
+
 def load_questions() -> list[dict]:
     return [json.loads(line) for line in QUESTIONS.read_text().splitlines() if line.strip()]
 
 
-async def run_arm(store, arm: str, questions: list[dict], k: int) -> list[QuestionResult]:
-    from tacit.search import search, search_chunks
+def cited_urls(facts: list[dict]) -> list[str]:
+    """Documents in the order their facts rank (a fact can cite several)."""
+    out: list[str] = []
+    for f in facts:
+        for c in f.get("citations") or []:
+            if c["url"] not in out:
+                out.append(c["url"])
+    return out
 
-    signals = ARMS[arm]
+
+def rrf(*ranked_lists: list[str], k: int = RRF_K) -> list[str]:
+    scores: dict[str, float] = {}
+    for ranked in ranked_lists:
+        for i, url in enumerate(ranked):
+            scores[url] = scores.get(url, 0.0) + 1 / (k + i + 1)
+    return sorted(scores, key=lambda u: (-scores[u], u))
+
+
+async def run_arm(store, arm: str, questions: list[dict], k: int) -> list[QuestionResult]:
+    from tacit.search import _search_facts, search, search_chunks
 
     async def ranked_urls(query: str) -> list[str]:
-        if signals is None:
-            hits = (await search(store, query, limit=k, tool=f"bench.{arm}"))["results"]
-        else:
-            hits, _ = await search_chunks(store, query, k, f"bench.{arm}", signals=signals)
+        if arm == "facts":
+            return cited_urls(await _search_facts(store, query, k, "bench.facts", None, None))[:k]
+        if arm == "hybrid+facts":
+            out = await search(store, query, limit=k, tool="bench.hybrid+facts")
+            chunk_docs = [h["url"] for h in out["results"]]
+            return rrf(chunk_docs, cited_urls(out["facts"]))[:k]
+        # Chunk arms search chunks only, so their latency doesn't include the fact search
+        # that `tacit search` adds once a graph exists.
+        signals = ARMS[arm]
+        kwargs = {"signals": signals} if signals else {}
+        hits, _ = await search_chunks(store, query, k, f"bench.{arm}", **kwargs)
         return [h["url"] for h in hits]
 
     await ranked_urls("warm-up: why did we pick this?")  # load the model, warm caches
@@ -234,12 +266,18 @@ async def run(args: argparse.Namespace) -> dict:
     async with Store.from_config() as store:
         await store.driver.verify_connectivity()
         nodes = (await store._execute("MATCH (n) RETURN count(n) AS n"))[0]["n"]
-        if nodes and not args.wipe:
+        if nodes and not (args.wipe or args.use_existing):
             sys.exit(
-                f"{args.neo4j_uri} is not empty ({nodes} nodes). Use --wipe on a throwaway DB."
+                f"{args.neo4j_uri} is not empty ({nodes} nodes). Use --wipe on a throwaway DB,"
+                " or --use-existing for a graph built by benchmark/extract_demo.py."
             )
-        if nodes:
+        if nodes and args.wipe:
             await store._execute("MATCH (n) DETACH DELETE n")
+        facts_in_graph = (await store._execute("MATCH ()-[r:RELATES_TO]->() RETURN count(r) AS n"))[
+            0
+        ]["n"]
+        if set(args.arms) & set(GRAPH_ARMS) and not facts_in_graph:
+            sys.exit("Graph arms need extracted facts: run benchmark/extract_demo.py first.")
         await ensure_schema(store, get_embedder().model)
 
         t0 = time.perf_counter()
@@ -296,7 +334,8 @@ async def run(args: argparse.Namespace) -> dict:
             "ingest_seconds": round(ingest_s, 1),
         },
         "cost_usd": 0.0,
-        "extraction": "off",
+        "extraction": "off" if not facts_in_graph else latest_extraction(),
+        "facts_in_graph": facts_in_graph,
         "coverage": coverage,
         "scoring": "document level by URL; comment/review anchors mapped to their parent"
         " PR/issue (strict_recall uses exact URLs)",
@@ -318,7 +357,13 @@ async def run(args: argparse.Namespace) -> dict:
             }
             for a in arms
         },
-        "graph": GRAPH_NOTE,
+        "graph": GRAPH_NOTE
+        if not set(arms) & set(GRAPH_ARMS)
+        else (
+            "facts: documents cited by the top Graphiti facts, in fact order. hybrid+facts:"
+            " RRF (k=60) of the hybrid chunk ranking and the facts ranking, i.e. both"
+            " layers `tacit search` returns, fused at the document level."
+        ),
         "v0_hosted_baseline": V0,
         "per_question": {a: [asdict(q) for q in qs] for a, qs in arms.items()},
     }
@@ -341,10 +386,16 @@ def to_markdown(r: dict, questions: list[dict]) -> str:
         f"- Demo data: {ds['demo_items']} issues/PRs/markdown files; skipped as bot-authored:"
         f" {len(ds['bot_items_skipped'])}, of which gold sources:"
         f" {len(set(ds['bot_items_skipped']) & gold)}",
-        f"- Ingest: {ds['items_written']} items -> {ds['documents']} documents,"
+        f"- Ingest: {ds['items_written']} new items -> {ds['documents']} documents,"
         f" {ds['chunks']} chunks in {ds['ingest_seconds']} s"
         f" ({', '.join(f'{kd}: {v["docs"]} docs/{v["chunks"]} chunks' for kd, v in ds['by_kind'].items())})",
-        f"- Cost: ${r['cost_usd']} (extraction {r['extraction']})",
+        (
+            f"- Cost: retrieval $0. Extraction: {x['items_extracted']} items with {x['model']},"
+            f" {x['llm_calls']} LLM calls, ${x['cost_usd']}, {x['minutes']} min ->"
+            f" {x['facts']} facts ({x['facts_superseded']} superseded), {x['entities']} entities"
+            if isinstance((x := r["extraction"]), dict)
+            else f"- Cost: ${r['cost_usd']} (extraction {r['extraction']})"
+        ),
         f"- Graph facts arm: {r['graph']}",
         f"- Scoring: {r['scoring']}",
         "",
@@ -359,7 +410,8 @@ def to_markdown(r: dict, questions: list[dict]) -> str:
     ]
     for arm, s in r["arms"].items():
         lines.append(f"| {arm} | " + " | ".join(str(s.get(c, "")) for c in cols) + " |")
-    lines.append("| graph facts | not run (needs an LLM key) |" + " |" * (len(cols) - 1))
+    if not set(r["arms"]) & set(GRAPH_ARMS):
+        lines.append("| graph facts | not run (needs an LLM key) |" + " |" * (len(cols) - 1))
 
     lines += ["", "## Determinism", ""]
     for arm, d in r["determinism"].items():
@@ -422,7 +474,12 @@ def main() -> None:
         "--neo4j-password", default=os.environ.get("NEO4J_PASSWORD", "tacit-test-password")
     )
     ap.add_argument("--k", type=int, default=10)
-    ap.add_argument("--arms", nargs="+", default=list(ARMS), choices=list(ARMS))
+    ap.add_argument("--arms", nargs="+", default=list(ARMS), choices=[*ARMS, *GRAPH_ARMS])
+    ap.add_argument(
+        "--use-existing",
+        action="store_true",
+        help="benchmark the graph already in the database (built by extract_demo.py)",
+    )
     ap.add_argument("--wipe", action="store_true", help="empty the (throwaway!) database first")
     ap.add_argument("--out", default=None, help="results file stem (default <date>-local-first)")
     args = ap.parse_args()

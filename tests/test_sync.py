@@ -132,3 +132,17 @@ async def test_items_marked_extract_false_are_indexed_but_not_extracted(store: S
     items = [ITEMS[0], replace(ITEMS[1], extract=False)]
     r = await run_sync(store, {"github": FakeSource(items)})
     assert r.scopes[0].written == 2 and r.extraction_pending == 1
+
+
+def test_canonical_prompt_sorts_entity_type_lists():
+    from tacit.graph.adapters import canonical_prompt
+
+    a = '[{"name": "ES", "entity_types": ["Technology", "Entity"]}]'
+    b = '[{"name": "ES", "entity_types": ["Entity", "Technology"]}]'
+    assert canonical_prompt(a) == canonical_prompt(b) == b
+    c = "{'name': 'api', 'entity_types': ['Entity', 'Component'], 'attributes': {}}"
+    assert (
+        canonical_prompt(c)
+        == "{'name': 'api', 'entity_types': ['Component', 'Entity'], 'attributes': {}}"
+    )
+    assert canonical_prompt("no lists here") == "no lists here"
