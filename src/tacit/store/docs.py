@@ -60,12 +60,53 @@ async def upsert_doc(
     )
 
 
-async def set_episode(store: Store, external_id: str, episode_uuid: str | None) -> None:
+async def set_episode(
+    store: Store, external_id: str, episode_uuid: str | None, extracted_hash: str | None = None
+) -> None:
     await store.run_query(
         "write",
         "doc.episode",
-        "MATCH (d:TacitDoc {external_id: $eid}) SET d.episode_uuid = $uuid",
-        {"eid": external_id, "uuid": episode_uuid},
+        "MATCH (d:TacitDoc {external_id: $eid}) SET d.episode_uuid = $uuid, d.extracted_hash = $h",
+        {"eid": external_id, "uuid": episode_uuid, "h": extracted_hash},
+    )
+
+
+async def pending_extraction(store: Store, limit: int = 50) -> list[Item]:
+    """Docs whose current text hasn't been extracted yet, oldest first (Graphiti wants
+    episodes in time order)."""
+    rows = await store.run_query(
+        "read",
+        "doc.pending",
+        "MATCH (d:TacitDoc) WHERE d.extracted_hash IS NULL OR d.extracted_hash <> d.content_hash"
+        " RETURN d {.*} AS d ORDER BY d.reference_time ASC, d.external_id ASC LIMIT $n",
+        {"n": limit},
+    )
+    return [_item(r["d"]) for r in rows]
+
+
+async def count_pending_extraction(store: Store) -> int:
+    rows = await store.run_query(
+        "read",
+        "doc.pending",
+        "MATCH (d:TacitDoc) WHERE d.extracted_hash IS NULL OR d.extracted_hash <> d.content_hash"
+        " RETURN count(d) AS n",
+    )
+    return rows[0]["n"] if rows else 0
+
+
+def _item(d: dict[str, Any]) -> Item:
+    ref = d.get("reference_time")
+    return Item(
+        source=d["source"],
+        scope_key=d["scope_key"],
+        external_id=d["external_id"],
+        kind=d["kind"],
+        url=d["url"],
+        title=d["title"],
+        text=d["text"],
+        reference_time=ref.to_native() if hasattr(ref, "to_native") else ref,
+        participants=tuple(d.get("participants") or ()),
+        metadata=json.loads(d.get("metadata") or "{}"),
     )
 
 

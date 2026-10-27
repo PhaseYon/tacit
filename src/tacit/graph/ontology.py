@@ -5,7 +5,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-ONTOLOGY_VERSION = "1"
+ONTOLOGY_VERSION = "2"
 
 
 class Person(BaseModel):
@@ -76,8 +76,8 @@ EDGE_TYPE_MAP: dict[tuple[str, str], list[str]] = {
 }
 
 EXTRACTION_INSTRUCTIONS = """\
-This is engineering discussion from a software team (pull requests, reviews, issues,
-design docs). Name people exactly by their @login (without the @). Extract a Decision
-only when there is an explicit choice or a stated rationale; ignore code-level detail
-such as variable names. An approval of a pull request means that person DECIDED the
-decision it contains."""
+This is a software team's working history: pull requests, reviews, issues and docs from
+GitHub, Slack threads, and Notion pages. Speakers appear as "@handle"; name people exactly
+by that handle (without the @). Extract a Decision only when there is an explicit choice
+or a stated rationale; ignore code-level detail such as variable names. An approval of a
+pull request means that person DECIDED the decision it contains."""

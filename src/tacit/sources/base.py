@@ -45,12 +45,12 @@ class Item:
     # People involved, as "<source>:<handle>" ("github:octocat", "slack:U0123").
     participants: tuple[str, ...] = ()
     metadata: dict[str, Any] = field(default_factory=dict)
-    # Extra inputs that define "changed" beyond kind/title/text (rarely needed).
-    hash_extra: dict[str, Any] = field(default_factory=dict)
 
     @property
     def content_hash(self) -> str:
-        payload = {"kind": self.kind, "title": self.title, "text": self.text, **self.hash_extra}
+        """What counts as "changed". Only kind/title/text: put anything else that should
+        trigger re-indexing (e.g. "State: merged") into the rendered text."""
+        payload = {"kind": self.kind, "title": self.title, "text": self.text}
         data = json.dumps(payload, sort_keys=True, separators=(",", ":"), default=str)
         return hashlib.sha256(data.encode()).hexdigest()
 
