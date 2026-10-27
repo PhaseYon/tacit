@@ -82,10 +82,25 @@ Tacit is built for small, high-trust teams:
 
 ## Benchmark
 
-The published numbers ([benchmark/](benchmark/)) are from the previous hosted version
-(`v0-hosted`, Postgres search): hybrid recall@10 0.865 vs vector-only 0.750 on 52
-"why" questions over a generated demo company. The same author wrote the questions and
-the corpus, so wording overlaps. The benchmark is being re-run on the local-first stack.
+52 "why" questions over the fictional Larkspur Labs company ([demo/](demo/)), local
+bge-small embeddings, k = 10, cost $0, extraction off. Reproduce with
+`uv run python benchmark/bench.py --neo4j-uri bolt://localhost:7688 --wipe`; three runs
+gave identical retrieval numbers.
+
+| arm | recall@5 | recall@10 | MRR |
+|---|---|---|---|
+| vector-only | 0.846 | 0.942 | 0.711 |
+| keyword-only | 0.885 | 0.962 | 0.707 |
+| hybrid (RRF) | 0.885 | 0.962 | 0.704 |
+| graph facts | not run (needs an LLM key) | | |
+
+Caveats, in full in [benchmark/README.md](benchmark/README.md):
+- **Hybrid is no better than keyword-only here.** The same author wrote the questions and
+  the corpus, so they share wording; a held-out, paraphrased question set is still needed.
+- **Not comparable one-to-one with v0** (hybrid recall@10 0.865 on Postgres): v0 indexed
+  every comment as its own document, while the new stack bundles a PR or issue with its
+  discussion, so a top-10 hit is easier.
+- The graph-facts layer is unmeasured, so there's no claim yet that it helps.
 
 ## Development
 

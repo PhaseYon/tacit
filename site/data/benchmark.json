@@ -52,22 +52,51 @@
   },
   "next": {
     "label": "Local-first stack (Neo4j)",
-    "status": "pending",
+    "status": "measured",
+    "file": "benchmark/results/2026-10-27-local-first.json",
+    "report": "benchmark/results/2026-10-27-local-first.md",
+    "date": "2026-10-27T00:30:45+00:00",
+    "embedder": "BAAI/bge-small-en-v1.5",
+    "k": 10,
+    "questions": 52,
+    "documents": null,
+    "chunks": null,
     "arms": [
       {
-        "id": "chunk_hybrid",
+        "id": "hybrid",
         "name": "Chunk index, hybrid (RRF)",
-        "status": "pending"
+        "status": "measured",
+        "n": 52,
+        "recall@5": 0.885,
+        "recall@10": 0.962,
+        "gold_coverage": 0.849,
+        "mrr": 0.704,
+        "p50_ms": 33,
+        "p95_ms": 49.4
       },
       {
-        "id": "chunk_vector",
+        "id": "vector",
         "name": "Chunk index, vector only",
-        "status": "pending"
+        "status": "measured",
+        "n": 52,
+        "recall@5": 0.846,
+        "recall@10": 0.942,
+        "gold_coverage": 0.837,
+        "mrr": 0.711,
+        "p50_ms": 26.6,
+        "p95_ms": 40.1
       },
       {
-        "id": "chunk_keyword",
+        "id": "keyword",
         "name": "Chunk index, keyword only",
-        "status": "pending"
+        "status": "measured",
+        "n": 52,
+        "recall@5": 0.885,
+        "recall@10": 0.962,
+        "gold_coverage": 0.84,
+        "mrr": 0.707,
+        "p50_ms": 12.3,
+        "p95_ms": 13.9
       },
       {
         "id": "graph",

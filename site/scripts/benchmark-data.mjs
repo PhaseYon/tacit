@@ -21,9 +21,9 @@ const V0_ARMS = {
   hybrid: "Hybrid (RRF of both)",
 };
 const NEW_ARMS = {
-  chunk_hybrid: "Chunk index, hybrid (RRF)",
-  chunk_vector: "Chunk index, vector only",
-  chunk_keyword: "Chunk index, keyword only",
+  hybrid: "Chunk index, hybrid (RRF)",
+  vector: "Chunk index, vector only",
+  keyword: "Chunk index, keyword only",
   graph: "Chunks + graph facts (Graphiti)",
 };
 const METRICS = ["recall@5", "recall@10", "gold_coverage", "mrr", "p50_ms", "p95_ms"];
@@ -42,7 +42,7 @@ const runs = readdirSync(resultsDir)
 
 const latest = (pred) => runs.filter((r) => pred(r.data)).at(-1);
 const v0 = latest((d) => !d.stack || d.stack === "v0-hosted");
-const next = latest((d) => d.stack === "local-first");
+const next = latest((d) => typeof d.stack === "string" && d.stack.startsWith("local-first"));
 
 function arms(run, names) {
   return Object.entries(names).map(([id, name]) => {

@@ -121,19 +121,32 @@ export function Numbers() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div className="rounded-xl border border-warn-fg/30 bg-warn-soft px-4 py-3 text-sm text-warn-fg">
-        <strong className="font-semibold">Honest status:</strong> the only measured numbers so far
-        are from the old hosted stack. They&apos;re shown as a <em>v0 (Postgres) baseline</em>. The
-        benchmark on the new local-first stack is pending, and we won&apos;t show numbers until
-        it has run.
-      </div>
+      {next.status === "measured" ? (
+        <div className="rounded-xl border border-warn-fg/30 bg-warn-soft px-4 py-3 text-sm text-warn-fg">
+          <strong className="font-semibold">Read these with care:</strong> v0 and the local-first
+          stack aren&apos;t like for like. v0 indexed every comment as its own document; the new
+          stack indexes a PR or issue together with its discussion (fewer, larger documents), so a
+          top-10 hit is easier. The questions and the corpus were written by the same author, so
+          they share wording. The graph-facts arm hasn&apos;t run (it needs an LLM key), so we
+          make no claim yet that the graph helps.
+        </div>
+      ) : (
+        <div className="rounded-xl border border-warn-fg/30 bg-warn-soft px-4 py-3 text-sm text-warn-fg">
+          <strong className="font-semibold">Honest status:</strong> the only measured numbers so
+          far are from the old hosted stack. They&apos;re shown as a <em>v0 (Postgres)
+          baseline</em>. The benchmark on the new local-first stack is pending, and we won&apos;t
+          show numbers until it has run.
+        </div>
+      )}
 
       {v0 && (
         <section aria-labelledby="v0-title" className="flex flex-col gap-4">
           <div>
             <h3 id="v0-title" className="font-semibold">
               {v0.label}{" "}
-              <span className="font-normal text-muted">· new stack benchmark pending</span>
+              {next.status === "pending" && (
+                <span className="font-normal text-muted">· new stack benchmark pending</span>
+              )}
             </h3>
             <p className="mt-1 text-sm text-muted">
               {v0.stack}. {v0.questions} questions over {v0.documents} documents from the fictional
@@ -181,11 +194,27 @@ export function Numbers() {
             </span>
           </h3>
           <p className="mt-1 text-sm text-muted">
-            The same questions, re-run against Neo4j. Also to be measured: cost per
-            ingested item with extraction on, and setup time from a clean machine.
+            The same questions, re-run against Neo4j
+            {next.status === "measured" && next.documents
+              ? ` over ${next.documents} documents (${next.chunks} chunks), local ${next.embedder}, k = ${next.k}, cost $0. Identical results across repeated runs.`
+              : "."}{" "}
+            Still to be measured: cost per ingested item with extraction on, and setup time from a
+            clean machine.
           </p>
         </div>
+        {next.status === "measured" && <RecallBars arms={next.arms as Arm[]} />}
         <ArmTable arms={next.arms as Arm[]} caption={`${next.label} retrieval results`} />
+        {next.status === "measured" && next.report && (
+          <p className="text-sm">
+            <a className="text-accent underline-offset-2 hover:underline" href={repoPath(next.report)}>
+              Per-question results
+            </a>{" "}
+            ·{" "}
+            <a className="text-accent underline-offset-2 hover:underline" href={BENCHMARK_DIR}>
+              How to reproduce
+            </a>
+          </p>
+        )}
       </section>
     </div>
   );
