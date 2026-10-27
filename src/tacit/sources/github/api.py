@@ -1,5 +1,5 @@
 """Small helpers over githubkit's raw requests. We work with plain JSON dicts so the
-same normalizers handle REST responses and webhook payloads."""
+normalizers stay pure and easy to test."""
 
 from typing import Any
 
