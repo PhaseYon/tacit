@@ -222,11 +222,11 @@ async def run_arm(store, arm: str, questions: list[dict], k: int) -> list[Questi
             out = await search(store, query, limit=k, tool="bench.hybrid+facts")
             chunk_docs = [h["url"] for h in out["results"]]
             return rrf(chunk_docs, cited_urls(out["facts"]))[:k]
+        # Chunk arms search chunks only, so their latency doesn't include the fact search
+        # that `tacit search` adds once a graph exists.
         signals = ARMS[arm]
-        if signals is None:
-            hits = (await search(store, query, limit=k, tool=f"bench.{arm}"))["results"]
-        else:
-            hits, _ = await search_chunks(store, query, k, f"bench.{arm}", signals=signals)
+        kwargs = {"signals": signals} if signals else {}
+        hits, _ = await search_chunks(store, query, k, f"bench.{arm}", **kwargs)
         return [h["url"] for h in hits]
 
     await ranked_urls("warm-up: why did we pick this?")  # load the model, warm caches
@@ -386,10 +386,16 @@ def to_markdown(r: dict, questions: list[dict]) -> str:
         f"- Demo data: {ds['demo_items']} issues/PRs/markdown files; skipped as bot-authored:"
         f" {len(ds['bot_items_skipped'])}, of which gold sources:"
         f" {len(set(ds['bot_items_skipped']) & gold)}",
-        f"- Ingest: {ds['items_written']} items -> {ds['documents']} documents,"
+        f"- Ingest: {ds['items_written']} new items -> {ds['documents']} documents,"
         f" {ds['chunks']} chunks in {ds['ingest_seconds']} s"
         f" ({', '.join(f'{kd}: {v["docs"]} docs/{v["chunks"]} chunks' for kd, v in ds['by_kind'].items())})",
-        f"- Cost: ${r['cost_usd']} (extraction {r['extraction']})",
+        (
+            f"- Cost: retrieval $0. Extraction: {x['items_extracted']} items with {x['model']},"
+            f" {x['llm_calls']} LLM calls, ${x['cost_usd']}, {x['minutes']} min ->"
+            f" {x['facts']} facts ({x['facts_superseded']} superseded), {x['entities']} entities"
+            if isinstance((x := r["extraction"]), dict)
+            else f"- Cost: ${r['cost_usd']} (extraction {r['extraction']})"
+        ),
         f"- Graph facts arm: {r['graph']}",
         f"- Scoring: {r['scoring']}",
         "",
@@ -404,7 +410,8 @@ def to_markdown(r: dict, questions: list[dict]) -> str:
     ]
     for arm, s in r["arms"].items():
         lines.append(f"| {arm} | " + " | ".join(str(s.get(c, "")) for c in cols) + " |")
-    lines.append("| graph facts | not run (needs an LLM key) |" + " |" * (len(cols) - 1))
+    if not set(r["arms"]) & set(GRAPH_ARMS):
+        lines.append("| graph facts | not run (needs an LLM key) |" + " |" * (len(cols) - 1))
 
     lines += ["", "## Determinism", ""]
     for arm, d in r["determinism"].items():

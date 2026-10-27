@@ -1,0 +1,17 @@
+{
+  "kind": "extraction-demo",
+  "date": "2026-10-27",
+  "mode": "record",
+  "model": "claude-haiku-5-5",
+  "fixtures": "benchmark/llm-fixtures/demo-haiku-5-5",
+  "items_pending": 124,
+  "items_extracted": 124,
+  "items_failed": 0,
+  "minutes": 48.2,
+  "cost_usd": 1.367,
+  "llm_calls": 2117,
+  "facts": 746,
+  "entities": 213,
+  "episodes": 124,
+  "facts_superseded": 83
+}
