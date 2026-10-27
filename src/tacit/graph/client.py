@@ -14,7 +14,10 @@ from ..config import Config, get_config  # noqa: E402
 from ..index.embeddings import get_embedder  # noqa: E402
 from ..llm import LLMProvider  # noqa: E402
 from ..sources.base import Item  # noqa: E402
-from ..store import Store  # noqa: E402
+from ..store import (
+    Store,  # noqa: E402
+    people,  # noqa: E402
+)
 from ..store import docs as d  # noqa: E402
 from .adapters import NoRerank, TacitEmbedder, TacitGraphitiLLMClient  # noqa: E402
 from .costs import BudgetExceeded, CostContext, current_cost  # noqa: E402
@@ -78,6 +81,8 @@ class Extractor:
         if remaining <= 0:
             raise BudgetExceeded(f"LLM budget for this run reached (${self.budget})")
         old = await d.episode_of(self.store, item.external_id)
+        header = await people.identity_header(self.store, list(item.participants), item.metadata)
+        body = f"{header}\n\n{item.text}" if header else item.text
         ctx = CostContext(remaining)
         token = current_cost.set(ctx)
         try:
@@ -90,7 +95,7 @@ class Extractor:
                         await d.set_episode(self.store, item.external_id, None, None)
                     result = await self.graphiti.add_episode(
                         name=item.title[:250] or item.external_id,
-                        episode_body=item.text,
+                        episode_body=body,
                         source_description=f"{item.source} {item.kind} {item.url}",
                         reference_time=item.reference_time or datetime.now(UTC),
                         group_id=GROUP,

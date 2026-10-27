@@ -394,6 +394,63 @@ def doctor() -> None:
         raise typer.Exit(1)
 
 
+# -- people ------------------------------------------------------------------------------
+
+people_app = typer.Typer(help="One identity per person across GitHub, Slack and Notion.")
+app.add_typer(people_app, name="people")
+
+
+@people_app.command("ls")
+def people_ls(as_json: Annotated[bool, typer.Option("--json")] = False) -> None:
+    """Linked people, then the most active handles not linked to anyone yet."""
+    from .store import people as p
+
+    async def go(store):
+        return await p.people(store), await p.unlinked(store, limit=30)
+
+    linked, unlinked = _run(_with_store, go)
+    if as_json:
+        _dump({"people": linked, "unlinked": unlinked})
+        return
+    for person in linked:
+        typer.echo(f"{person['name']:24} {', '.join(person['handles'])}")
+    if unlinked:
+        typer.echo("\nNot linked yet (most active first):")
+        for u in unlinked:
+            extra = " ".join(x for x in (u["display"] and f"@{u['display']}", u["email"]) if x)
+            typer.echo(f"  {u['handle']:32} {u['docs']:4} items  {extra}")
+        typer.echo('\nLink with: tacit people link "Dana Lee" github:dana-gh slack:U0123')
+
+
+@people_app.command("link")
+def people_link(name: str, handles: list[str]) -> None:
+    """Mark handles as the same person (moves them from anyone else)."""
+    from .store import people as p
+
+    key = _run(_with_store, p.link, name, handles)
+    typer.secho(f"Linked {len(handles)} handle(s) to {name} ({key}).", fg="green")
+    typer.echo("Applies to items extracted from now on.")
+
+
+@people_app.command("unlink")
+def people_unlink(handle: str) -> None:
+    """Detach one handle from whoever has it."""
+    from .store import people as p
+
+    typer.echo("Unlinked." if _run(_with_store, p.unlink, handle) else "Not linked.")
+
+
+@people_app.command("auto")
+def people_auto() -> None:
+    """Link handles that share an email address (where sources expose emails)."""
+    from .store import people as p
+
+    done = _run(_with_store, p.auto_link)
+    for name, handles in done:
+        typer.echo(f"{name}: {', '.join(handles)}")
+    typer.echo(f"Linked {sum(len(h) for _, h in done)} handle(s)." if done else "Nothing to link.")
+
+
 # -- MCP ---------------------------------------------------------------------------------
 
 
