@@ -30,6 +30,19 @@ from .ontology import (  # noqa: E402
 GROUP = "tacit"
 
 
+class _Driver(Neo4jDriver):
+    """Graphiti's driver schedules index creation on its own whenever it is built inside a
+    running event loop: an unlogged schema write on every search. Here schema changes only
+    happen when Extractor.setup() asks for them (and logs it)."""
+
+    allow_schema = False
+
+    async def build_indices_and_constraints(self, delete_existing: bool = False):
+        if not self.allow_schema:
+            return None
+        return await super().build_indices_and_constraints(delete_existing)
+
+
 class _NoLLM:
     """Read paths never need an LLM; this makes any accidental call fail loudly."""
 
@@ -46,7 +59,7 @@ def build_graphiti(provider: LLMProvider | None = None, config: Config | None = 
     """provider=None gives a read-only instance (search only)."""
     c = config or get_config()
     password = secrets.require("neo4j_password", "Run `tacit init` or set NEO4J_PASSWORD.")
-    driver = Neo4jDriver(c.graph.uri, c.graph.user, password, database=c.graph.database)
+    driver = _Driver(c.graph.uri, c.graph.user, password, database=c.graph.database)
     return Graphiti(
         graph_driver=driver,
         llm_client=TacitGraphitiLLMClient(provider or _NoLLM()),  # type: ignore[arg-type]
@@ -67,7 +80,12 @@ class Extractor:
         self.spent = Decimal(0)
 
     async def setup(self) -> None:
-        await self.graphiti.build_indices_and_constraints()
+        async with self.store.access("write", "schema.graphiti"):
+            self.graphiti.driver.allow_schema = True
+            try:
+                await self.graphiti.build_indices_and_constraints()
+            finally:
+                self.graphiti.driver.allow_schema = False
 
     async def close(self) -> None:
         await self.graphiti.close()
