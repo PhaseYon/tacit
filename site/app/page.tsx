@@ -4,7 +4,6 @@ import examples from "@/data/demo-examples.json";
 import { CodeLine } from "@/components/copy-button";
 import { DemoSearch } from "@/components/demo-search";
 import { HowItWorks } from "@/components/how-it-works";
-import { InstallNote } from "@/components/install-note";
 import { LiveStats, LiveStatsFallback } from "@/components/live-stats";
 import { Numbers } from "@/components/numbers";
 import { Quickstart } from "@/components/quickstart";
@@ -118,11 +117,8 @@ export default function Home() {
               <a className={link} href="https://docs.astral.sh/uv/">
                 uv
               </a>
-              . No binary to download.
+              . Then run <code className="font-mono">tacit init</code>. No binary to download.
             </p>
-            <Suspense fallback={null}>
-              <InstallNote />
-            </Suspense>
           </div>
 
           <div className="mt-6 flex flex-wrap items-center gap-3 text-sm">

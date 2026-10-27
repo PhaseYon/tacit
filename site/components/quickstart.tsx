@@ -1,4 +1,4 @@
-import { NEO4J_COMPOSE } from "@/lib/site";
+import { NEO4J_COMPOSE, REPO_URL } from "@/lib/site";
 import { CodeLine } from "./copy-button";
 
 type Step = { title: string; body: React.ReactNode; code?: string };
@@ -23,9 +23,9 @@ const STEPS: Step[] = [
     ),
   },
   {
-    title: "Connect and set up the schema",
-    body: "Asks for the URL, password and your email (used in the access log).",
-    code: "uvx tacit init",
+    title: "Install and connect",
+    body: "Installs the tacit command, then asks for the URL, password and your email (used in the access log).",
+    code: `uv tool install git+${REPO_URL} && tacit init`,
   },
   {
     title: "Sign in to GitHub",
@@ -93,9 +93,9 @@ export function Quickstart() {
         ))}
       </ol>
       <p className="mt-6 text-sm text-muted">
-        Teammates: get the URL and password from whoever set it up, then run{" "}
+        Teammates: get the URL and password from whoever set it up, install Tacit, then run{" "}
         <code className="rounded bg-code-bg px-1 py-0.5 font-mono text-[0.85em] text-fg">
-          uvx tacit init
+          tacit init
         </code>{" "}
         and{" "}
         <code className="rounded bg-code-bg px-1 py-0.5 font-mono text-[0.85em] text-fg">
