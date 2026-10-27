@@ -4,8 +4,8 @@ import { demoSearch } from "@/lib/demo-search";
 import { MAX_QUERY_CHARS, type DemoError } from "@/lib/demo-types";
 import { clientIp, take } from "@/lib/rate-limit";
 
-// Node runtime: the Neo4j driver needs TCP sockets.
-export const runtime = "nodejs";
+// Runs on the Node.js runtime (the default; the `runtime` segment option is not allowed
+// with cacheComponents). The Neo4j driver needs TCP sockets, so never move this to edge.
 
 const NO_STORE = { "Cache-Control": "no-store" };
 
