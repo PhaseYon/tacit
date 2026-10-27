@@ -1,13 +1,11 @@
 """A fake Slack Web API on localhost for tests (no network).
 
 slack_sdk's async client runs on aiohttp, which respx can't intercept (and aioresponses
-doesn't support aiohttp 3.14), so tests point SLACK_API_URL at this in-process server.
-Responses are queued per method; the last one repeats. Every call is recorded.
+doesn't support aiohttp 3.14), so tests point `sources.slack_api_url` at this in-process
+server (`fake.url`). Responses are queued per method; the last one repeats. Every call
+is recorded.
 """
 
-import hashlib
-import hmac
-import time
 from collections.abc import Callable
 from dataclasses import dataclass, field
 from typing import Any
@@ -15,8 +13,6 @@ from typing import Any
 import pytest
 from aiohttp import web
 from aiohttp.test_utils import TestServer
-
-SIGNING_SECRET = "test-slack-signing-secret"
 
 
 @dataclass
@@ -34,6 +30,7 @@ class FakeSlack:
     calls: list[Call] = field(default_factory=list)
     # method -> fn(params) -> response body, for answers that depend on the request
     dynamic: dict[str, Callable[[dict[str, str]], dict[str, Any]]] = field(default_factory=dict)
+    url: str = ""
 
     def on(self, method: str, *bodies: dict[str, Any], status: int = 200, headers=None):
         """Queue responses for a method (replaces earlier ones). `ok` defaults to true."""
@@ -43,6 +40,7 @@ class FakeSlack:
         ]
 
     def on_call(self, method: str, fn: Callable[[dict[str, str]], dict[str, Any]]) -> None:
+        """Answer `method` with fn(params). fn may return {"ok": False, "error": ...}."""
         self.dynamic[method] = fn
 
     def calls_to(self, method: str) -> list[Call]:
@@ -65,33 +63,15 @@ class FakeSlack:
 
 
 @pytest.fixture
-async def slack_api(monkeypatch):
-    from tacit_api.config import get_settings
-
+async def slack_api():
     fake = FakeSlack()
     app = web.Application()
     app.router.add_route("*", "/api/{method}", fake.handle)
     server = TestServer(app, host="127.0.0.1")
     await server.start_server()
-    monkeypatch.setenv("SLACK_API_URL", str(server.make_url("/api/")))
-    monkeypatch.setenv("SLACK_CLIENT_ID", "cid")
-    monkeypatch.setenv("SLACK_CLIENT_SECRET", "csecret")
-    monkeypatch.setenv("SLACK_SIGNING_SECRET", SIGNING_SECRET)
-    get_settings.cache_clear()
+    fake.url = str(server.make_url("/api/"))
     yield fake
     await server.close()
-    get_settings.cache_clear()
-
-
-def sign(body: bytes, ts: int | None = None, secret: str = SIGNING_SECRET) -> dict[str, str]:
-    ts = int(time.time()) if ts is None else ts
-    base = f"v0:{ts}:".encode() + body
-    sig = "v0=" + hmac.new(secret.encode(), base, hashlib.sha256).hexdigest()
-    return {
-        "X-Slack-Request-Timestamp": str(ts),
-        "X-Slack-Signature": sig,
-        "Content-Type": "application/json",
-    }
 
 
 def user(uid: str, name: str, **flags: Any) -> dict[str, Any]:

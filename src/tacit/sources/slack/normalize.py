@@ -1,7 +1,8 @@
-"""Pure functions: Slack message dict -> NormalizedDocument. No I/O.
+"""Pure functions over Slack message dicts: mrkdwn -> text, the human-message filter,
+permalinks and the user directory. No I/O.
 
-The same normalizer handles conversations.history / conversations.replies items and
-Events API message payloads, so backfill and webhooks produce identical rows.
+SlackSource (source.py) groups messages into thread / day transcripts with these;
+`normalize_message` renders a single message as a NormalizedDocument.
 """
 
 import re
@@ -36,6 +37,7 @@ class Directory:
     users: dict[str, str] = field(default_factory=dict)
     bots: frozenset[str] = frozenset()
     channels: dict[str, str] = field(default_factory=dict)
+    emails: dict[str, str] = field(default_factory=dict)  # needs users:read.email
 
 
 def parse_ts(ts: str | None) -> datetime | None:
@@ -110,6 +112,20 @@ def _files(msg: dict[str, Any]) -> list[dict[str, Any]]:
     ]
 
 
+def message_text(msg: dict[str, Any], directory: Directory | None = None) -> tuple[str, bool]:
+    """A message's readable text (mentions resolved, attachments named), normalized.
+    Returns (text, truncated)."""
+    text = mrkdwn_to_text(msg.get("text"), directory)
+    if names := ", ".join(f["name"] for f in _files(msg)):
+        text = f"{text}\n\n[Attached: {names}]" if text.strip() else f"[Attached: {names}]"
+    return normalize_body(text)
+
+
+def first_line(text: str) -> str:
+    first = next((line.strip() for line in text.split("\n") if line.strip()), "")
+    return first if len(first) <= TITLE_MAX else first[: TITLE_MAX - 1] + "…"
+
+
 def normalize_message(
     msg: dict[str, Any], ch: Channel, directory: Directory | None = None
 ) -> NormalizedDocument | None:
@@ -121,18 +137,13 @@ def normalize_message(
     is_reply = bool(thread_ts and thread_ts != ts)
     files = _files(msg)
 
-    text = mrkdwn_to_text(msg.get("text"), directory)
-    if files:
-        names = ", ".join(f["name"] for f in files)
-        text = f"{text}\n\n[Attached: {names}]" if text.strip() else f"[Attached: {names}]"
-    body, truncated = normalize_body(text)
+    body, truncated = message_text(msg, directory)
     if not body:
         return None
 
     title = None
     if not is_reply:
-        first = next((line.strip() for line in body.split("\n") if line.strip()), "")
-        title = first if len(first) <= TITLE_MAX else first[: TITLE_MAX - 1] + "…"
+        title = first_line(body)
 
     user = msg["user"]
     handle = (directory.users.get(user) if directory else None) or msg.get("user_name")
@@ -176,6 +187,11 @@ def directory_from_users(users: list[dict[str, Any]]) -> Directory:
     return Directory(
         users={u["id"]: handle(u) for u in users if u.get("id")},
         bots=frozenset(u["id"] for u in users if u.get("is_bot") or u.get("id") == SLACKBOT),
+        emails={
+            u["id"]: email
+            for u in users
+            if u.get("id") and (email := (u.get("profile") or {}).get("email"))
+        },
     )
 
 

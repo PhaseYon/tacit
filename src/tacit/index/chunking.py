@@ -58,6 +58,8 @@ def context_header(kind: str, title: str | None, metadata: dict) -> str:
         "markdown_file": "Doc",
         "slack_message": "Slack message",
         "slack_reply": "Slack thread reply",
+        "slack_thread": "Slack thread",
+        "slack_day": "Slack messages",
         "notion_page": "Notion page",
     }
     parts = [labels.get(kind, kind)]
