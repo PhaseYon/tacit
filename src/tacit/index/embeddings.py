@@ -1,5 +1,5 @@
 """One replaceable interface for embeddings. All backends return 384-dim vectors to
-match the document_chunk.embedding column.
+match the Neo4j vector index (tacit_chunk_embedding).
 
 - fastembed (default): local ONNX model, no API key, no per-document cost, and the
   same results everywhere, so benchmarks are reproducible.
@@ -12,7 +12,8 @@ import math
 from functools import lru_cache
 from typing import Protocol
 
-from ..config import get_settings
+from .. import secrets
+from ..config import get_config
 
 DIM = 384
 
@@ -78,10 +79,10 @@ class FakeEmbedder:
 
 @lru_cache
 def get_embedder() -> Embedder:
-    s = get_settings()
-    if s.embedding_provider == "fake":
+    c = get_config().embeddings
+    if c.provider == "fake":
         return FakeEmbedder()
-    if s.embedding_provider == "openai":
-        model = s.embedding_model if "embedding" in s.embedding_model else "text-embedding-3-small"
-        return OpenAIEmbedder(model, s.openai_api_key.get_secret_value())
-    return FastEmbedEmbedder(s.embedding_model)
+    if c.provider == "openai":
+        model = c.model if "embedding" in c.model else "text-embedding-3-small"
+        return OpenAIEmbedder(model, secrets.get("openai_api_key") or "")
+    return FastEmbedEmbedder(c.model)

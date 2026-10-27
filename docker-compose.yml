@@ -20,5 +20,22 @@ services:
       timeout: 10s
       retries: 30
 
+  # Throwaway database for the test suite (wiped by tests, nothing persisted).
+  neo4j-test:
+    image: neo4j:5.26
+    profiles: ["test"]
+    environment:
+      NEO4J_AUTH: neo4j/tacit-test-password
+      NEO4J_server_memory_heap_max__size: 512M
+    ports:
+      - "7688:7687"
+    tmpfs:
+      - /data
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p tacit-test-password 'RETURN 1' || exit 1"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+
 volumes:
   neo4jdata:

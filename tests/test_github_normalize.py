@@ -7,8 +7,8 @@ from pathlib import Path
 
 import pytest
 
-from tacit_api.connectors.documents import MAX_BODY_BYTES
-from tacit_api.connectors.github.normalize import (
+from tacit.sources.documents import MAX_BODY_BYTES
+from tacit.sources.github.normalize import (
     DEFAULT_DOC_GLOBS,
     approvals,
     is_bot,

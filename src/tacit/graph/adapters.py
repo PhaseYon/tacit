@@ -10,8 +10,8 @@ from graphiti_core.llm_client.config import LLMConfig, ModelSize
 from graphiti_core.prompts.models import Message
 from pydantic import BaseModel
 
+from ..index.embeddings import Embedder
 from ..llm import ChatMessage, LLMProvider
-from ..search.embeddings import Embedder
 from .costs import BudgetExceeded, current_cost, current_prompt
 
 

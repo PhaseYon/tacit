@@ -12,7 +12,7 @@ from urllib.parse import quote
 
 from wcmatch import glob
 
-from tacit_api.connectors.documents import NormalizedDocument, normalize_body
+from tacit.sources.documents import NormalizedDocument, normalize_body
 
 DEFAULT_DOC_GLOBS: tuple[str, ...] = (
     "README.md",

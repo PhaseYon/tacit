@@ -2,7 +2,7 @@
 
 import pytest
 
-from tacit_api.connectors.slack import normalize as n
+from tacit.sources.slack import normalize as n
 
 CH = n.Channel("T1", "C1", "#eng", "acme")
 DIR = n.Directory(users={"UA": "alice", "UB": "bob"}, bots=frozenset({"UBOT"}))

@@ -1,9 +1,11 @@
-"""LLM providers behind one interface. Select with LLM_PROVIDER (anthropic|openai|replay)."""
+"""LLM providers behind one interface, used only for Graphiti extraction.
+Selected by [llm] provider in config.toml (anthropic | openai | replay)."""
 
 from functools import lru_cache
 from pathlib import Path
 
-from ..config import get_settings
+from .. import secrets
+from ..config import get_config
 from .base import ChatMessage, LLMNotConfigured, LLMProvider, Tier, Usage
 
 __all__ = ["ChatMessage", "LLMNotConfigured", "LLMProvider", "Tier", "Usage", "get_provider"]
@@ -11,23 +13,25 @@ __all__ = ["ChatMessage", "LLMNotConfigured", "LLMProvider", "Tier", "Usage", "g
 
 @lru_cache
 def get_provider() -> LLMProvider:
-    s = get_settings()
-    if s.llm_provider == "anthropic":
-        if not s.anthropic_api_key.get_secret_value():
-            raise LLMNotConfigured("Set ANTHROPIC_API_KEY to use the Anthropic provider")
+    c = get_config().llm
+    if c.provider == "anthropic":
+        key = secrets.get("anthropic_api_key")
+        if not key:
+            raise LLMNotConfigured("Set ANTHROPIC_API_KEY or run `tacit auth anthropic`")
         from .anthropic_provider import AnthropicProvider
 
-        return AnthropicProvider(
-            s.anthropic_api_key.get_secret_value(), s.llm_model, s.llm_small_model
-        )
-    if s.llm_provider == "openai":
-        if not s.openai_api_key.get_secret_value():
-            raise LLMNotConfigured("Set OPENAI_API_KEY to use the OpenAI provider")
+        return AnthropicProvider(key, c.model, c.small_model)
+    if c.provider == "openai":
+        key = secrets.get("openai_api_key")
+        if not key:
+            raise LLMNotConfigured("Set OPENAI_API_KEY or run `tacit auth openai`")
         from .openai_provider import OpenAIProvider
 
-        return OpenAIProvider(s.openai_api_key.get_secret_value(), s.llm_model, s.llm_small_model)
-    if s.llm_provider == "replay":
+        return OpenAIProvider(key, c.model, c.small_model)
+    if c.provider == "replay":
+        if not c.replay_dir:
+            raise LLMNotConfigured("Set [llm] replay_dir to use the replay provider")
         from .replay import ReplayProvider
 
-        return ReplayProvider(Path(s.llm_replay_dir))
-    raise LLMNotConfigured(f"Unknown LLM_PROVIDER={s.llm_provider!r}")
+        return ReplayProvider(Path(c.replay_dir))
+    raise LLMNotConfigured(f"Unknown LLM provider {c.provider!r}")

@@ -1,6 +1,6 @@
 """Pure normalizer tests: block rendering, titles, properties, hashing, tree roots."""
 
-from tacit_api.connectors.notion import normalize as n
+from tacit.sources.notion import normalize as n
 
 from .notion_mock import block, data_source, page, rt
 
