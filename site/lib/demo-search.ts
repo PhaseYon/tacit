@@ -47,12 +47,21 @@ function getDriver(): Driver | null {
   return driver;
 }
 
+// Neo4j's default full-text analyzer keeps stop words, so question words like "why did
+// we" would otherwise outweigh the words that matter.
+const STOP = new Set(
+  ("a an and are as at be but by did do does for from had has have how i in is it its " +
+    "not of on or our so that the their them then there these they this to us was we " +
+    "were what when where which who whom why will with would you your").split(" "),
+);
+
 /** Words only: no Lucene operators, quotes, wildcards or field names survive. */
 export function toTerms(query: string): string[] {
   const words = query.toLowerCase().match(/[\p{L}\p{N}]+/gu) ?? [];
   const terms = [...new Set(words.filter((w) => w.length > 1 || /\d/.test(w)))];
-  // Lucene keywords would act as operators even without symbols.
-  return terms.filter((w) => !["and", "or", "not", "to"].includes(w)).slice(0, MAX_TERMS);
+  // Lowercase words can't act as Lucene operators (AND/OR/NOT/TO are case-sensitive).
+  const content = terms.filter((w) => !STOP.has(w));
+  return (content.length ? content : terms).slice(0, MAX_TERMS);
 }
 
 export function makeSnippet(text: string, terms: string[], max = 260): string {
