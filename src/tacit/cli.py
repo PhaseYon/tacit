@@ -451,6 +451,49 @@ def people_auto() -> None:
     typer.echo(f"Linked {sum(len(h) for _, h in done)} handle(s)." if done else "Nothing to link.")
 
 
+# -- demo --------------------------------------------------------------------------------
+
+demo_app = typer.Typer(help="The fictional Larkspur Labs company, for trying Tacit.")
+app.add_typer(demo_app, name="demo")
+
+
+@demo_app.command("load")
+def demo_load(
+    data_dir: Annotated[str | None, typer.Option(help="demo/data/github folder")] = None,
+    extract: Annotated[bool, typer.Option(help="Also run Graphiti extraction")] = False,
+    max_usd: Annotated[float | None, typer.Option()] = None,
+) -> None:
+    """Load the demo company into the configured graph (use a separate graph from your team's)."""
+    from pathlib import Path
+
+    from . import demo
+    from .store import Store
+
+    async def go():
+        async with Store.from_config() as store:
+            extractor = None
+            if extract:
+                from .graph.client import Extractor
+                from .llm import get_provider
+
+                c = get_config()
+                extractor = Extractor(store, get_provider(), max_usd or c.llm.max_usd_per_run)
+                await extractor.setup()
+            try:
+                return await demo.load(
+                    store,
+                    data_dir=Path(data_dir) if data_dir else None,
+                    extractor=extractor,
+                    progress=lambda m: typer.echo(f"  {m}", err=True),
+                )
+            finally:
+                if extractor:
+                    await extractor.close()
+
+    _print_report(_run(go))
+    typer.echo('Try: tacit search "why did larkspur move off Elasticsearch"')
+
+
 # -- MCP ---------------------------------------------------------------------------------
 
 
