@@ -1,15 +1,13 @@
 """The only module that imports notion_client. Swap the library here if needed.
 
-- API: notion_client's AsyncClient (httpx), Notion-Version 2025-09-03.
-- Rate limits: the SDK retries 429s (honouring Retry-After, capped at 60 s) and GET
-  500/503 itself. What survives raises, and the Celery task retries later.
-- Webhook signatures: HMAC-SHA256 of the raw body keyed with the verification token
-  (`X-Notion-Signature: sha256=<hex>`). The SDK has no verifier; this is the whole thing.
+- API: notion_client's AsyncClient (httpx), Notion-Version 2025-09-03, authenticated with
+  the team's internal integration token (it sees only pages shared with the integration).
+- Rate limits: the SDK retries 429s (honouring Retry-After) and GET 500/503 itself.
+  `call()` waits out a 429 the SDK gave up on a few more times before raising.
 """
 
-import hashlib
-import hmac
-from collections.abc import AsyncIterator
+import asyncio
+from collections.abc import AsyncIterator, Awaitable, Callable
 from contextlib import asynccontextmanager
 from typing import Any
 
@@ -18,50 +16,29 @@ from notion_client.client import RetryOptions
 from notion_client.errors import APIErrorCode, APIResponseError
 from notion_client.helpers import async_collect_paginated_api
 
-from ...config import get_settings
-
 NotionClient = AsyncClient
 NotionError = APIResponseError
 NOTION_VERSION = "2025-09-03"
 PAGE_SIZE = 100  # Notion's maximum
+RATE_LIMIT_ATTEMPTS = 3
+MAX_WAIT_S = 120
 
 
-class NotionNotConfigured(RuntimeError):
-    pass
-
-
-def _client(token: str | None) -> AsyncClient:
+def _client(token: str, base_url: str) -> AsyncClient:
     return AsyncClient(
         auth=token,
-        base_url=get_settings().notion_api_url,
+        base_url=base_url.rstrip("/"),
         notion_version=NOTION_VERSION,
         timeout_ms=30_000,
-        retry=RetryOptions(max_retries=2, max_retry_delay_ms=60_000),
+        retry=RetryOptions(max_retries=3, max_retry_delay_ms=60_000),
     )
 
 
 @asynccontextmanager
-async def connect(token: str) -> AsyncIterator[AsyncClient]:
-    client = _client(token)
+async def connect(token: str, base_url: str) -> AsyncIterator[AsyncClient]:
+    client = _client(token, base_url)
     try:
         yield client
-    finally:
-        await client.aclose()
-
-
-async def exchange(grant: dict[str, Any]) -> dict[str, Any]:
-    """POST /v1/oauth/token (Basic auth). `grant` is the body: an authorization_code or
-    refresh_token grant."""
-    s = get_settings()
-    if not s.notion_enabled:
-        raise NotionNotConfigured("Notion integration is not configured")
-    client = _client(None)
-    try:
-        return await client.oauth.token(
-            client_id=s.notion_client_id,
-            client_secret=s.notion_client_secret.get_secret_value(),
-            **grant,
-        )
     finally:
         await client.aclose()
 
@@ -85,6 +62,11 @@ def is_gone(exc: BaseException) -> bool:
     return _code(exc) in (APIErrorCode.ObjectNotFound.value, APIErrorCode.RestrictedResource.value)
 
 
+def is_invalid(exc: BaseException) -> bool:
+    """A 400: e.g. a malformed id, or the id of a different kind of object."""
+    return _code(exc) == APIErrorCode.ValidationError.value
+
+
 def rate_limit_wait(exc: BaseException) -> int | None:
     """Seconds to wait if `exc` is a 429 the SDK gave up retrying."""
     if _code(exc) != APIErrorCode.RateLimited.value:
@@ -95,39 +77,54 @@ def rate_limit_wait(exc: BaseException) -> int | None:
         return 60
 
 
+async def call[T](fn: Callable[[], Awaitable[T]]) -> T:
+    """Run one API call, waiting out rate limits the SDK's own retries didn't absorb."""
+    for attempt in range(RATE_LIMIT_ATTEMPTS):
+        try:
+            return await fn()
+        except APIResponseError as exc:
+            wait = rate_limit_wait(exc)
+            if wait is None or attempt == RATE_LIMIT_ATTEMPTS - 1:
+                raise
+            await asyncio.sleep(min(wait, MAX_WAIT_S))
+    raise AssertionError("unreachable")
+
+
 # --- Reads ----------------------------------------------------------------------------
 
 
-async def search_page(client: AsyncClient, cursor: str | None) -> tuple[list[dict], str | None]:
-    """One page of everything shared with this connection, most recently edited first."""
+async def search_pages(client: AsyncClient, cursor: str | None) -> tuple[list[dict], str | None]:
+    """One page of pages shared with the integration, most recently edited first."""
     params: dict[str, Any] = {
         "page_size": PAGE_SIZE,
+        "filter": {"property": "object", "value": "page"},
         "sort": {"timestamp": "last_edited_time", "direction": "descending"},
     }
     if cursor:
         params["start_cursor"] = cursor
-    resp = await client.search(**params)
+    resp = await call(lambda: client.search(**params))
     nxt = resp.get("next_cursor") if resp.get("has_more") else None
     return list(resp.get("results") or []), nxt
 
 
-async def retrieve_page(client: AsyncClient, page_id: str) -> dict[str, Any]:
-    return await client.pages.retrieve(page_id=page_id)
+async def retrieve(client: AsyncClient, kind: str, object_id: str) -> dict[str, Any]:
+    """GET one page, block, database or data source by id."""
+    endpoints: dict[str, Callable[[], Awaitable[Any]]] = {
+        "page": lambda: client.pages.retrieve(page_id=object_id),
+        "block": lambda: client.blocks.retrieve(block_id=object_id),
+        "database": lambda: client.databases.retrieve(database_id=object_id),
+        "data_source": lambda: client.data_sources.retrieve(data_source_id=object_id),
+    }
+    return await call(endpoints[kind])
 
 
 async def block_children(client: AsyncClient, block_id: str) -> list[dict[str, Any]]:
-    return await async_collect_paginated_api(
-        client.blocks.children.list, block_id=block_id, page_size=PAGE_SIZE
+    return await call(
+        lambda: async_collect_paginated_api(
+            client.blocks.children.list, block_id=block_id, page_size=PAGE_SIZE
+        )
     )
 
 
 async def list_users(client: AsyncClient) -> list[dict[str, Any]]:
-    return await async_collect_paginated_api(client.users.list, page_size=PAGE_SIZE)
-
-
-def verify_signature(body: bytes, signature: str | None) -> bool:
-    secret = get_settings().notion_webhook_verification_token.get_secret_value()
-    if not secret or not signature or not signature.startswith("sha256="):
-        return False
-    expected = "sha256=" + hmac.new(secret.encode(), body, hashlib.sha256).hexdigest()
-    return hmac.compare_digest(expected, signature)
+    return await call(lambda: async_collect_paginated_api(client.users.list, page_size=PAGE_SIZE))

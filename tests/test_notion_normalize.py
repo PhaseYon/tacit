@@ -1,10 +1,14 @@
-"""Pure normalizer tests: block rendering, titles, properties, hashing, tree roots."""
+"""Pure normalizer tests: block rendering, titles, properties, hashing, ids."""
 
 from tacit.sources.notion import normalize as n
 
 from .notion_mock import block, data_source, page, rt
 
-CTX = n.Context("conn1", "NW1", {"nu-alice": "Alice", "nu-bob": "Bob"})
+USERS = {"nu-alice": "Alice", "nu-bob": "Bob"}
+
+
+def norm(p: dict, blocks: list[dict]):
+    return n.normalize_page(p, blocks, scope_key="notion:root", users=USERS)
 
 
 def with_children(b: dict, *kids: dict) -> dict:
@@ -87,16 +91,24 @@ def test_tables_columns_synced_blocks_and_links():
     ]
 
 
-def test_page_document_fields_and_citation():
-    p = page("p-1", "Queue decision", author="nu-bob")
-    doc = n.normalize_page(p, [block("paragraph", "Use Postgres.")], CTX)
-    assert doc is not None
-    assert doc.kind == "notion_page" and doc.title == "Queue decision"
-    assert doc.external_id == "conn1:p-1"
-    assert doc.url == p["url"]
-    assert doc.body == "Use Postgres."
-    assert doc.author_external_id == "NW1:nu-bob" and doc.author_login == "Bob"
-    assert doc.source_updated_at.isoformat() == "2025-10-01T10:00:00+00:00"
+def test_page_item_fields_and_citation():
+    p = page("p-1", "Queue decision", author="nu-bob", editor="nu-carol")
+    item = norm(p, [block("paragraph", "Use Postgres.")])
+    assert item is not None
+    assert item.source == "notion" and item.scope_key == "notion:root"
+    assert item.kind == "notion_page" and item.title == "Queue decision"
+    assert item.external_id == "notion:p-1"
+    assert item.url == p["url"]
+    assert item.text == "Use Postgres."
+    assert item.participants == ("notion:Bob", "notion:nu-carol")  # unknown user: by id
+    assert item.reference_time.isoformat() == "2025-10-01T10:00:00+00:00"
+    assert item.extract is False  # a one-line stub isn't worth extraction
+
+
+def test_extract_only_pages_with_meaningful_text():
+    long = block("paragraph", "We picked Postgres queues over Redis because " * 6)
+    assert norm(page("p", "T"), [long]).extract is True
+    assert norm(page("p", "T"), []).extract is False
 
 
 def test_database_row_gets_stable_property_header():
@@ -111,8 +123,8 @@ def test_database_row_gets_stable_property_header():
         "Edited": {"type": "last_edited_time", "last_edited_time": "2026-10-01T10:00:00Z"},
     }
     row = page("r-1", "Use Postgres", parent=("data_source", "ds-1"), props=props)
-    doc = n.normalize_page(row, [block("paragraph", "Context here.")], CTX)
-    assert doc.body.split("\n") == [
+    doc = norm(row, [block("paragraph", "Context here.")])
+    assert doc.text.split("\n") == [
         "Done: Yes",
         "Due: 2026-11-01",
         "ID: ADR-7",
@@ -125,21 +137,17 @@ def test_database_row_gets_stable_property_header():
 
 
 def test_hash_ignores_edit_time_noise_but_tracks_text():
-    a = n.normalize_page(
-        page("p", "T", edited="2026-10-01T10:00:00.000Z"), [block("paragraph", "x")], CTX
-    )
-    b = n.normalize_page(
-        page("p", "T", edited="2026-10-02T11:00:00.000Z"), [block("paragraph", "x")], CTX
-    )
-    c = n.normalize_page(page("p", "T"), [block("paragraph", "y")], CTX)
+    a = norm(page("p", "T", edited="2026-10-01T10:00:00.000Z"), [block("paragraph", "x")])
+    b = norm(page("p", "T", edited="2026-10-02T11:00:00.000Z"), [block("paragraph", "x")])
+    c = norm(page("p", "T"), [block("paragraph", "y")])
     assert a.content_hash == b.content_hash
     assert a.content_hash != c.content_hash
 
 
 def test_trashed_and_untitled_pages():
-    assert n.normalize_page(page("p", "Gone", in_trash=True), [], CTX) is None
-    assert n.normalize_page(page("p", "Gone", archived=True), [], CTX) is None
-    assert n.normalize_page(page("p", ""), [], CTX).title == "Untitled"
+    assert norm(page("p", "Gone", in_trash=True), []) is None
+    assert norm(page("p", "Gone", archived=True), []) is None
+    assert norm(page("p", ""), []).title == "Untitled"
 
 
 def test_parent_refs():
@@ -150,21 +158,15 @@ def test_parent_refs():
     assert n.parent_ref(ds) == ("page", "q")  # skips the database to its parent
 
 
-def test_tree_roots():
-    nodes = [
-        n.Node("root", "page", "workspace", None),
-        n.Node("child", "page", "page", "root"),
-        n.Node("grandchild", "page", "page", "child"),
-        n.Node("ds", "data_source", "page", "child", database_id="db"),
-        n.Node("row", "page", "data_source", "ds"),
-        n.Node("row-old-api", "page", "database", "db"),
-        n.Node("orphan", "page", "page", "not-shared"),  # parent not visible to us
-        n.Node("in-column", "page", "block", "blk"),  # block parent: unresolved
-        n.Node("loop-a", "page", "page", "loop-b"),
-        n.Node("loop-b", "page", "page", "loop-a"),
-    ]
-    roots = n.compute_roots(nodes)
-    for nid in ("root", "child", "grandchild", "ds", "row", "row-old-api"):
-        assert roots[nid] == "root"
-    assert roots["orphan"] == "orphan" and roots["in-column"] == "in-column"
-    assert roots["loop-a"] == "loop-a" and roots["loop-b"] == "loop-b"
+def test_parse_page_id():
+    pid = "1a2b3c4d-5e6f-4a1b-8c9d-0e1f2a3b4c5d"
+    compact = pid.replace("-", "")
+    assert n.parse_page_id(pid) == pid
+    assert n.parse_page_id(compact) == pid
+    assert n.parse_page_id(compact.upper()) == pid
+    assert n.parse_page_id(f"https://www.notion.so/acme/Eng-Decisions-{compact}") == pid
+    view = "f" * 32
+    assert n.parse_page_id(f"https://www.notion.so/{compact}?v={view}#{'e' * 32}") == pid
+    assert n.parse_page_id(f"https://acme.notion.site/Title-{compact}") == pid
+    assert n.parse_page_id("not-a-page") is None
+    assert n.parse_page_id(compact[:-1]) is None

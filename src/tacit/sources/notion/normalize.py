@@ -1,19 +1,23 @@
-"""Pure functions: Notion page + block tree -> NormalizedDocument, and page-tree roots.
+"""Pure functions: Notion page + block tree -> one Item, plus id and parent helpers.
 
 No I/O. Blocks are API block objects; the fetcher attaches each block's children (when
 `has_children`) under the CHILDREN key, so rendering is a plain recursive walk.
 """
 
+import re
 from collections.abc import Iterable
-from dataclasses import dataclass, field
 from datetime import datetime
 from typing import Any
 
-from ..documents import NormalizedDocument, normalize_body
+from ..base import Item
+from ..documents import normalize_body
 
 KIND = "notion_page"
 CHILDREN = "_children"
 TITLE_MAX = 200
+# Pages with less rendered text than this are indexed for search but not worth paying
+# LLM extraction for (empty stubs, a title and a link).
+EXTRACT_MIN_CHARS = 200
 # Property types whose values are stable, human-written facts. Formulas, rollups,
 # relations and created/edited stamps change without anyone editing the page.
 HEADER_PROPERTIES = {
@@ -31,18 +35,24 @@ HEADER_PROPERTIES = {
     "unique_id",
 }
 
+_DASHED = re.compile(r"[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}")
+_COMPACT = re.compile(r"(?<![0-9a-f])[0-9a-f]{32}(?![0-9a-f])")
 
-@dataclass(frozen=True)
-class Context:
-    connection_id: str
-    notion_workspace_id: str
-    users: dict[str, str] = field(default_factory=dict)  # Notion user id -> name
 
-    def external_id(self, page_id: str) -> str:
-        return f"{self.connection_id}:{page_id}"
+def dashed(compact: str) -> str:
+    c = compact.replace("-", "").lower()
+    return f"{c[:8]}-{c[8:12]}-{c[12:16]}-{c[16:20]}-{c[20:]}"
 
-    def person(self, user_id: str | None) -> str | None:
-        return f"{self.notion_workspace_id}:{user_id}" if user_id else None
+
+def parse_page_id(target: str) -> str | None:
+    """A page id (with or without dashes) or a Notion page URL -> the dashed page id.
+    For URLs the id is the last one in the path (`/Title-<32 hex>`); query strings and
+    fragments (`?v=`, `#block`) name views and blocks, not the page."""
+    text = target.strip().lower()
+    if "://" in text or text.startswith(("www.", "notion.so", "notion.site")):
+        text = re.split(r"[?#]", text, maxsplit=1)[0]
+    found = [m.group(0) for m in re.finditer(f"{_DASHED.pattern}|{_COMPACT.pattern}", text)]
+    return dashed(found[-1]) if found else None
 
 
 def parse_time(value: str | None) -> datetime | None:
@@ -191,44 +201,56 @@ def render_blocks(blocks: list[dict[str, Any]], depth: int = 0) -> list[str]:
     return lines
 
 
-# --- Documents ------------------------------------------------------------------------
+# --- Items ----------------------------------------------------------------------------
+
+DATABASE_PARENTS = {"data_source", "database"}
+
+
+def person(user_id: str | None, users: dict[str, str]) -> str | None:
+    return f"notion:{users.get(user_id) or user_id}" if user_id else None
+
+
+def page_url(page: dict[str, Any]) -> str:
+    return page.get("url") or f"https://www.notion.so/{page['id'].replace('-', '')}"
 
 
 def normalize_page(
-    page: dict[str, Any], blocks: list[dict[str, Any]], ctx: Context
-) -> NormalizedDocument | None:
-    """A Notion page -> one document. None for trashed pages (callers tombstone)."""
+    page: dict[str, Any], blocks: list[dict[str, Any]], *, scope_key: str, users: dict[str, str]
+) -> Item | None:
+    """A Notion page -> one Item. None for trashed pages and non-pages."""
     if page.get("object") != "page" or is_trashed(page):
         return None
     title = title_of(page)[:TITLE_MAX] or "Untitled"
-    parent_type, parent_id = parent_ref(page)
-    header = properties_header(page, ctx.users) if parent_type in DATABASE_PARENTS else []
+    parent_type, _ = parent_ref(page)
+    header = properties_header(page, users) if parent_type in DATABASE_PARENTS else []
     text = "\n".join(header + ([""] if header else []) + render_blocks(blocks))
     body, truncated = normalize_body(text)
-    author = (page.get("created_by") or {}).get("id")
-    return NormalizedDocument(
+    people = [
+        person((page.get(k) or {}).get("id"), users) for k in ("created_by", "last_edited_by")
+    ]
+    return Item(
+        source="notion",
+        scope_key=scope_key,
+        external_id=f"notion:{page['id']}",
         kind=KIND,
-        external_id=ctx.external_id(page["id"]),
-        url=page.get("url") or f"https://www.notion.so/{page['id'].replace('-', '')}",
+        url=page_url(page),
         title=title,
-        body=body,
-        author_external_id=ctx.person(author),
-        author_login=ctx.users.get(author or ""),
-        source_created_at=parse_time(page.get("created_time")),
-        source_updated_at=parse_time(page.get("last_edited_time")),
-        # last_edited_time, parent and the tree live in metadata, outside the hash.
+        text=body,
+        reference_time=parse_time(page.get("last_edited_time")),
+        participants=tuple(dict.fromkeys(p for p in people if p)),
+        # last_edited_time and the parent live in metadata, outside the content hash.
         metadata={
             "page_id": page["id"],
             "last_edited_time": page.get("last_edited_time"),
+            "created_time": page.get("created_time"),
             "parent_type": parent_type,
             "truncated": truncated,
         },
+        extract=len(body) >= EXTRACT_MIN_CHARS,
     )
 
 
-# --- Trees ----------------------------------------------------------------------------
-
-DATABASE_PARENTS = {"data_source", "database"}
+# --- Parents --------------------------------------------------------------------------
 
 
 def parent_ref(obj: dict[str, Any]) -> tuple[str, str | None]:
@@ -240,40 +262,3 @@ def parent_ref(obj: dict[str, Any]) -> tuple[str, str | None]:
     t = parent.get("type") or "workspace"
     short = t.removesuffix("_id")
     return short, parent.get(t) if t != "workspace" else None
-
-
-@dataclass(frozen=True)
-class Node:
-    id: str
-    object: str  # page | data_source
-    parent_type: str
-    parent_id: str | None
-    database_id: str | None = None
-
-
-def compute_roots(nodes: Iterable[Node]) -> dict[str, str]:
-    """node id -> its tree root id. Walks parents through nodes this connection can see;
-    anything unresolvable (workspace, block, not shared) ends the walk, so an unknown
-    parent makes a page its own (private) tree. Loops end at the node itself."""
-    by_id = {n.id: n for n in nodes}
-    by_database = {n.database_id: n.id for n in by_id.values() if n.database_id}
-
-    def parent(n: Node) -> str | None:
-        if n.parent_type in ("page", "data_source") and n.parent_id in by_id:
-            return n.parent_id
-        if n.parent_type == "database" and n.parent_id in by_database:
-            pid = by_database[n.parent_id]
-            return pid if pid != n.id else None
-        return None
-
-    roots: dict[str, str] = {}
-    for start in by_id.values():
-        seen, cur = {start.id}, start
-        while (pid := parent(cur)) is not None:
-            if pid in seen:  # a parent loop: keep the page in its own tree
-                cur = start
-                break
-            seen.add(pid)
-            cur = by_id[pid]
-        roots[start.id] = cur.id
-    return roots
