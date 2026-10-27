@@ -1,0 +1,169 @@
+{
+  "note": "Recorded example results from the fictional Larkspur Labs demo (demo/). Shown when the live demo database is unavailable. Snippets are copied from demo/data.",
+  "examples": [
+    {
+      "query": "Why did we replace Elasticsearch?",
+      "results": [
+        {
+          "title": "ADR-0012: Replace Elasticsearch with Postgres full-text search",
+          "url": "https://github.com/larkspur/handbook/pull/20",
+          "source": "github",
+          "kind": "pull_request",
+          "repo": "larkspur/handbook",
+          "date": "2026-03-09",
+          "snippet": "Proposal to supersede ADR-0005. Background: the 2025-12-04 reindex incident (postmortem in larkspur/api), the evaluation in larkspur/api#32 and the benchmark spike in larkspur/api#38. TL;DR: 2.1M reports (not 10M), p95 38 ms on Postgres FTS vs 22 ms on ES,…"
+        },
+        {
+          "title": "INCIDENT: search missing a large share of reports",
+          "url": "https://github.com/larkspur/api/issues/29",
+          "source": "github",
+          "kind": "issue",
+          "repo": "larkspur/api",
+          "date": "2025-12-04",
+          "snippet": "Brightwell reports that searches return far fewer results than yesterday. ES doc count is 1.56M vs 1.90M reports in Postgres (~18% missing). Last night's full reindex looks stuck. Investigating."
+        },
+        {
+          "title": "Postmortem: 2025-12-04 search reindex outage",
+          "url": "https://github.com/larkspur/api/pull/31",
+          "source": "github",
+          "kind": "pull_request",
+          "repo": "larkspur/api",
+          "date": "2025-12-09",
+          "snippet": "Blameless postmortem for #29. Action item 3 is the big one: evaluate whether we need Elasticsearch."
+        },
+        {
+          "title": "Elastic Cloud bill went from $640 to $1,380/month",
+          "url": "https://github.com/larkspur/api/issues/33",
+          "source": "github",
+          "kind": "issue",
+          "repo": "larkspur/api",
+          "date": "2025-12-20",
+          "snippet": "After scaling to 3 nodes during the 2025-12-04 incident, the Elastic Cloud deployment costs $1,380/month. Scaling back to 2 nodes saves ~$740 but brings back the disk watermark problem during reindexes. Keep 3 nodes?"
+        },
+        {
+          "title": "Evaluate replacing Elasticsearch with Postgres full-text search",
+          "url": "https://github.com/larkspur/api/issues/32",
+          "source": "github",
+          "kind": "issue",
+          "repo": "larkspur/api",
+          "date": "2025-12-15",
+          "snippet": "Postmortem action item 3. Questions to answer: 1. Latency: can Postgres FTS meet our 150 ms p95 budget on production-sized data? 2. Relevance: do top-10 results match ES closely enough on real queries? 3. Fuzzy address matching: how much do we lose? 4. Cost…"
+        }
+      ]
+    },
+    {
+      "query": "Why did we move off Auth0?",
+      "results": [
+        {
+          "title": "ADR-0013: WorkOS for auth, SSO and SCIM (supersedes ADR-0004)",
+          "url": "https://github.com/larkspur/handbook/pull/23",
+          "source": "github",
+          "kind": "pull_request",
+          "repo": "larkspur/handbook",
+          "date": "2026-05-12",
+          "snippet": "Enterprise deals are blocked on SAML SSO and SCIM (larkspur/api#45). Auth0's Enterprise quote plus SCIM add-on doesn't fit our pricing; WorkOS charges per SSO connection, which we can pass through in the enterprise plan. Migration: import Auth0 password…"
+        },
+        {
+          "title": "WorkOS: AuthKit sign-in, SSO and Directory Sync (SCIM)",
+          "url": "https://github.com/larkspur/api/pull/48",
+          "source": "github",
+          "kind": "pull_request",
+          "repo": "larkspur/api",
+          "date": "2026-05-21",
+          "snippet": "Implements ADR-0013 on the API side. /v1/auth/callback exchanges the WorkOS code for a session; API verifies WorkOS JWTs SSO: organizations map to our firms; domain verification required Directory Sync webhooks create/deactivate inspectors (and update Stripe…"
+        },
+        {
+          "title": "Migrate Auth0 users to WorkOS (import password hashes)",
+          "url": "https://github.com/larkspur/api/pull/49",
+          "source": "github",
+          "kind": "pull_request",
+          "repo": "larkspur/api",
+          "date": "2026-06-01",
+          "snippet": "One-off migration: export Auth0 users with bcrypt hashes (Auth0 support ticket), import into WorkOS, map ids in users.workos_id. Users keep their passwords; Google logins re-link by verified email. Dry run on staging: 4,212 users, 0 failures."
+        },
+        {
+          "title": "ADR-0004: Auth0 for authentication",
+          "url": "https://github.com/larkspur/handbook/pull/4",
+          "source": "github",
+          "kind": "pull_request",
+          "repo": "larkspur/handbook",
+          "date": "2025-04-03",
+          "snippet": "We shouldn't build password storage, resets and MFA ourselves. Auth0 Essentials covers email/password, Google login and MFA. The API verifies RS256 JWTs against the JWKS. Looked at Cognito (cheaper, but the hosted UI is rough and customizing it is painful)…"
+        }
+      ]
+    },
+    {
+      "query": "Why did we leave Heroku?",
+      "results": [
+        {
+          "title": "ADR-0010: Move from Heroku to AWS (ECS Fargate + RDS)",
+          "url": "https://github.com/larkspur/handbook/pull/17",
+          "source": "github",
+          "kind": "pull_request",
+          "repo": "larkspur/handbook",
+          "date": "2025-11-10",
+          "snippet": "ADR-0003 said we'd revisit Heroku when the bill passed ~$2k/month or a customer needed private networking. Both happened: October bill: $2,912 (Performance-M dynos for PDF workers after the R14 errors) Brightwell Surveys (enterprise pilot) needs VPC peering →…"
+        },
+        {
+          "title": "Heroku Postgres connection limit (120) reached at peak",
+          "url": "https://github.com/larkspur/api/issues/24",
+          "source": "github",
+          "kind": "issue",
+          "repo": "larkspur/api",
+          "date": "2025-10-20",
+          "snippet": "Monday morning peak: FATAL: too many connections. Standard-0 caps at 120; web + workers + beat use ~110 at peak."
+        },
+        {
+          "title": "Heroku R14/R15 memory errors in the PDF worker",
+          "url": "https://github.com/larkspur/api/issues/18",
+          "source": "github",
+          "kind": "issue",
+          "repo": "larkspur/api",
+          "date": "2025-09-08",
+          "snippet": "Since big firms started uploading 300+ photos per report, the pdf worker dynos hit R14 (memory quota exceeded) daily and R15 (killed) a few times a week. wkhtmltopdf loads every image at full resolution."
+        },
+        {
+          "title": "Plan: migrate from Heroku to AWS",
+          "url": "https://github.com/larkspur/api/issues/25",
+          "source": "github",
+          "kind": "issue",
+          "repo": "larkspur/api",
+          "date": "2025-10-27",
+          "snippet": "ADR-0003's exit criteria are met (bill > $2k/month, enterprise customer needs private networking). Proposed plan: 1. Terraform: VPC, ECS Fargate (api, worker-default, worker-pdf), RDS Postgres 16 (multi-AZ), ElastiCache Redis, ALB, S3. 2. Logical replication…"
+        }
+      ]
+    },
+    {
+      "query": "How do we rate limit the API?",
+      "results": [
+        {
+          "title": "Rate limit the public API with a Redis token bucket",
+          "url": "https://github.com/larkspur/api/pull/51",
+          "source": "github",
+          "kind": "pull_request",
+          "repo": "larkspur/api",
+          "date": "2026-06-25",
+          "snippet": "Partners now call /v1 with API keys, and one partner's sync job sent 40k requests in 10 minutes last week. This adds a per-API-key token bucket in Redis (100 req/min burst, 20 req/s sustained), returns 429 with Retry-After, and exempts the PWA's session…"
+        },
+        {
+          "title": "Proposal: move background jobs from Celery/Redis to a Postgres-backed queue?",
+          "url": "https://github.com/larkspur/api/issues/60",
+          "source": "github",
+          "kind": "issue",
+          "repo": "larkspur/api",
+          "date": "2026-09-16",
+          "snippet": "Now that search lives in Postgres, Redis is only a Celery broker plus rate limiting. Options: keep Celery + Redis, or move jobs to a Postgres queue (procrastinate, or plain SKIP LOCKED) for transactional enqueueing. Not urgent, opening for discussion."
+        },
+        {
+          "title": "Add Celery worker with Redis broker",
+          "url": "https://github.com/larkspur/api/pull/6",
+          "source": "github",
+          "kind": "pull_request",
+          "repo": "larkspur/api",
+          "date": "2025-05-14",
+          "snippet": "We need background jobs for ES indexing, emails and soon PDF rendering. This adds a Celery app with Redis as broker and result backend, a worker Procfile entry and beat for periodic jobs (the ES catch-up job). Why Celery over RQ or Dramatiq: we need retries…"
+        }
+      ]
+    }
+  ]
+}
