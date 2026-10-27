@@ -22,6 +22,91 @@ const COLS: { key: keyof Arm; label: string; title: string; ms?: boolean }[] = [
   { key: "p50_ms", label: "p50 ms", title: "Median query latency", ms: true },
 ];
 
+type Extraction = {
+  file: string;
+  date: string;
+  model: string;
+  item: { title: string; url: string; chars: number };
+  seconds: number;
+  cost_usd: number;
+  entities: { name: string; types: string[] }[];
+  facts: { relation: string; source: string; target: string; fact: string; valid_at: string }[];
+};
+
+// Show the most "why"-shaped relations first.
+const RELATION_ORDER = ["DECIDED", "SUPERSEDES", "AFFECTS"];
+
+function ExtractionSample({ x }: { x: Extraction }) {
+  const facts = [...x.facts].sort(
+    (a, b) =>
+      (RELATION_ORDER.indexOf(a.relation) + 1 || 99) - (RELATION_ORDER.indexOf(b.relation) + 1 || 99),
+  );
+  const shown = facts.slice(0, 6);
+  const rest = facts.slice(6);
+  const Fact = ({ f }: { f: Extraction["facts"][number] }) => (
+    <li className="flex gap-3 py-2">
+      <span className="mt-0.5 h-fit shrink-0 rounded bg-code-bg px-1.5 py-0.5 font-mono text-[0.7rem] text-muted">
+        {f.relation}
+      </span>
+      <span>
+        {f.fact} <span className="text-muted">· valid from {f.valid_at}</span>
+      </span>
+    </li>
+  );
+  return (
+    <section aria-labelledby="extraction-title" className="flex flex-col gap-4">
+      <div>
+        <h3 id="extraction-title" className="font-semibold">
+          Real LLM extraction <span className="font-normal text-muted">· single-item sample</span>
+        </h3>
+        <p className="mt-1 text-sm text-muted">
+          One decision record from the demo,{" "}
+          <span className="text-fg">{x.item.title}</span>, run through Graphiti with{" "}
+          {x.model}. A smoke test of the real pipeline, not a benchmark.
+        </p>
+      </div>
+      <dl className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+        {[
+          ["Facts", x.facts.length.toString()],
+          ["Entities", x.entities.length.toString()],
+          ["Time", `${x.seconds} s`],
+          ["Cost", `$${x.cost_usd.toFixed(4)}`],
+        ].map(([k, v]) => (
+          <div key={k} className="rounded-xl border border-border px-4 py-3">
+            <dt className="text-xs text-muted">{k}</dt>
+            <dd className="mt-1 text-xl font-semibold tabular-nums">{v}</dd>
+          </div>
+        ))}
+      </dl>
+      <ul className="divide-y divide-border rounded-xl border border-border px-4 text-sm">
+        {shown.map((f) => (
+          <Fact key={f.fact} f={f} />
+        ))}
+      </ul>
+      {rest.length > 0 && (
+        <details className="text-sm">
+          <summary className="cursor-pointer text-accent">
+            Show the other {rest.length} facts
+          </summary>
+          <ul className="mt-2 divide-y divide-border rounded-xl border border-border px-4">
+            {rest.map((f) => (
+              <Fact key={f.fact} f={f} />
+            ))}
+          </ul>
+        </details>
+      )}
+      <p className="text-sm text-muted">
+        Every fact keeps a link to the document it came from and the date it became true, so
+        &ldquo;why did we do X&rdquo; gets the current decision plus what it replaced. Cost per
+        item will vary with length; this is one data point.{" "}
+        <a className="text-accent underline-offset-2 hover:underline" href={repoPath(x.file)}>
+          Raw output
+        </a>
+      </p>
+    </section>
+  );
+}
+
 function fmt(v: unknown, ms?: boolean) {
   if (typeof v !== "number") return "—";
   return ms ? Math.round(v).toString() : v.toFixed(3);
@@ -127,8 +212,9 @@ export function Numbers() {
           stack aren&apos;t like for like. v0 indexed every comment as its own document; the new
           stack indexes a PR or issue together with its discussion (fewer, larger documents), so a
           top-10 hit is easier. The questions and the corpus were written by the same author, so
-          they share wording. The graph-facts arm hasn&apos;t run (it needs an LLM key), so we
-          make no claim yet that the graph helps.
+          they share wording. Graph facts are
+          shown below from a real single-item run; their effect on retrieval isn&apos;t
+          benchmarked, so we make no claim that the graph improves answers.
         </div>
       ) : (
         <div className="rounded-xl border border-warn-fg/30 bg-warn-soft px-4 py-3 text-sm text-warn-fg">
@@ -216,6 +302,10 @@ export function Numbers() {
           </p>
         )}
       </section>
+
+      {"extraction" in bench && bench.extraction && (
+        <ExtractionSample x={bench.extraction as unknown as Extraction} />
+      )}
     </div>
   );
 }

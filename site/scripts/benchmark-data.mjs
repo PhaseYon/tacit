@@ -13,6 +13,7 @@ import { fileURLToPath } from "node:url";
 const here = dirname(fileURLToPath(import.meta.url));
 const siteDir = join(here, "..");
 const resultsDir = join(siteDir, "..", "benchmark", "results");
+const extractionDir = join(siteDir, "..", "benchmark", "extraction");
 const outFile = join(siteDir, "data", "benchmark.json");
 
 const V0_ARMS = {
@@ -85,6 +86,17 @@ const out = {
     arms: arms(next, NEW_ARMS),
   },
 };
+
+// Real-LLM extraction smoke tests (benchmark/extraction_smoke.py): the latest one.
+const smokes = existsSync(extractionDir)
+  ? readdirSync(extractionDir).filter((f) => f.endsWith(".json")).sort()
+  : [];
+out.extraction = smokes.length
+  ? {
+      file: `benchmark/extraction/${smokes.at(-1)}`,
+      ...JSON.parse(readFileSync(join(extractionDir, smokes.at(-1)), "utf8")),
+    }
+  : null;
 
 writeFileSync(outFile, JSON.stringify(out, null, 2) + "\n");
 console.log(
