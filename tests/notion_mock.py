@@ -1,12 +1,11 @@
 """A fake Notion API for tests, served through respx (notion-client uses httpx).
 
-State is plain dicts: objects (pages and data sources) by id, block children by parent
-id, users. `access` maps a bearer token to the object ids it may read (default: all),
-so tests can model per-connection sharing. Every call is recorded.
+State is plain dicts: objects (pages, data sources, databases, blocks) by id, block
+children by parent id, users. `access` maps a bearer token to the object ids it may read
+(default: all), so tests can model what's shared with an integration. Every call is
+recorded.
 """
 
-import hashlib
-import hmac
 import json
 from dataclasses import dataclass, field
 from typing import Any
@@ -16,7 +15,6 @@ import pytest
 import respx
 
 API = "https://notion.test"
-WEBHOOK_TOKEN = "secret_test_notion_verification"
 
 
 @dataclass
@@ -35,7 +33,6 @@ class FakeNotion:
     users: list[dict[str, Any]] = field(default_factory=list)
     access: dict[str, set[str]] = field(default_factory=dict)
     hidden_from_search: set[str] = field(default_factory=set)
-    oauth: dict[str, Any] = field(default_factory=dict)
     # path -> (status, body), checked before normal handling (e.g. 429s, 401s)
     failures: dict[str, tuple[int, dict[str, Any], dict[str, str]]] = field(default_factory=dict)
     search_page_size: int = 100
@@ -67,21 +64,25 @@ class FakeNotion:
             status, fbody, headers = self.failures[path]
             return httpx.Response(status, json=fbody, headers=headers)
 
-        if path == "oauth/token":
-            return httpx.Response(200, json=self.oauth)
         if path == "search":
+            kind = ((body or {}).get("filter") or {}).get("value")
             visible = [
                 o
                 for oid, o in self.objects.items()
-                if self._visible(token, oid) and oid not in self.hidden_from_search
+                if self._visible(token, oid)
+                and oid not in self.hidden_from_search
+                and o.get("object") in ({kind} if kind else {"page", "data_source"})
             ]
             visible.sort(key=lambda o: o.get("last_edited_time", ""), reverse=True)
             return self._paginate(visible, body.get("start_cursor"), self.search_page_size)
         if path == "users":
             return self._paginate(self.users, request.url.params.get("start_cursor"), 100)
-        if path.startswith("pages/"):
-            oid = path.split("/")[1]
-            if not self._visible(token, oid):
+        parts = path.split("/")
+        retrievable = {"pages": "page", "databases": "database", "data_sources": "data_source"}
+        if len(parts) == 2 and (parts[0] in retrievable or parts[0] == "blocks"):
+            oid = parts[1]
+            want = retrievable.get(parts[0], "block")
+            if not self._visible(token, oid) or self.objects[oid].get("object") != want:
                 return self._error(404, "object_not_found")
             return httpx.Response(200, json=self.objects[oid])
         if path.startswith("blocks/") and path.endswith("/children"):
@@ -113,24 +114,16 @@ class FakeNotion:
 
 @pytest.fixture
 def notion_api(monkeypatch):
-    from tacit_api.config import get_settings
+    from tacit.config import get_config
 
     fake = FakeNotion()
-    monkeypatch.setenv("NOTION_API_URL", API)
-    monkeypatch.setenv("NOTION_CLIENT_ID", "notion-cid")
-    monkeypatch.setenv("NOTION_CLIENT_SECRET", "notion-csecret")
-    monkeypatch.setenv("NOTION_WEBHOOK_VERIFICATION_TOKEN", WEBHOOK_TOKEN)
-    get_settings.cache_clear()
+    monkeypatch.setenv("TACIT_SOURCES__NOTION_API_URL", API)
+    get_config.cache_clear()
     with respx.mock(assert_all_called=False) as router:
         # Late-bound, so a test can wrap fake.handle.
         router.route(host="notion.test").mock(side_effect=lambda request: fake.handle(request))
         yield fake
-    get_settings.cache_clear()
-
-
-def sign(body: bytes, secret: str = WEBHOOK_TOKEN) -> dict[str, str]:
-    sig = "sha256=" + hmac.new(secret.encode(), body, hashlib.sha256).hexdigest()
-    return {"X-Notion-Signature": sig, "Content-Type": "application/json"}
+    get_config.cache_clear()
 
 
 # --- Builders -------------------------------------------------------------------------
@@ -147,6 +140,7 @@ def page(
     parent: tuple[str, str | None] = ("workspace", None),
     edited: str = "2025-10-01T10:00:00.000Z",
     author: str = "nu-alice",
+    editor: str | None = None,
     props: dict[str, Any] | None = None,
     **extra: Any,
 ) -> dict[str, Any]:
@@ -163,6 +157,7 @@ def page(
         "created_time": "2025-09-01T09:00:00.000Z",
         "last_edited_time": edited,
         "created_by": {"object": "user", "id": author},
+        "last_edited_by": {"object": "user", "id": editor or author},
         "parent": parent_obj,
         "in_trash": False,
         "properties": {
@@ -197,4 +192,29 @@ def block(btype: str, text: str = "", *, bid: str | None = None, **data: Any) ->
         "type": btype,
         "has_children": False,
         btype: content,
+    }
+
+
+def database(dbid: str, title: str, parent: tuple[str, str | None]) -> dict[str, Any]:
+    ptype, pid = parent
+    return {
+        "object": "database",
+        "id": dbid,
+        "title": rt(title),
+        "parent": {"type": f"{ptype}_id", f"{ptype}_id": pid}
+        if ptype != "workspace"
+        else {"type": "workspace", "workspace": True},
+    }
+
+
+def parent_block(bid: str, parent: tuple[str, str]) -> dict[str, Any]:
+    """A layout block (e.g. a column) that pages can sit inside."""
+    ptype, pid = parent
+    return {
+        "object": "block",
+        "id": bid,
+        "type": "column",
+        "has_children": True,
+        "column": {},
+        "parent": {"type": f"{ptype}_id", f"{ptype}_id": pid},
     }
