@@ -1,0 +1,34 @@
+# Self-hosted Neo4j for a team graph, for an always-on VPS (~$5/month is plenty for a
+# small team). See README.md in this folder for TLS, firewall and backups.
+#
+#   cp .env.example .env   # set NEO4J_PASSWORD
+#   docker compose up -d
+#
+# Teammates then run `tacit init` with uri neo4j+s://<your-domain>:7687 (TLS) and the password.
+name: tacit-graph
+
+services:
+  neo4j:
+    image: neo4j:5.26
+    restart: unless-stopped
+    environment:
+      NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:?set NEO4J_PASSWORD in .env}
+      NEO4J_server_memory_heap_max__size: ${NEO4J_HEAP:-1G}
+      NEO4J_server_memory_pagecache_size: ${NEO4J_PAGECACHE:-512M}
+      # Bolt over TLS: certificates from ./certs (see README). Browser/HTTP stays local-only.
+      NEO4J_server_bolt_tls__level: REQUIRED
+      NEO4J_dbms_ssl_policy_bolt_enabled: "true"
+      NEO4J_dbms_ssl_policy_bolt_base__directory: /ssl/bolt
+      NEO4J_dbms_ssl_policy_bolt_private__key: private.key
+      NEO4J_dbms_ssl_policy_bolt_public__certificate: public.crt
+      NEO4J_dbms_ssl_policy_bolt_client__auth: NONE
+    ports:
+      - "7687:7687"            # Bolt (TLS), what tacit connects to
+      - "127.0.0.1:7474:7474"  # Browser, only via SSH tunnel
+    volumes:
+      - data:/data
+      - ./certs:/ssl/bolt:ro
+      - ./backups:/backups
+
+volumes:
+  data:
