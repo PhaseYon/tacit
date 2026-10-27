@@ -50,7 +50,8 @@ _STOPWORDS = frozenset(
 
 _CHUNK_QUERY = """
 CALL () {
-  CALL db.index.vector.queryNodes('tacit_chunk_embedding', $k, $vec) YIELD node, score
+  WITH $vec AS v WHERE v IS NOT NULL
+  CALL db.index.vector.queryNodes('tacit_chunk_embedding', $k, v) YIELD node, score
   RETURN collect({c: node {.id, .external_id, .idx, .text, .title, .url, .kind, .source,
                            .reference_time}, s: score}) AS vec
 }
@@ -139,11 +140,25 @@ def fuse(vec: list[dict[str, Any]], fts: list[dict[str, Any]], limit: int) -> li
     return results[:limit]
 
 
-async def _search_chunks(
-    store: Store, query: str, limit: int, tool: str, as_of: str | None
+SIGNALS = ("semantic", "keyword")
+
+
+async def search_chunks(
+    store: Store,
+    query: str,
+    limit: int,
+    tool: str = "search",
+    as_of: str | None = None,
+    *,
+    signals: tuple[str, ...] = SIGNALS,
 ) -> tuple[list[dict], bool]:
-    vec = await asyncio.to_thread(get_embedder().embed_query, query)
-    lucene = lucene_query(query)
+    """The chunk layer. `signals` picks the arms: both (what `search` uses), or only
+    "semantic" / only "keyword" (the benchmark's single-signal baselines). A skipped signal
+    costs nothing: no query embedding, no index call."""
+    vec = None
+    if "semantic" in signals:
+        vec = await asyncio.to_thread(get_embedder().embed_query, query)
+    lucene = lucene_query(query) if "keyword" in signals else ""
     rows = await store.run_query(
         "read",
         tool,
@@ -255,7 +270,7 @@ async def search(
     }
     if not query:
         return out
-    out["results"], has_facts = await _search_chunks(store, query, limit, tool, as_of)
+    out["results"], has_facts = await search_chunks(store, query, limit, tool, as_of)
     out["facts_available"] = has_facts
     if has_facts:
         out["facts"] = await _search_facts(store, query, limit, tool, as_of, at)

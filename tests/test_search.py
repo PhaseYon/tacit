@@ -7,7 +7,7 @@ from datetime import UTC, datetime
 import pytest
 
 from tacit.llm.base import Usage
-from tacit.search import format_results, fuse, lucene_query, parse_as_of, search
+from tacit.search import format_results, fuse, lucene_query, parse_as_of, search, search_chunks
 from tacit.sources.base import Item
 from tacit.store import Store
 from tacit.store import state as st
@@ -126,6 +126,17 @@ async def test_search_is_deterministic(store: Store):
     for _ in range(3):
         assert await search(store, "redis cache", limit=8) == first
     assert format_results(first) == format_results(await search(store, "redis cache", limit=8))
+
+
+async def test_single_signal_arms(store: Store):
+    await _index(store, DOCS)
+    kw, _ = await search_chunks(store, "Kafka retries", 10, signals=("keyword",))
+    assert kw and all(r["matched_by"] == ["keyword"] for r in kw)
+    assert kw[0]["url"].endswith("/pull/2")
+    sem, _ = await search_chunks(store, "Kafka retries", 10, signals=("semantic",))
+    assert sem and all(r["matched_by"] == ["semantic"] for r in sem)
+    both, _ = await search_chunks(store, "Kafka retries", 10)
+    assert both == (await search(store, "Kafka retries"))["results"]
 
 
 async def test_empty_query_and_empty_graph(store: Store):
