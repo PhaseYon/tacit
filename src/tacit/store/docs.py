@@ -38,6 +38,7 @@ async def upsert_doc(
         "participants": list(item.participants),
         "metadata": json.dumps(item.metadata, sort_keys=True, default=str),
         "ingested_by": store.who,
+        "extract": item.extract,
     }
     await store.run_query(
         "write",
@@ -77,7 +78,8 @@ async def pending_extraction(store: Store, limit: int = 50) -> list[Item]:
     rows = await store.run_query(
         "read",
         "doc.pending",
-        "MATCH (d:TacitDoc) WHERE d.extracted_hash IS NULL OR d.extracted_hash <> d.content_hash"
+        "MATCH (d:TacitDoc) WHERE coalesce(d.extract, true)"
+        " AND (d.extracted_hash IS NULL OR d.extracted_hash <> d.content_hash)"
         " RETURN d {.*} AS d ORDER BY d.reference_time ASC, d.external_id ASC LIMIT $n",
         {"n": limit},
     )
@@ -88,7 +90,8 @@ async def count_pending_extraction(store: Store) -> int:
     rows = await store.run_query(
         "read",
         "doc.pending",
-        "MATCH (d:TacitDoc) WHERE d.extracted_hash IS NULL OR d.extracted_hash <> d.content_hash"
+        "MATCH (d:TacitDoc) WHERE coalesce(d.extract, true)"
+        " AND (d.extracted_hash IS NULL OR d.extracted_hash <> d.content_hash)"
         " RETURN count(d) AS n",
     )
     return rows[0]["n"] if rows else 0
@@ -107,6 +110,7 @@ def _item(d: dict[str, Any]) -> Item:
         reference_time=ref.to_native() if hasattr(ref, "to_native") else ref,
         participants=tuple(d.get("participants") or ()),
         metadata=json.loads(d.get("metadata") or "{}"),
+        extract=d.get("extract", True),
     )
 
 

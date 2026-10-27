@@ -45,6 +45,9 @@ class Item:
     # People involved, as "<source>:<handle>" ("github:octocat", "slack:U0123").
     participants: tuple[str, ...] = ()
     metadata: dict[str, Any] = field(default_factory=dict)
+    # Worth paying for LLM extraction? Everything is indexed for search (free); only
+    # items with extract=True become Graphiti episodes (e.g. merged PRs, not open drafts).
+    extract: bool = True
 
     @property
     def content_hash(self) -> str:

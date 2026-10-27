@@ -123,3 +123,12 @@ async def test_extraction_creates_episodes_and_respects_budget(store: Store):
         await ex2.close()
     assert r2.extraction_note and "budget" in r2.extraction_note
     assert r2.extraction_pending >= 1
+
+
+async def test_items_marked_extract_false_are_indexed_but_not_extracted(store: Store):
+    from dataclasses import replace
+
+    await st.scope_add(store, ScopeEntry("github:acme/api", "github", "acme/api", "acme/api"))
+    items = [ITEMS[0], replace(ITEMS[1], extract=False)]
+    r = await run_sync(store, {"github": FakeSource(items)})
+    assert r.scopes[0].written == 2 and r.extraction_pending == 1
