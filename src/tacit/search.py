@@ -156,16 +156,10 @@ async def _search_chunks(
 
 
 def _graph_reader():
-    """A read-only Graphiti (no LLM). Its Neo4j driver schedules index creation when built
-    inside a running loop; that is an unlogged write, and extraction already created the
-    indexes, so cancel it before it starts."""
+    """A read-only Graphiti (no LLM, no schema writes; see graph.client._Driver)."""
     from .graph.client import build_graphiti
 
-    graphiti = build_graphiti()
-    task = getattr(graphiti.driver, "_init_task", None)
-    if task is not None:
-        task.cancel()
-    return graphiti
+    return build_graphiti()
 
 
 async def _search_facts(
