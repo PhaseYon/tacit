@@ -149,9 +149,9 @@ class SlackSource:
 
         # Units in order of their newest top-level message, so a page's cursor (the newest
         # top-level ts written so far) never skips past an unwritten unit by > LOOKBACK.
-        units: list[tuple[float, str, Any]] = [(float(m["ts"]), "thread", m) for m in threads]
-        units += [(max(float(m["ts"]) for m in msgs), "day", d) for d, msgs in days.items()]
-        units.sort(key=lambda u: u[0])
+        units: list[tuple[str, str, Any]] = [(m["ts"], "thread", m) for m in threads]
+        units += [(max((m["ts"] for m in ms), key=float), "day", d) for d, ms in days.items()]
+        units.sort(key=lambda u: float(u[0]))
         newest = max((m["ts"] for m in history), key=float, default=latest)
 
         if not units:
@@ -169,7 +169,7 @@ class SlackSource:
                 if item is not None:
                     items.append(item)
             last = i + PAGE_ITEMS >= len(units)
-            page_ts = newest if last else _ts(datetime.fromtimestamp(batch[-1][0], UTC))
+            page_ts = newest if last else batch[-1][0]
             yield Page(items, json.dumps({"latest_ts": page_ts}))
 
     async def _call(self, entry: ScopeEntry, coro):
