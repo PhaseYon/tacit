@@ -88,7 +88,7 @@ def parse_as_of(as_of: str | None) -> datetime | None:
     return dt if dt.tzinfo else dt.replace(tzinfo=UTC)
 
 
-def _iso(value: Any) -> str | None:
+def iso_time(value: Any) -> str | None:
     if value is None:
         return None
     if hasattr(value, "to_native"):
@@ -129,7 +129,7 @@ def fuse(vec: list[dict[str, Any]], fts: list[dict[str, Any]], limit: int) -> li
                 "url": best.get("url"),
                 "source": best.get("source"),
                 "kind": best.get("kind"),
-                "reference_time": _iso(best.get("reference_time")),
+                "reference_time": iso_time(best.get("reference_time")),
                 "score": round(entries[0]["score"], 6),
                 "matched_by": [m for m in ("semantic", "keyword") if m in matched],
                 "passages": [e["c"]["text"] for e in entries[:PASSAGES_PER_DOC]],
@@ -225,8 +225,8 @@ async def _search_facts(
                 "fact": e.fact,
                 "relation": e.name,
                 "status": "superseded" if (e.invalid_at or e.expired_at) else "current",
-                "valid_at": _iso(e.valid_at),
-                "invalid_at": _iso(e.invalid_at),
+                "valid_at": iso_time(e.valid_at),
+                "invalid_at": iso_time(e.invalid_at),
                 "score": round(float(score), 6),
                 "citations": sorted(citations, key=lambda c: c["external_id"]),
                 "_uuid": e.uuid,
