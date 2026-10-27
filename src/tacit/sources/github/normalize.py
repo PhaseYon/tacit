@@ -1,8 +1,8 @@
-"""Pure functions: GitHub JSON (REST responses or webhook payload objects) -> NormalizedDocument.
+"""Pure functions: GitHub REST JSON -> NormalizedDocument.
 
 No I/O here. Every function takes plain dicts and returns a NormalizedDocument, or None when
-the item should be skipped (bot authors, empty reviews, ...). See docs/design/github-connector.md
-sections 3 and 5 for what we ingest and what goes into the content hash.
+the item should be skipped (bot authors, empty reviews, ...). GitHubSource (source.py)
+groups them into one Item per PR/issue/doc and renders the transcript (render.py).
 """
 
 from collections.abc import Iterable
