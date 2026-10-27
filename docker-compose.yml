@@ -1,50 +1,10 @@
 name: tacit
 
-# Local dev infrastructure. The apps (web, api) run on the host for fast reloads.
+# Local Neo4j for development, tests and solo use. Teams sharing a graph should use
+# Neo4j Aura or deploy/neo4j/docker-compose.yml on an always-on host instead.
 services:
-  postgres:
-    image: pgvector/pgvector:pg17
-    environment:
-      POSTGRES_USER: ${POSTGRES_SUPERUSER:-postgres}
-      POSTGRES_PASSWORD: ${POSTGRES_SUPERUSER_PASSWORD:-postgres}
-      POSTGRES_DB: ${POSTGRES_DB:-tacit}
-      # Read by infra/postgres/init/01-roles.sh to create the app roles.
-      TACIT_MIGRATOR_PASSWORD: ${TACIT_MIGRATOR_PASSWORD:-migrator}
-      TACIT_AUTH_PASSWORD: ${TACIT_AUTH_PASSWORD:-auth}
-      TACIT_API_PASSWORD: ${TACIT_API_PASSWORD:-api}
-      TACIT_WORKER_PASSWORD: ${TACIT_WORKER_PASSWORD:-worker}
-    ports:
-      - "5432:5432"
-    volumes:
-      - pgdata:/var/lib/postgresql/data
-      - ./infra/postgres/init:/docker-entrypoint-initdb.d:ro
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-  # Catches outgoing email (invites, verification) in dev. UI: http://localhost:8025
-  mailpit:
-    image: axllent/mailpit:latest
-    ports:
-      - "1025:1025"
-      - "8025:8025"
-
-  # Graph layer (Graphiti). Optional: docker compose --profile graph up -d neo4j
   neo4j:
     image: neo4j:5.26
-    profiles: ["graph"]
     environment:
       NEO4J_AUTH: neo4j/${NEO4J_PASSWORD:-tacit-dev-password}
       NEO4J_server_memory_heap_max__size: 1G
@@ -54,7 +14,11 @@ services:
       - "7687:7687"
     volumes:
       - neo4jdata:/data
+    healthcheck:
+      test: ["CMD-SHELL", "cypher-shell -u neo4j -p $${NEO4J_AUTH#neo4j/} 'RETURN 1' || exit 1"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
 
 volumes:
-  pgdata:
   neo4jdata:

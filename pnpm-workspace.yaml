@@ -1,8 +1,0 @@
-packages:
-  - apps/web
-
-allowBuilds:
-  sharp: false
-  unrs-resolver: false
-  "@prisma/client": false
-  better-sqlite3: false
