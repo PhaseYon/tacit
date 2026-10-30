@@ -79,11 +79,12 @@ def parse_as_of(as_of: str | None) -> datetime | None:
     made that day count as valid "as of" it."""
     if not as_of:
         return None
+    text = as_of.strip()
     try:
-        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", as_of.strip()):
-            day = datetime.fromisoformat(as_of.strip()).date()
+        if re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
+            day = datetime.fromisoformat(text).date()
             return datetime.combine(day, time.max, tzinfo=UTC)
-        dt = datetime.fromisoformat(as_of.strip())
+        dt = datetime.fromisoformat(text)
     except ValueError as exc:
         raise ValueError(f"as_of must be an ISO date like 2026-03-01 (got {as_of!r})") from exc
     return dt if dt.tzinfo else dt.replace(tzinfo=UTC)
