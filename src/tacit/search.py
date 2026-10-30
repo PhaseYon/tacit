@@ -1,4 +1,4 @@
-"""Deterministic hybrid search (design §8, §8.3). No LLM: same graph + query, same output.
+"""Deterministic hybrid search (design §8, §8.3): same graph + query, same output.
 
 Two layers, both in the team's Neo4j:
 
