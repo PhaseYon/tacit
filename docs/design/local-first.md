@@ -329,6 +329,23 @@ content_hash`), oldest first, from the stored text, so turning extraction on lat
 needs no re-fetch. The whole run holds the write lease; a second laptop that finds it
 held exits and retries next run.
 
+### 8.4 Later: time-range search (not built)
+
+`as_of` is a snapshot: only facts valid at one moment. It filters facts, not chunks.
+A range (`--from X --to Y`, MCP `from`/`to`) would answer "what changed between X and
+Y": facts whose validity window overlaps it (`valid_at <= Y` or unknown, and
+`invalid_at > X` or open).
+
+Today an agent can compare two `as_of` snapshots, which works for before vs after but
+misses anything that started and ended in between (a two-week trial). Or it can search
+with no `as_of` and filter the dates itself, which only sees the top `limit` facts and
+spends context on facts outside the window. A range filter fixes both: Neo4j returns
+only the facts in the window.
+
+Not built because a snapshot covers the main question (what's current, and why), and
+agents can approximate ranges. It's cheap to add: two more `DateFilter`s in
+`_search_facts`. Filtering chunks by `reference_time` would be a separate change.
+
 ## 9. CLI
 
 ```
