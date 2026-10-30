@@ -2,64 +2,58 @@
 
 **Your team's memory, wired into every AI tool.**
 
-Tacit syncs a team's Slack, GitHub and Notion into a time-aware knowledge graph. Teammates search it from Claude, Cursor and Claude Code through a local MCP server, or from the terminal. The main question it answers: "Why did we do X, who decided, and where's the evidence?"
+Tacit syncs a team's Slack, GitHub and Notion into a time-aware knowledge graph. Teammates search it from any MCP-capable agent (Claude Code, Cursor, Claude Desktop) through a local MCP server, or from the terminal. The main question it answers: "Why did we do X, who decided, and where's the evidence?"
 
-Repo: https://github.com/PhaseYon/tacit · License: Apache 2.0 · Owner: Ahmed Fezan
+Repo: https://github.com/PhaseYon/tacit · Site: https://tacit-silk.vercel.app · License: Apache 2.0 · Owner: Ahmed Fezan
 
-## ⚠ Direction change (2026-10-26): local-first
+## Status
 
-**The source of truth for what to build is [`docs/design/local-first.md`](docs/design/local-first.md).** Read it before starting any work.
-
-- The code currently on `main` is the **old hosted architecture**: Next.js + Better Auth, FastAPI, Celery + Redis, Postgres with RLS, OAuth MCP over HTTP, and the LangGraph Ask agent. It will be tagged `v0-hosted` and replaced step by step (design doc §13).
-- **Don't extend the hosted stack.** Don't add features to `apps/web`, FastAPI routes, Celery tasks, webhooks, Postgres migrations or the Ask agent. They are being deleted.
-- The older design docs (`github-connector.md`, `graph-layer.md`, `slack-connector.md`, `notion-connector.md`) describe `v0-hosted`. They're still useful for API facts and Graphiti behaviour (graph-layer §0), but not for architecture.
+The local-first version is built and on `main` (design: [`docs/design/local-first.md`](docs/design/local-first.md)). The previous hosted architecture (Next.js app, FastAPI, Celery, Postgres RLS, OAuth MCP) is preserved only at tag `v0-hosted`; don't bring it back. The older design docs (`github-connector.md`, `graph-layer.md`, `slack-connector.md`, `notion-connector.md`) describe `v0-hosted`; they're still useful for API facts and Graphiti behaviour (graph-layer §0), not for architecture.
 
 ## Goals
 
-- A portfolio project that shows a well-built local-first tool: Graphiti GraphRAG, a local MCP server, incremental sync, and honest benchmarks. Each piece there for a product reason.
-- Fully open source. Finish a working version before adding scope.
-- Publish a benchmark of Graphiti hybrid vs vector-only vs keyword-only search on about 50 "why" questions, including extraction cost and query latency.
+- A portfolio project that shows a well-built local-first tool: GraphRAG, a local MCP server, incremental sync, and honest benchmarks. Each piece there for a product reason.
+- Fully open source. Finish what exists before adding scope.
+- Keep the benchmark ([`benchmark/`](benchmark/)) real and reproducible: hybrid vs vector-only vs keyword-only vs graph facts on 52 "why" questions, with cost and latency.
 
 ## Core ideas
 
-- **Local-first, we host no team data.** Each teammate runs `uvx tacit`. Sync, extraction and the MCP server run on their laptop. The team hosts one Neo4j (Aura Free by default, or Docker on a VPS).
-- **Shared responsibility for access.** One password per team graph. Whoever has it can read the graph. Handing it out carefully is the team's job. **Sync scope** (which repos, channels and pages) is the permission boundary: nothing outside scope is ever fetched, Slack private channels need an explicit opt-in, and DMs are never synced.
-- **Every DB access goes through `run_query()`**, which writes a `:TacitAccess` log entry first and fails closed if the write fails. The LLM never writes Cypher. MCP tools build fixed queries from their parameters.
-- **Incremental, idempotent sync** by polling each source's API with the user's own token. Cursors and a single write lease live in Neo4j, and a content-hash check skips anything already ingested. Retry on rate limits.
-- **Deterministic reads.** `search` uses no LLM. The AI client writes the answer itself; Tacit has no `ask` feature. LLMs are used only for Graphiti extraction during sync, with the user's own key.
-- **Decisions change over time.** Use Graphiti's time-aware facts (when a fact was valid vs. when it was learned) to answer with the current decision plus its history.
-- **One identity per person across tools.** Slack, GitHub and Notion accounts for the same person map to one entity.
-- **Citations everywhere.** Every result links back to the exact source message, PR, issue or page.
+- **Local-first, we host no team data.** Each teammate installs `tacit`. Sync, indexing, extraction and the MCP server run on their machine. The team hosts one Neo4j (Aura Free, or Docker on a VPS via `deploy/neo4j`).
+- **Shared responsibility for access.** One password per team graph; whoever has it can read the graph. **Sync scope** (repos, channels, pages) is the permission boundary: nothing outside scope is fetched, private Slack channels need an explicit opt-in, DMs are never synced.
+- **Every DB access goes through `Store.run_query()`** (or `Store.access()` for Graphiti), which writes a `:TacitAccess` log entry first and fails closed if it can't. The LLM never writes Cypher; MCP tools build fixed queries from their parameters.
+- **Incremental, idempotent sync** by polling each source with the user's own token. Cursors and a single write lease live in Neo4j; a content-hash check skips anything already ingested.
+- **Two search layers.** Chunks (local bge-small embeddings + full-text, fused with RRF) are always on and free. Graph facts (Graphiti) are optional and need an LLM key for extraction. `search` is deterministic and calls no LLM; the AI client writes the answer. There is no `ask` feature.
+- **Decisions change over time.** Graphiti facts carry when they were valid, so answers give the current decision plus its history.
+- **One identity per person across tools** (`tacit people`).
+- **Citations everywhere.** Every result links to the exact PR, issue, message or page.
+
+## Layout
+
+| Path | What |
+|---|---|
+| `src/tacit/` | The package: `cli.py`, `sync.py`, `search.py`, `mcp.py`, `store/` (Neo4j, access log, lease, cursors), `sources/` (GitHub, Slack, Notion), `graph/` (Graphiti, LLM adapter, budget), `llm/` (Anthropic, OpenAI, record/replay) |
+| `tests/` | pytest against a throwaway Neo4j: `docker compose --profile test up -d --wait neo4j-test` (port 7688, wiped by tests) |
+| `benchmark/` | `bench.py`, `extract_demo.py`, `extraction_smoke.py`, results |
+| `demo/` | The fictional Larkspur Labs dataset; `tacit demo load` |
+| `site/` | Next.js website, deployed on Vercel (root directory `site`) |
+| `deploy/neo4j/` | Self-hosted Neo4j for teams |
 
 ## Stack
 
 | Layer | Choice |
 |---|---|
-| Package / CLI | Python 3.13, uv, Typer (`uvx tacit`) |
-| Graph + search | Graphiti on Neo4j (team-hosted); Graphiti's own hybrid search. No separate search index unless a benchmark shows it helps. |
+| Package / CLI | Python 3.13 (pinned in `.python-version`), uv, Typer |
+| Graph + search | Neo4j: chunk index (vector + full-text) and Graphiti facts |
 | Embeddings | Local fastembed (bge-small, 384 dimensions) |
-| MCP | FastMCP over stdio (local) |
-| LLMs | Anthropic / OpenAI behind one replaceable interface, extraction only |
-| Secrets | OS keychain (`keyring`) |
-| Website | Next.js in `site/` on Vercel: pitch, live stats, live demo search over a fictional-data Neo4j |
+| MCP | FastMCP over stdio |
+| LLMs | Anthropic / OpenAI behind one interface, extraction only |
+| Secrets | Env vars → OS keychain → 0600 file |
+| Website | Next.js on Vercel |
 
-## Build order
+## Working on it
 
-See `docs/design/local-first.md` §13 for detail.
-
-1. Tag `v0-hosted`, restructure into the `tacit` package, delete the hosted pieces
-2. `store/`: Neo4j schema, `run_query()` + access log, leases, cursors, hash skip
-3. `tacit init`, `auth`, `scope`, `doctor`
-4. GitHub sync end to end
-5. Local MCP (`search`, `get_document`, `status`) and `mcp install`
-6. Slack and Notion sync
-7. People linking, `tacit log`
-8. Demo load and benchmark re-run
-9. Website
-
-## Things to keep in mind
-
-- Watch LLM extraction cost per document from day one. Graphiti makes several LLM calls for each item it ingests.
-- Benchmark numbers must be real and reproducible. Don't overstate results. Nothing goes on the website until it's measured.
-- The demo uses generated or our own data. Never commit real private team data.
+- Run `uv run ruff check . && uv run ruff format --check . && uv run pytest -q` before committing, and check that GitHub CI is green before calling a PR done.
+- Watch LLM extraction cost. Graphiti makes several LLM calls per item; extraction has per-run budget caps.
+- Benchmark numbers must be real and reproducible. Don't overstate results, don't tune on the 52 benchmark questions, and nothing goes on the website until it's measured.
+- The demo uses generated data only. Never commit real private team data.
 - Make small commits after each feature or iteration, including in subagents.
