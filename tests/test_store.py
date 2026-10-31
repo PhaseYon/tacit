@@ -98,3 +98,58 @@ async def test_lease_is_exclusive_and_expires(store: Store):
 async def test_schema_refuses_other_embedder(store: Store):
     with pytest.raises(SchemaMismatch):
         await ensure_schema(store, "BAAI/bge-small-en-v1.5")
+
+
+async def _expire_lease(store: Store) -> None:
+    await store._execute(
+        "MATCH (l:TacitLease) SET l.expires_at = datetime() - duration({seconds: 1})"
+    )
+
+
+async def test_lease_token_increments_only_for_a_new_holder(store: Store):
+    a, b = st.Lease(store, ttl_seconds=60), st.Lease(store, ttl_seconds=60)
+    assert (await a.claim())[0]
+    first = a.token
+    assert isinstance(first, int)
+    assert (await a.claim())[0] and a.token == first  # re-claim by the same holder
+    assert not (await b.claim())[0] and b.token is None
+    await _expire_lease(store)
+    assert (await b.claim())[0] and b.token == first + 1  # takeover after expiry
+    await b.release()
+    assert (await a.claim())[0] and a.token == first + 2  # free lease, new holder
+
+
+async def test_fenced_writes_with_a_stale_token_write_nothing(store: Store):
+    stale, fresh = st.Lease(store, ttl_seconds=60), st.Lease(store, ttl_seconds=60)
+    assert (await stale.claim())[0]
+    item = _item()
+    await d.upsert_doc(store, item, ["a", "b"], [[0.1] * 384, [0.2] * 384], fence=stale)
+    await st.cursor_set(store, "github:acme/api", "c1", fence=stale)
+    await d.set_episode(store, item.external_id, "ep-1", item.content_hash, fence=stale)
+
+    await _expire_lease(store)  # `stale` froze past its TTL; someone else takes over
+    assert (await fresh.claim())[0]
+
+    changed = _item(text="We picked Kafka instead.")
+    with pytest.raises(st.FencedOut):
+        await d.upsert_doc(store, changed, ["x"], [[0.3] * 384], fence=stale)
+    with pytest.raises(st.FencedOut):
+        await st.cursor_set(store, "github:acme/api", "c2", fence=stale)
+    with pytest.raises(st.FencedOut):
+        await d.set_episode(store, item.external_id, "ep-2", "h2", fence=stale)
+    assert stale.lost
+
+    doc = await d.get_doc(store, item.external_id)
+    assert doc["text"] == item.text
+    chunks = await store._execute("MATCH (c:TacitChunk) RETURN c.text AS t ORDER BY c.idx")
+    assert [c["t"] for c in chunks] == ["a", "b"]
+    assert await st.cursor_get(store, "github:acme/api") == "c1"
+    assert await d.episode_of(store, item.external_id) == "ep-1"
+    lease = await store._execute("MATCH (l:TacitLease) RETURN l._fence AS f, l.token AS t")
+    assert lease[0]["f"] is None and lease[0]["t"] == fresh.token
+
+    # The current holder's token still writes; unfenced callers are unaffected.
+    await st.cursor_set(store, "github:acme/api", "c3", fence=fresh)
+    assert await st.cursor_get(store, "github:acme/api") == "c3"
+    await st.cursor_set(store, "github:acme/api", "c4")
+    assert await st.cursor_get(store, "github:acme/api") == "c4"
