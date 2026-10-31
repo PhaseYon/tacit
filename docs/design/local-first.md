@@ -202,6 +202,31 @@ free, expired, or already ours. The uniqueness constraint plus Neo4j's node writ
 make it atomic. If a laptop dies mid-run, the lease expires and the next run resumes from
 the last committed cursor.
 
+**Known gap: a lease can expire while its holder still thinks it has it (to do).** Sync
+renews only between steps: once per page in phase 1, once per document in phase 2. A
+holder that goes 10 minutes without renewing loses the lease without knowing, and keeps
+writing until its next check while the new holder writes too:
+
+- alive but slow: one extraction with many entities and API retries; a source call
+  waiting out a rate limit
+- frozen or offline: laptop asleep, network drop, process paused
+
+Chunk writes are idempotent (`MERGE` on `external_id`), so overlap there only wastes
+work. Extraction isn't: both writers can pay for the same document and create two
+episodes for it. Two fixes, for the two cases:
+
+1. **Background renewal** (alive but slow). A task renews every ~2 minutes for the whole
+   run, so a slow step never loses the lease. Stop the run if a renewal fails.
+2. **Fencing tokens** (frozen). Each successful claim increments a counter on the lease
+   and returns it as the holder's token. Tacit's own writes (docs, chunks, cursors)
+   check `l.token = $token` in the same statement and fail if it changed, so a writer
+   that wakes up after losing the lease can't write. Graphiti writes through its own
+   code and can't carry the token, so extraction keeps checking the lease right before
+   each document.
+
+Renewal alone can't help a frozen process; fencing alone would let a slow but healthy
+holder lose its lease and throw away paid extraction work. Both are needed.
+
 ### 6.2 Sync scope
 
 Scope is the permission boundary. Anything outside it is never fetched.
