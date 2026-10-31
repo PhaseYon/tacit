@@ -24,6 +24,7 @@ from ..store import (
     people,
 )
 from ..store import docs as d
+from ..store.state import Lease
 from .adapters import NoRerank, TacitEmbedder, TacitGraphitiLLMClient
 from .costs import BudgetExceeded, CostContext, current_cost
 from .ontology import (
@@ -98,8 +99,10 @@ class Extractor:
     async def close(self) -> None:
         await self.graphiti.close()
 
-    async def extract(self, item: Item) -> str:
-        """Replace the item's episode. Raises BudgetExceeded before spending past the cap."""
+    async def extract(self, item: Item, *, fence: Lease | None = None) -> str:
+        """Replace the item's episode. Raises BudgetExceeded before spending past the cap.
+        `fence` fences Tacit's own doc writes; Graphiti's writes go through its own driver
+        and are covered only by the caller's lease checks."""
         remaining = self.budget - self.spent
         if remaining <= 0:
             raise BudgetExceeded(f"LLM budget for this run reached (${self.budget})")
@@ -115,7 +118,7 @@ class Extractor:
                 try:
                     if old:
                         await self.graphiti.remove_episode(old)
-                        await d.set_episode(self.store, item.external_id, None, None)
+                        await d.set_episode(self.store, item.external_id, None, None, fence=fence)
                     result = await self.graphiti.add_episode(
                         name=item.title[:250] or item.external_id,
                         episode_body=body,
@@ -132,5 +135,7 @@ class Extractor:
                     self.spent += ctx.spent
         finally:
             current_cost.reset(token)
-        await d.set_episode(self.store, item.external_id, result.episode.uuid, item.content_hash)
+        await d.set_episode(
+            self.store, item.external_id, result.episode.uuid, item.content_hash, fence=fence
+        )
         return result.episode.uuid

@@ -1,12 +1,15 @@
+import asyncio
 from datetime import UTC, datetime
 from decimal import Decimal
+
+import pytest
 
 from tacit.llm.base import Usage
 from tacit.sources.base import Item, Page, ScopeEntry, SourceAccessDenied
 from tacit.store import Store
 from tacit.store import docs as d
 from tacit.store import state as st
-from tacit.sync import run_sync
+from tacit.sync import FencedOut, LeaseLost, run_sync
 
 from .graph_fake_llm import respond
 
@@ -146,3 +149,82 @@ def test_canonical_prompt_sorts_entity_type_lists():
         == "{'name': 'api', 'entity_types': ['Component', 'Entity'], 'attributes': {}}"
     )
     assert canonical_prompt("no lists here") == "no lists here"
+
+
+# -- lease renewal and fencing ------------------------------------------------------------
+
+
+def _renewal_tasks() -> list[asyncio.Task]:
+    return [t for t in asyncio.all_tasks() if t.get_name() == "tacit-lease-renewal"]
+
+
+async def _take_over(store: Store) -> st.Lease:
+    """Simulate this run freezing past its TTL while a teammate claims the lease."""
+    await store._execute(
+        "MATCH (l:TacitLease) SET l.expires_at = datetime() - duration({seconds: 1})"
+    )
+    other = st.Lease(store, ttl_seconds=60)
+    assert (await other.claim())[0]
+    return other
+
+
+class SlowSource(FakeSource):
+    """Spends `delay` seconds inside fetch before its first page and runs `during` at
+    `during_at` seconds in."""
+
+    def __init__(self, items, delay: float, during, during_at: float) -> None:
+        super().__init__(items)
+        self.delay, self.during, self.during_at = delay, during, during_at
+        self.during_result = None
+
+    async def fetch(self, entry, cursor):
+        await asyncio.sleep(self.during_at)
+        self.during_result = await self.during()
+        await asyncio.sleep(self.delay - self.during_at)
+        async for page in super().fetch(entry, cursor):
+            yield page
+
+
+async def test_background_renewal_keeps_the_lease_through_a_slow_step(store: Store):
+    await st.scope_add(store, ScopeEntry("github:acme/api", "github", "acme/api", "acme/api"))
+    lease = st.Lease(store, ttl_seconds=2, renew_every=0.5)
+
+    async def competitor_claims():  # past the 2 s TTL: only renewal keeps it ours
+        return (await st.Lease(store).claim())[0]
+
+    src = SlowSource(ITEMS, delay=3, during=competitor_claims, during_at=2.5)
+    r = await run_sync(store, {"github": src}, lease=lease)
+    assert src.during_result is False
+    assert r.scopes[0].written == 2 and not lease.lost
+    assert await st.cursor_get(store, "github:acme/api") == "c2"
+    assert lease._renewal is None and _renewal_tasks() == []
+
+
+async def test_lost_lease_is_noticed_by_background_renewal(store: Store):
+    await st.scope_add(store, ScopeEntry("github:acme/api", "github", "acme/api", "acme/api"))
+    lease = st.Lease(store, ttl_seconds=60, renew_every=0.2)
+    src = SlowSource(ITEMS, delay=1, during=lambda: _take_over(store), during_at=0.3)
+    with pytest.raises(LeaseLost, match="renewal failed"):
+        await run_sync(store, {"github": src}, lease=lease)
+    assert lease.lost
+    assert await d.get_doc(store, "github:PR_1") is None
+    assert lease._renewal is None and _renewal_tasks() == []
+
+
+async def test_writes_after_a_takeover_are_fenced_out(store: Store, monkeypatch):
+    import tacit.sync as sync_mod
+
+    await st.scope_add(store, ScopeEntry("github:acme/api", "github", "acme/api", "acme/api"))
+    lease = st.Lease(store, ttl_seconds=60)
+    real_known = d.known_hashes
+
+    async def known_then_takeover(s, ids):  # lands after the step-level lease check
+        await _take_over(store)
+        return await real_known(s, ids)
+
+    monkeypatch.setattr(sync_mod.d, "known_hashes", known_then_takeover)
+    with pytest.raises(FencedOut):
+        await run_sync(store, {"github": FakeSource(ITEMS)}, lease=lease)
+    assert await d.get_doc(store, "github:PR_1") is None
+    assert await st.cursor_get(store, "github:acme/api") is None
+    assert lease._renewal is None and _renewal_tasks() == []

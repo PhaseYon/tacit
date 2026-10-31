@@ -1,11 +1,16 @@
 """Shared sync state: scope, cursors, the write lease, and the access log (design §6, §7)."""
 
+import asyncio
+import contextlib
 import json
+import logging
 import uuid
 from typing import Any
 
 from ..sources.base import ScopeEntry
 from . import Store
+
+log = logging.getLogger(__name__)
 
 # -- scope -------------------------------------------------------------------------------
 
@@ -61,13 +66,14 @@ async def cursor_get(store: Store, key: str) -> str | None:
     return rows[0]["v"] if rows else None
 
 
-async def cursor_set(store: Store, key: str, value: str) -> None:
-    await store.run_query(
-        "write",
+async def cursor_set(store: Store, key: str, value: str, *, fence: "Lease | None" = None) -> None:
+    await fenced_write(
+        store,
         "cursor.set",
         "MERGE (c:TacitCursor {key: $key}) SET c.value = $value, c.updated_at = datetime(),"
         " c.updated_by = $who",
         {"key": key, "value": value, "who": store.who},
+        fence=fence,
     )
 
 
@@ -83,34 +89,60 @@ async def cursors(store: Store) -> dict[str, dict[str, Any]]:
 # -- the write lease ---------------------------------------------------------------------
 
 
+class LeaseLost(RuntimeError):
+    """This process no longer holds the write lease; stop writing."""
+
+
+class FencedOut(LeaseLost):
+    """A fenced write was refused: the lease's token has moved on (someone else took it)."""
+
+
 class Lease:
     """One writer per graph at a time (design §4, §6.1). Graphiti needs episodes in a group
     added one at a time, in order; the lease also stops two laptops paying for the same
     extraction. `SET l._lock` takes Neo4j's write lock before the holder is read, so two
-    concurrent claims serialize instead of both succeeding."""
+    concurrent claims serialize instead of both succeeding.
+
+    Each new holder gets a higher `token` (a fencing token). Writes made under the lease
+    pass it along (`fenced_write`), so a holder that froze past its TTL and wakes up after
+    someone else took over is refused instead of writing. While held, `start_renewal()`
+    keeps the lease alive in the background every `renew_every` seconds."""
 
     NAME = "writer"
 
-    def __init__(self, store: Store, ttl_seconds: int = 600) -> None:
+    def __init__(
+        self, store: Store, ttl_seconds: float = 600, renew_every: float | None = None
+    ) -> None:
         self.store = store
         self.ttl = ttl_seconds
+        self.renew_every = renew_every if renew_every is not None else ttl_seconds / 5
         self.holder = f"{store.who}:{store.client}:{uuid.uuid4().hex[:8]}"
+        self.token: int | None = None
+        self.lost = False
+        self._renewal: asyncio.Task | None = None
 
     async def claim(self) -> tuple[bool, str | None]:
-        """Returns (got_it, current_holder_label)."""
+        """Returns (got_it, current_holder_label). On success `self.token` is the fencing
+        token: unchanged if we already held the lease, one higher if we're a new holder."""
         rows = await self.store.run_query(
             "write",
             "lease.claim",
             "MERGE (l:TacitLease {name: $name}) SET l._lock = true WITH l"
-            " WITH l, (l.holder IS NULL OR l.holder = $holder OR l.expires_at < datetime()) AS free"
+            " WITH l, (l.holder IS NULL OR l.holder = $holder OR l.expires_at < datetime()) AS free,"
+            "      (l.holder = $holder AND l.token IS NOT NULL) AS mine"
             " FOREACH (_ IN CASE WHEN free THEN [1] ELSE [] END |"
             "   SET l.holder = $holder, l.label = $label,"
-            "       l.expires_at = datetime() + duration({seconds: $ttl}))"
-            " REMOVE l._lock RETURN free, l.label AS label, l.expires_at AS expires_at",
+            "       l.expires_at = datetime() + duration({seconds: $ttl}),"
+            "       l.token = CASE WHEN mine THEN l.token ELSE coalesce(l.token, 0) + 1 END)"
+            " REMOVE l._lock RETURN free, l.label AS label, l.token AS token",
             {"name": self.NAME, "holder": self.holder, "label": self.store.who, "ttl": self.ttl},
         )
         row = rows[0]
-        return bool(row["free"]), row["label"]
+        got = bool(row["free"])
+        if got:
+            self.token = row["token"]
+            self.lost = False
+        return got, row["label"]
 
     async def renew(self) -> bool:
         rows = await self.store.run_query(
@@ -122,6 +154,40 @@ class Lease:
         )
         return bool(rows and rows[0]["n"])
 
+    async def ensure(self, what: str = "sync") -> None:
+        """Step-level check: fail fast if the background renewal saw the lease go, else
+        renew now. Raises LeaseLost."""
+        if self.lost:
+            raise LeaseLost(f"Lost the write lease mid-{what} (renewal failed); stopping.")
+        if not await self.renew():
+            self.lost = True
+            raise LeaseLost(f"Lost the write lease mid-{what} (expired?); stopping.")
+
+    def start_renewal(self) -> None:
+        if self._renewal is None:
+            self._renewal = asyncio.create_task(self._renew_loop(), name="tacit-lease-renewal")
+
+    async def stop_renewal(self) -> None:
+        task, self._renewal = self._renewal, None
+        if task is None:
+            return
+        task.cancel()
+        with contextlib.suppress(asyncio.CancelledError):
+            await task
+
+    async def _renew_loop(self) -> None:
+        while True:
+            await asyncio.sleep(self.renew_every)
+            try:
+                ok = await self.renew()
+            except Exception:
+                log.warning("Renewing the write lease failed", exc_info=True)
+                ok = False
+            if not ok:
+                self.lost = True
+                log.warning("Lost the write lease; the sync will stop at its next step.")
+                return
+
     async def release(self) -> None:
         await self.store.run_query(
             "write",
@@ -129,6 +195,44 @@ class Lease:
             "MATCH (l:TacitLease {name: $name, holder: $holder})"
             " REMOVE l.holder, l.label, l.expires_at",
             {"name": self.NAME, "holder": self.holder},
+        )
+
+
+async def fenced_write(
+    store: Store,
+    tool: str,
+    cypher: str,
+    params: dict[str, Any],
+    *,
+    fence: Lease | None = None,
+    log_params: dict[str, Any] | None = None,
+) -> None:
+    """Run a write, fenced by the lease's token when `fence` is given.
+
+    The token check and the write are one statement (one transaction). It first takes
+    the write lock on the lease node (`SET l._fence`), then compares tokens, so a
+    concurrent `claim()` either commits before (we see the new token and write nothing)
+    or waits until we commit. `cypher` must be a write without RETURN; its parameters
+    must not start with `_fence`. Raises FencedOut if the token no longer matches."""
+    if fence is None:
+        await store.run_query("write", tool, cypher, params, log_params=log_params)
+        return
+    if fence.token is None:
+        raise FencedOut("Fenced write without a claimed lease.")
+    rows = await store.run_query(
+        "write",
+        tool,
+        "MATCH (l:TacitLease {name: $_fence_name}) SET l._fence = true"
+        " WITH l, coalesce(l.token = $_fence_token, false) AS ok REMOVE l._fence"
+        " WITH ok WHERE ok CALL () { " + cypher + " } RETURN ok",
+        {**params, "_fence_name": fence.NAME, "_fence_token": fence.token},
+        log_params={**(log_params if log_params is not None else params), "fence": fence.token},
+    )
+    if not rows:
+        fence.lost = True
+        raise FencedOut(
+            f"Write refused: the write lease moved on from token {fence.token} "
+            "(someone else holds it now); stopping."
         )
 
 

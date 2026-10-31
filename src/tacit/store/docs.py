@@ -5,6 +5,7 @@ from typing import Any
 
 from ..sources.base import Item
 from . import Store
+from .state import Lease, fenced_write
 
 
 async def known_hashes(store: Store, external_ids: list[str]) -> dict[str, str]:
@@ -22,9 +23,15 @@ async def known_hashes(store: Store, external_ids: list[str]) -> dict[str, str]:
 
 
 async def upsert_doc(
-    store: Store, item: Item, chunks: list[str], embeddings: list[list[float]]
+    store: Store,
+    item: Item,
+    chunks: list[str],
+    embeddings: list[list[float]],
+    *,
+    fence: Lease | None = None,
 ) -> None:
-    """Replace the doc and all its chunks in one transaction."""
+    """Replace the doc and all its chunks in one statement (one transaction), fenced by
+    the write lease's token when `fence` is given."""
     assert len(chunks) == len(embeddings)
     props = {
         "source": item.source,
@@ -40,8 +47,8 @@ async def upsert_doc(
         "ingested_by": store.who,
         "extract": item.extract,
     }
-    await store.run_query(
-        "write",
+    await fenced_write(
+        store,
         "doc.upsert",
         "MERGE (d:TacitDoc {external_id: $eid}) SET d += $props, d.updated_at = datetime()"
         " WITH d OPTIONAL MATCH (d)-[:HAS_CHUNK]->(old:TacitChunk) DETACH DELETE old"
@@ -57,18 +64,25 @@ async def upsert_doc(
                 for i, (t, e) in enumerate(zip(chunks, embeddings, strict=True))
             ],
         },
+        fence=fence,
         log_params={"external_id": item.external_id, "url": item.url, "chunks": len(chunks)},
     )
 
 
 async def set_episode(
-    store: Store, external_id: str, episode_uuid: str | None, extracted_hash: str | None = None
+    store: Store,
+    external_id: str,
+    episode_uuid: str | None,
+    extracted_hash: str | None = None,
+    *,
+    fence: Lease | None = None,
 ) -> None:
-    await store.run_query(
-        "write",
+    await fenced_write(
+        store,
         "doc.episode",
         "MATCH (d:TacitDoc {external_id: $eid}) SET d.episode_uuid = $uuid, d.extracted_hash = $h",
         {"eid": external_id, "uuid": episode_uuid, "h": extracted_hash},
+        fence=fence,
     )
 
 

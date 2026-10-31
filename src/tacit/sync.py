@@ -29,8 +29,8 @@ from .store import state as st
 log = logging.getLogger(__name__)
 
 
-class LeaseLost(RuntimeError):
-    pass
+LeaseLost = st.LeaseLost
+FencedOut = st.FencedOut
 
 
 @dataclass
@@ -58,7 +58,7 @@ class SyncReport:
 Progress = Callable[[str], None]
 
 
-async def index_item(store: Store, item: Item) -> int:
+async def index_item(store: Store, item: Item, *, fence: st.Lease | None = None) -> int:
     """Chunk, embed (locally) and write one item. Returns the number of chunks."""
     header = context_header(item.kind, item.title, item.metadata)
     chunks = chunk_text(item.text) or [item.title]
@@ -66,7 +66,7 @@ async def index_item(store: Store, item: Item) -> int:
     vectors = await asyncio.to_thread(
         embedder.embed_documents, [f"{header}\n\n{c}" for c in chunks]
     )
-    await d.upsert_doc(store, item, chunks, vectors)
+    await d.upsert_doc(store, item, chunks, vectors, fence=fence)
     return len(chunks)
 
 
@@ -76,18 +76,17 @@ async def _sync_entry(
     report = ScopeReport(entry.key)
     cursor = await st.cursor_get(store, entry.key)
     async for page in source.fetch(entry, cursor):
-        if not await lease.renew():
-            raise LeaseLost("Lost the write lease mid-sync (expired?); stopping.")
+        await lease.ensure("sync")
         report.fetched += len(page.items)
         known = await d.known_hashes(store, [i.external_id for i in page.items])
         for item in page.items:
             if known.get(item.external_id) == item.content_hash:
                 report.unchanged += 1
                 continue
-            await index_item(store, item)
+            await index_item(store, item, fence=lease)
             report.written += 1
         if page.cursor is not None:
-            await st.cursor_set(store, entry.key, page.cursor)
+            await st.cursor_set(store, entry.key, page.cursor, fence=lease)
         progress(f"{entry.label}: {report.written} new/changed, {report.unchanged} unchanged")
     return report
 
@@ -99,15 +98,22 @@ async def run_sync(
     extractor=None,
     only: list[str] | None = None,
     progress: Progress = lambda _: None,
+    lease: st.Lease | None = None,
 ) -> SyncReport:
     """`sources` holds only sources this user has a token for. `extractor` is a
-    tacit.graph.client.Extractor or None (extraction off)."""
+    tacit.graph.client.Extractor or None (extraction off). `lease` is for tests (a short
+    TTL); by default a fresh one with the standard TTL is claimed.
+
+    The lease is renewed in the background while the run is alive, checked again before
+    every page and every extraction, and Tacit's own writes carry its fencing token, so a
+    run that lost the lease (slept, stalled past the TTL) stops instead of writing."""
     report = SyncReport()
-    lease = st.Lease(store)
+    lease = lease or st.Lease(store)
     got, holder = await lease.claim()
     if not got:
         report.blocked_by = holder
         return report
+    lease.start_renewal()
     try:
         for entry in await st.scope_list(store):
             if only and entry.key not in only and entry.source not in only:
@@ -133,6 +139,7 @@ async def run_sync(
         report.extraction_pending = await d.count_pending_extraction(store)
         report.pruned_log_entries = await st.prune_access_log(store, get_config().access_log_days)
     finally:
+        await lease.stop_renewal()
         await lease.release()
     return report
 
@@ -150,12 +157,13 @@ async def _extract(store: Store, lease: st.Lease, extractor, report: SyncReport,
         if not batch:
             break
         for item in batch:
-            if not await lease.renew():
-                raise LeaseLost("Lost the write lease mid-extraction; stopping.")
+            await lease.ensure("extraction")
             try:
-                await extractor.extract(item)
+                await extractor.extract(item, fence=lease)
                 report.extracted += 1
                 progress(f"extracted {report.extracted}: {item.title[:60]}")
+            except LeaseLost:
+                raise
             except BudgetExceeded as exc:
                 report.extraction_note = str(exc)
                 report.spent_usd = float(extractor.spent)
