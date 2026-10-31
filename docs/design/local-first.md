@@ -202,6 +202,37 @@ free, expired, or already ours. The uniqueness constraint plus Neo4j's node writ
 make it atomic. If a laptop dies mid-run, the lease expires and the next run resumes from
 the last committed cursor.
 
+**Lease expiry while the holder still writes.** A holder that goes 10 minutes without
+renewing loses the lease without knowing it, and would keep writing while the new holder
+writes too:
+
+- alive but slow: one extraction with many entities and API retries; a source call
+  waiting out a rate limit
+- frozen or offline: laptop asleep, network drop, process paused
+
+Chunk writes are idempotent (`MERGE` on `external_id`), so overlap there only wastes
+work. Extraction isn't: both writers could pay for the same document and create two
+episodes for it. Two fixes, for the two cases (built 2026-10-30):
+
+1. **Background renewal** (alive but slow). After the claim, a task renews every
+   ttl/5 (2 minutes) for the whole run, so a slow step keeps the lease. If a renewal
+   fails, the lease is marked lost and the run stops at the start of its next step
+   (`Lease.ensure`). The step in progress finishes; its writes still pass the fence
+   unless someone actually claimed the lease. The task is cancelled before release.
+2. **Fencing tokens** (frozen). Each claim by a new holder increments `l.token`; a
+   re-claim by the same holder keeps it. Tacit's own sync writes (`upsert_doc`,
+   `cursor_set`, `set_episode`) go through `state.fenced_write`: one statement that
+   takes the lease node's write lock first, compares the token, and only then writes.
+   `claim()` also locks first, so a takeover lands either before the check (write
+   refused) or after the commit. A refused write raises `FencedOut` and writes nothing.
+   Graphiti writes through its own code and can't carry the token, so extraction keeps
+   checking the lease right before each document.
+
+Renewal alone can't help a frozen process; fencing alone would let a slow but healthy
+holder lose its lease and throw away paid extraction work. A single failed renewal
+(e.g. a brief network drop) currently stops the run; retrying until the lease is close
+to expiry would be gentler.
+
 ### 6.2 Sync scope
 
 Scope is the permission boundary. Anything outside it is never fetched.
