@@ -1,4 +1,4 @@
-"""Retrieval benchmark on the local-first stack (design §8.3, §10). Replaces bench_v0.py.
+"""Retrieval benchmark on the local-first stack (design §8.3, §10). Replaces the v0 benchmark (tag v0-hosted).
 
     docker run -d --rm --name tacit-bench -p 7705:7687 \\
       -e NEO4J_AUTH=neo4j/tacit-test-password --tmpfs /data neo4j:5.26
