@@ -3,12 +3,11 @@
 Goal (from CLAUDE.md): measure hybrid GraphRAG against vector-only RAG on ~50 "why"
 questions, with cost and latency, and **report the numbers as measured**.
 
-Two harnesses live here:
+| file | stack |
+|---|---|
+| [`bench.py`](bench.py) | local-first: Neo4j chunk index (bge-small vectors + Neo4j full-text, RRF) |
 
-| file | stack | status |
-|---|---|---|
-| [`bench.py`](bench.py) | local-first: Neo4j chunk index (bge-small vectors + Neo4j full-text, RRF) | **maintained** |
-| [`bench_v0.py`](bench_v0.py) | v0 hosted: Postgres + pgvector + Postgres FTS | history only; the `apps/api` code it imports is gone, so it no longer runs |
+The v0 harness (Postgres + pgvector + Postgres FTS) is kept at tag `v0-hosted`; its results are in [`results/2026-10-25-fastembed.md`](results/2026-10-25-fastembed.md).
 
 ## How to reproduce (local-first)
 
